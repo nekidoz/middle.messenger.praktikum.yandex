@@ -48,3 +48,11 @@
 ## Установка требуемых зависимостей
 Установить все, что есть в package-lock.json:
     npm i
+## Чтобы прошли автотесты в Pull Request
+Добавить разделы node и engines в package.json (ошибка:
+Check NodeJS version7/7 ✗ Check NodeJS version
+   (from function `fatal' in file /tmp/tests-middle-frontend/tests/utils/utils.bash, line 3,
+    in test file /tmp/tests-middle-frontend/tests/sprint_1.bats, line 50)
+     `[[ "$output" = "null" ]] && fatal "$output" # "node" in "engines" section in package.json' failed
+   null
+):
