@@ -9,17 +9,16 @@
 */
 
 function range(start, end, step) {
-    const rStart = end === undefined ? 0 : start;
-    const rEnd = end === undefined ? start : end;
-    const rStep = step === undefined ? rStart > rEnd ? -1 : 1 : step;
-    
-    let iterations = Math.floor(Math.abs((rEnd - rStart) / (rStep === 0 ? 1 : rStep)));
-    const result = new Array(iterations);
+  const rStart = end === undefined ? 0 : start;
+  const rEnd = end === undefined ? start : end;
+  const rStep = step === undefined ? rStart > rEnd ? -1 : 1 : step;
   
-    for (let i = 0, value = rStart; i < iterations; i++, value += rStep) {
-      result[i] = value;
-    }
-  
-    return result;
+  let iterations = Math.floor(Math.abs((rEnd - rStart) / (rStep === 0 ? 1 : rStep)));
+  const result = new Array(iterations);
+
+  for (let i = 0, value = rStart; i < iterations; i++, value += rStep) {
+    result[i] = value;
   }
-  
+
+  return result;
+}
