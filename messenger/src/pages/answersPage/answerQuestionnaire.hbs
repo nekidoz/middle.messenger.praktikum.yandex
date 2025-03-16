@@ -1,13 +1,13 @@
 <div class="app">
-    <h1>Test page</h1>
-    <div class="questionnaire">
+    <h1>Answer Questionnaire</h1>
+    <div class="answer-questionnaire">
         {{#each questions}}
             <div class="question">
                 <p>{{this}}</p>
                 {{> Select id=(concat "answer-" @index) options=../answerOptions}}
             </div>
         {{/each}}
-        {{> Button id="submit-answers" text="Submit answers"}}
+        {{> Button id="submit-answers" text="Submit Answers"}}
     </div>
     {{> Footer}}
 </div>

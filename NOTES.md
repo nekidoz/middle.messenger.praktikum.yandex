@@ -16,9 +16,14 @@
 Шаблонизатор Handlebars
     npm install vite-plugin-handlebars
 Добавить в конфиг vite.config.js
-## Препроцессор CSS
+## Препроцессор CSS - НЕ НУЖЕН
 Установка LESS в проект (больше ничего для Vite не требуется):
     npm add -D less
+## PostCSS
+Установить postcss:
+    npm install postcss-nested
+Создать postcss.config.cjs .
+Добавить секцию css в vite.config.js .
 ## Git
 Установить локального пользователя, если нужно
     git config --local user.name "Nekidoz" 
@@ -33,3 +38,13 @@
 - Создать новый upstream для другого пользователя
     remote add origin git@nekidoz-github:nekidoz/middle.messenger.praktikum.yandex.git
 где nekidoz-github - имя хоста в ssh config
+## Конфигурация Express для Production - npm run start
+Установить Express:
+    npm install express
+Создать файл конфигурации
+    server.cjs
+В package.json в раздел scripts добавить строку дополнительно к тому, что генерирует vite:
+    "start": "vite build && node server.cjs",
+## Установка требуемых зависимостей
+Установить все, что есть в package-lock.json:
+    npm i
