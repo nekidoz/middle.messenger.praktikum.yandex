@@ -48,6 +48,11 @@
 ## Установка требуемых зависимостей
 Установить все, что есть в package-lock.json:
     npm i
+## Deploy на Netlify
+1. Создать или переключиться на ветку deploy
+	git checkout [-b] deploy
+2. В файле .gitignore убираем папку dist/ (папка dist/ должна деплоиться)
+3. Сделать коммит ветки на GitHub
 ## Чтобы прошли автотесты в Pull Request
 Добавить разделы node и engines в package.json (ошибка:
 Check NodeJS version7/7 ✗ Check NodeJS version
