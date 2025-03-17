@@ -23,7 +23,7 @@ Handlebars.registerPartial('Text', Text);
 export default class App {
     constructor() {
         this.state = {
-            currentPage: 'login',
+            currentPage: 'signup',
             questions: [],
             answers: [],
         };
@@ -36,9 +36,11 @@ export default class App {
             case 'login':
                 template = Handlebars.compile(Pages.LoginPage);
                 this.appElement.innerHTML = template({
-                    questions: mockQuestions,
-                    answers: mockAnswers,
-                    answerOptions: ['Yes', 'No', 'Maybe'],
+                });
+                break;
+            case 'signup':
+                template = Handlebars.compile(Pages.SignupPage);
+                this.appElement.innerHTML = template({
                 });
                 break;
             case 'createQuestionnaire': 
@@ -65,6 +67,10 @@ export default class App {
             case 'login':
                 const loginForm = document.getElementById('login-form');
                 loginForm.addEventListener('submit', (e) => this.login(e));
+                break;
+            case 'signup':
+                const signupForm = document.getElementById('signup-form');
+                signupForm.addEventListener('submit', (e) => this.signup(e));
                 break;
             case 'createQuestionnaire':
                 const addButton = document.getElementById('add-question');
@@ -118,5 +124,12 @@ export default class App {
         const login = event.target.login.value;
         const password = event.target.password.value;
         alert('Логин: ' + (login ? login : "<не задан>") + " , пароль: " + (password ? password : "<не задан>"));
+    }
+
+    signup(event) {
+        event.preventDefault();
+        const login = event.target.login.value;
+        const password = event.target.password.value;
+        alert('Регистрация: ' + (login ? login : "<не задан>") + " , пароль: " + (password ? password : "<не задан>"));
     }
 }
