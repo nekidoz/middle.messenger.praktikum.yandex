@@ -1,7 +1,7 @@
 <div class="app">
     <h1>Create Questionnaire</h1>
     <div class="create-questionnaire">
-        {{> Input id="question-input" type="text" placeholder="Enter question"}}
+        {{> Input id="question-input" type="text" placeholder="Enter question" class="input"}}
         {{> Button id="add-question" text="Add Question"}}
         <p>Questions: {{questions.length}}/20</p>
         {{#if questions.length}}
