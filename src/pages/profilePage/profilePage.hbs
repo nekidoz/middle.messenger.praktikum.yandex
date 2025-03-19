@@ -1,0 +1,29 @@
+<div class="app">
+    <div class="profile-box">
+        {{> Image source="/avatar.png" class="avatar" }}
+        <h2>
+            {{#if display_name}}{{display_name}}{{/if}}
+            {{#unless display_name}}(имя не задано){{/unless}}
+        </h2>
+        <form id="profile-form">
+            <br>
+            {{> ProfileInputBlock id="email" type="email" value=email caption="Почта" placeholder="Почта" }}
+            {{> ProfileInputBlock id="login" type="text" value=login caption="Логин" placeholder="Логин" error="Здесь могла бы быть ужасная ошибка" }}
+            {{> ProfileInputBlock id="first_name" type="text" value=first_name caption="Имя" placeholder="Имя" }}
+            {{> ProfileInputBlock id="second_name" type="text" value=second_name caption="Фамилия" placeholder="Фамилия" }}
+            {{> ProfileInputBlock id="display_name" type="text" value=display_name caption="Имя в чате" placeholder="Имя в чате" }}
+            {{> ProfileInputBlock id="phone" type="tel" value=phone caption="Телефон" placeholder="Телефон" }}
+            {{> ProfileInputBlock id="avatar" type="file" value=avatar accept="image/png, image/jpeg" caption="Аватар" placeholder="Аватар" }}
+            <br>
+            {{> ProfileInputBlock id="oldPassword" type="password" caption="Старый пароль" placeholder="Старый пароль" }}
+            {{> ProfileInputBlock id="newPassword" type="password" caption="Новый пароль" placeholder="Новый пароль" }}
+            {{> ProfileInputBlock id="repeat_password" type="password" caption="Новый пароль (еще раз)" placeholder="Новый пароль (еще раз)" }}
+            <div class="button-stack">
+                {{!-- {{> Button id="btn-login" text="Войти"}} --}}
+                {{> Input id="btn-save-profile" type="submit" value="Сохранить" class="button" }}
+                {{> Link href="#" class="footer-link" data-page="login" text="Выйти"}}
+            </div>
+        </form>
+    </div>
+    {{> Footer}}
+</div>
