@@ -1,0 +1,16 @@
+<div class="app">
+    <div class="chats-box">
+        <div class="chats-sidebar">
+            <nav>
+                <ul class="chat-list">
+                    {{#each chats}}
+                        {{> ChatListItemBlock id=this.id party=this.party }}
+                    {{/each}}
+                </ul>
+            </nav>
+        </div>
+        <div class="chats-chat-content" id="chat-content">
+        </div>
+    </div>
+    {{> Footer}}
+</div>

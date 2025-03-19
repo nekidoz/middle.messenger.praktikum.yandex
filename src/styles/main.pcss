@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 :root {
   --primary-color: #3498db;
   --secondary-color: #2c3e50;
@@ -23,12 +27,26 @@ h1, h2, h3 {
   color: var(--secondary-color);
 }
 
+.error {
+  color: var(--error-color);
+  font-weight: bold;
+}
+
+.question {
+  background-color: white;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 3px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
 .select, .button {
   margin: 10px 0;
   padding: 10px;
   width: 100%;
   box-sizing: border-box;
 }
+
 
 .button {
   background-color: var(--primary-color);
@@ -48,30 +66,14 @@ h1, h2, h3 {
   }
 }
 
+nav {
+  background-color: var(--background-color)
+}
+
 ul {
   list-style-type: none;
   padding: 0;
-}
-
-li {
-  background-color: white;
-  margin: 10px 0;
-  padding: 10px;
-  border-radius: 3px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.error {
-  color: var(--error-color);
-  font-weight: bold;
-}
-
-.question {
-  background-color: white;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 3px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  margin: 0;
 }
 
 .footer {
@@ -96,7 +98,6 @@ li {
     text-decoration: underline;
   }
 }
-
 
 .login-signup-box {
   margin: auto;
@@ -211,9 +212,50 @@ h2 {
   }
 }
 
-.avatar {
+.profile-avatar {
   display: block;
   margin-left: auto;
   margin-right: auto;
   width: 200px;
 }
+
+.chats-box {
+  position: fixed;
+  margin-top: 50px;
+  width: 100%;
+  height: auto;
+  
+  display: flex;
+}
+
+.chats-sidebar {
+  width: 25%;
+  border-right: 1px solid var(--secondary-text-color);
+}
+
+.chats-chat-content {
+  width: 75%;
+  background-color: var(--secondary-background-color);
+}
+
+.chat-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.chat-list-item {
+  background-color: white;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--secondary-text-color);
+  background-color: var(--background-color);
+}
+
+.chat-list-item-active {
+  background-color: var(--secondary-background-color);
+}
+
+.chat-list-item-avatar {
+  width: 50px;
+}
+

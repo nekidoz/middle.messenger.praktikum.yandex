@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import Image from './components/Image';
 import Input from './components/Input';
 import Link from './components/Link';
+import ChatListItemBlock from './components/molecules/ChatListItemBlock.js';
 import LoginSignupInputBlock from './components/molecules/LoginSignupInputBlock.js';
 import ProfileInputBlock from './components/molecules/ProfileInputBlock.js';
 import Select from './components/Select';
@@ -19,6 +20,7 @@ Handlebars.registerPartial('Footer', Footer);
 Handlebars.registerPartial('Image', Image);
 Handlebars.registerPartial('Input', Input);
 Handlebars.registerPartial('Link', Link);
+Handlebars.registerPartial('ChatListItemBlock', ChatListItemBlock);
 Handlebars.registerPartial('LoginSignupInputBlock', LoginSignupInputBlock);
 Handlebars.registerPartial('ProfileInputBlock', ProfileInputBlock);
 Handlebars.registerPartial('Select', Select);
@@ -27,7 +29,7 @@ Handlebars.registerPartial('Text', Text);
 export default class App {
     constructor() {
         this.state = {
-            currentPage: 'profile',
+            currentPage: 'chats',
 
             login: '',
             password: '',
@@ -37,6 +39,24 @@ export default class App {
             phone: '',
             display_name: '',
             avatar: '',
+
+            chats: [
+                {party: 'Chat 1', id: 'chat1', content: 'content of chat 1'},
+                {party: 'Chat 2', id: 'chat2', content: 'content of chat 2'},
+                {party: 'Chat 3', id: 'chat3', content: 'content of chat 3'},
+                {party: 'Chat 4', id: 'chat4', content: 'content of chat 4'},
+                {party: 'Chat 5', id: 'chat5', content: 'content of chat 5'},
+                {party: 'Chat 6', id: 'chat6', content: 'content of chat 6'},
+                {party: 'Chat 7', id: 'chat7', content: 'content of chat 7'},
+                {party: 'Chat 8', id: 'chat8', content: 'content of chat 8'},
+                {party: 'Chat 9', id: 'chat9', content: 'content of chat 9'},
+                {party: 'Chat 10', id: 'chat10', content: 'content of chat 10'},
+                {party: 'Chat 11', id: 'chat11', content: 'content of chat 11'},
+                {party: 'Chat 12', id: 'chat12', content: 'content of chat 12'},
+                {party: 'Chat 13', id: 'chat13', content: 'content of chat 13'},
+                {party: 'Chat 14', id: 'chat14', content: 'content of chat 14'},
+                {party: 'Chat 15', id: 'chat15', content: 'content of chat 15'},
+            ],
 
             questions: [],
             answers: [],
@@ -75,6 +95,12 @@ export default class App {
                     avatar: this.state.avatar,
                 });
                 break;
+            case 'chats':
+                template = Handlebars.compile(Pages.ChatsPage);
+                this.appElement.innerHTML = template({
+                    chats: this.state.chats,
+                });
+                break;
             case 'createQuestionnaire': 
                 template = Handlebars.compile(Pages.CreatePage);
                 this.appElement.innerHTML = template({
@@ -107,6 +133,26 @@ export default class App {
             case 'profile':
                 const profileForm = document.getElementById('profile-form');
                 profileForm.addEventListener('submit', (e) => this.saveProfile(e));
+                break;
+            case 'chats':
+                const chatLinks = document.querySelectorAll('.chat-list-item');
+                chatLinks.forEach(link => {
+                    // find chat content
+                    const chatId = link.id;
+                    const chatContent = this.state.chats.find(chat => chat.id === chatId)?.content;
+                    if (!chatContent) {
+                        alert('Chat ' + chatId + ' not found!');
+                    }
+                    link.addEventListener('click', function () {
+                        chatLinks.forEach(chatLink => chatLink.classList.remove('chat-list-item-active'));
+                        this.classList.add('chat-list-item-active');
+
+                        // display chat content
+                        const chatContentsElement = document.getElementById('chat-content');
+                        chatContentsElement.innerHTML = chatContent;
+                    });
+                })
+                // profileForm.addEventListener('submit', (e) => this.saveProfile(e));
                 break;
             case 'createQuestionnaire':
                 const addButton = document.getElementById('add-question');
