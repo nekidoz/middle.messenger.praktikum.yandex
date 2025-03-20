@@ -9,22 +9,24 @@ import Footer from './components/Footer';
 import Image from './components/Image';
 import Input from './components/Input';
 import Link from './components/Link';
+import Menu from './components/Menu';
+import Select from './components/Select';
+import Text from './components/Text.js';
 import ChatListItemBlock from './components/molecules/ChatListItemBlock.js';
 import LoginSignupInputBlock from './components/molecules/LoginSignupInputBlock.js';
 import ProfileInputBlock from './components/molecules/ProfileInputBlock.js';
-import Select from './components/Select';
-import Text from './components/Text.js';
 
 Handlebars.registerPartial('Button', Button);
 Handlebars.registerPartial('Footer', Footer);
 Handlebars.registerPartial('Image', Image);
 Handlebars.registerPartial('Input', Input);
 Handlebars.registerPartial('Link', Link);
+Handlebars.registerPartial('Menu', Menu);
+Handlebars.registerPartial('Select', Select);
+Handlebars.registerPartial('Text', Text);
 Handlebars.registerPartial('ChatListItemBlock', ChatListItemBlock);
 Handlebars.registerPartial('LoginSignupInputBlock', LoginSignupInputBlock);
 Handlebars.registerPartial('ProfileInputBlock', ProfileInputBlock);
-Handlebars.registerPartial('Select', Select);
-Handlebars.registerPartial('Text', Text);
 
 export default class App {
     constructor() {
@@ -41,21 +43,21 @@ export default class App {
             avatar: '',
 
             chats: [
-                {party: 'Chat 1', id: 'chat1', content: 'content of chat 1'},
-                {party: 'Chat 2', id: 'chat2', content: 'content of chat 2'},
-                {party: 'Chat 3', id: 'chat3', content: 'content of chat 3'},
-                {party: 'Chat 4', id: 'chat4', content: 'content of chat 4'},
-                {party: 'Chat 5', id: 'chat5', content: 'content of chat 5'},
-                {party: 'Chat 6', id: 'chat6', content: 'content of chat 6'},
-                {party: 'Chat 7', id: 'chat7', content: 'content of chat 7'},
-                {party: 'Chat 8', id: 'chat8', content: 'content of chat 8'},
-                {party: 'Chat 9', id: 'chat9', content: 'content of chat 9'},
-                {party: 'Chat 10', id: 'chat10', content: 'content of chat 10'},
-                {party: 'Chat 11', id: 'chat11', content: 'content of chat 11'},
-                {party: 'Chat 12', id: 'chat12', content: 'content of chat 12'},
-                {party: 'Chat 13', id: 'chat13', content: 'content of chat 13'},
-                {party: 'Chat 14', id: 'chat14', content: 'content of chat 14'},
-                {party: 'Chat 15', id: 'chat15', content: 'content of chat 15'},
+                {party: 'Chat 1', id: 'chat1', content: 'content of chat 1', newMessages: 0, preview: 'Это превью содержимого чата номер 1', date: 'Пн'},
+                {party: 'Chat 2', id: 'chat2', content: 'content of chat 2', newMessages: 0, preview: 'Это превью содержимого чата номер 2', date: '28 Фев 2025'},
+                {party: 'Chat 3', id: 'chat3', content: 'content of chat 3', newMessages: 5, preview: 'Это превью содержимого чата номер 3', date: 'Ср'},
+                {party: 'Chat 4', id: 'chat4', content: 'content of chat 4', newMessages: 0, preview: 'Это превью содержимого чата номер 4', date: 'Сб'},
+                {party: 'Chat 5', id: 'chat5', content: 'content of chat 5', newMessages: 150, preview: 'Это превью содержимого чата номер 5', date: '11 Мар 2024'},
+                {party: 'Chat 6', id: 'chat6', content: 'content of chat 6', newMessages: 0, preview: 'Это превью содержимого чата номер 6', date: 'Вчера'},
+                {party: 'Chat 7', id: 'chat7', content: 'content of chat 7', newMessages: 15, preview: 'Это превью содержимого чата номер 7', date: '10:15'},
+                {party: 'Chat 8', id: 'chat8', content: 'content of chat 8', newMessages: 0, preview: 'Это превью содержимого чата номер 8', date: 'Позавчера'},
+                {party: 'Chat 9', id: 'chat9', content: 'content of chat 9', newMessages: 0, preview: 'Это превью содержимого чата номер 9', date: 'Пн'},
+                {party: 'Chat 10', id: 'chat10', content: 'content of chat 10', newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 11', id: 'chat11', content: 'content of chat 11', newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 12', id: 'chat12', content: 'content of chat 12', newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 13', id: 'chat13', content: 'content of chat 13', newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 14', id: 'chat14', content: 'content of chat 14', newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 15', id: 'chat15', content: 'content of chat 15', newMessages: 0, preview: '', date: ''},
             ],
 
             questions: [],
@@ -117,10 +119,12 @@ export default class App {
                 });
                 break;
         }
-        this.attachEventListeners();
+        this.attachPageEventListeners();
+        this.attachFooterEventListeners();
+        this.attachMenuEventListeners();
     }
 
-    attachEventListeners() {
+    attachPageEventListeners() {
         switch (this.state.currentPage) {
             case 'login':
                 const loginForm = document.getElementById('login-form');
@@ -167,8 +171,21 @@ export default class App {
                 break;
         }        
 
+    }
+
+    attachFooterEventListeners() {
         const footerLinks = document.querySelectorAll('.footer-link');
         footerLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.changePage(e.target.dataset.page);
+            })
+        })
+    }
+
+    attachMenuEventListeners() {
+        const menuItems = document.querySelectorAll('.menu-page-menu-item');
+        menuItems.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.changePage(e.target.dataset.page);

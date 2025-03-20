@@ -1,10 +1,13 @@
 <div class="app">
+    <div class="menu-page">
+        {{> Menu }}
+        <div class="menu-page-content">
     <div class="chats-box">
         <div class="chats-sidebar">
             <nav>
                 <ul class="chat-list">
                     {{#each chats}}
-                        {{> ChatListItemBlock id=this.id party=this.party }}
+                        {{> ChatListItemBlock id=this.id party=this.party date=this.date preview=this.preview newMessages=this.newMessages }}
                     {{/each}}
                 </ul>
             </nav>
@@ -12,5 +15,6 @@
         <div class="chats-chat-content" id="chat-content">
         </div>
     </div>
-    {{> Footer}}
+        </div>
+    </div>
 </div>

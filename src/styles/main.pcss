@@ -9,6 +9,7 @@
   --secondary-background-color: #f4f4f4;
   --text-color: #030303;
   --secondary-text-color: #c0c0c0;
+  --inverse-text-color: white;
   --error-color: #e74c3c;
 }
 
@@ -16,10 +17,41 @@ body {
   font-family: Arial, sans-serif;
   color: var(--text-color);
   margin: 0 auto;
-  padding-top: 20px;
 }
 
 .app {
+  background-color: var(--background-color);
+}
+
+.menu-page {
+  display: grid;
+  grid-template-rows: 60px auto;
+}
+
+.menu-page-menu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-bottom: 1px solid var(--secondary-color);
+  background-color: var(--background-color);
+}
+
+.menu-page-menu-item {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: normal;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.menu-page-content {
+  display: flex;
+  justify-content: space-around;
+  height: 100%;
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--secondary-color);
   background-color: var(--background-color);
 }
 
@@ -82,7 +114,7 @@ ul {
   padding-top: 20px;
   padding-bottom: 20px;
   margin: 0;
-  width: 100vw;
+  width: 100%;
   border-bottom: 1px solid var(--secondary-color);
   display: flex;
   justify-content: space-around;
@@ -221,7 +253,6 @@ h2 {
 
 .chats-box {
   position: fixed;
-  margin-top: 50px;
   width: 100%;
   height: auto;
   
@@ -246,8 +277,6 @@ h2 {
 
 .chat-list-item {
   background-color: white;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--secondary-text-color);
   background-color: var(--background-color);
 }
 
@@ -255,7 +284,48 @@ h2 {
   background-color: var(--secondary-background-color);
 }
 
-.chat-list-item-avatar {
-  width: 50px;
+.chat-list-item-separator {
+  margin: 0 15px;
+  border-bottom: 1px solid var(--secondary-text-color);
+}
+.chat-list-item-grid {
+  display: grid;
+  height: 90px;
+  padding: 15px;
+  grid-template: 1fr 2fr / 70px auto 60px 40px;
 }
 
+.chat-list-item-avatar {
+  grid-row: 1 / 3;
+  height: 100%;
+}
+
+.chat-list-item-party {
+  font-size: 18px;
+  color: var(--text-color);
+}
+
+.chat-list-item-date {
+  grid-column: 3 / 5;
+  text-align: right;
+  font-size: 14px;
+  color: var(--secondary-text-color);
+}
+
+.chat-list-item-preview {
+  grid-column: 2 / 4;
+  font-size: 16px;
+  padding-top: 5px;
+  color: var(--secondary-text-color);
+}
+
+.chat-list-item-new-messages {
+  width: 80%;
+  height: 80%;
+  margin: auto;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: var(--inverse-text-color);
+  text-align: center;
+  padding-top: 8px;
+}
