@@ -7,8 +7,10 @@
   --secondary-color: #2c3e50;
   --background-color: white;
   --secondary-background-color: #f4f4f4;
+  --chat-list-background-color: #fdfdfd;
+  --active-chat-background-color:rgb(218, 238, 252);
   --text-color: #030303;
-  --secondary-text-color: #c0c0c0;
+  --secondary-text-color:rgb(171, 174, 172);
   --inverse-text-color: white;
   --error-color: #e74c3c;
 }
@@ -72,15 +74,14 @@ h1, h2, h3 {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.select, .button {
+.select, .regular-button {
   margin: 10px 0;
   padding: 10px;
   width: 100%;
   box-sizing: border-box;
 }
 
-
-.button {
+.regular-button {
   background-color: var(--primary-color);
   color: white;
   border: none;
@@ -98,8 +99,19 @@ h1, h2, h3 {
   }
 }
 
-nav {
-  background-color: var(--background-color)
+.navigation-button {
+  color: var(--secondary-text-color);
+  font-size: 16px;
+  border: none;
+  background: transparent;
+
+  margin-right: 0;
+  margin-left: auto;
+  display: block;
+
+  &:hover {
+    color: color-mix(in srgb, var(--secondary-text-color) 80%, black);
+  }
 }
 
 ul {
@@ -254,7 +266,7 @@ h2 {
 .chats-box {
   position: fixed;
   width: 100%;
-  height: auto;
+  height: 100%;
   
   display: flex;
 }
@@ -262,11 +274,33 @@ h2 {
 .chats-sidebar {
   width: 25%;
   border-right: 1px solid var(--secondary-text-color);
+  background-color: var(--chat-list-background-color);
 }
 
 .chats-chat-content {
   width: 75%;
+  background-color: var(--background-color);
+}
+
+.chat-list-header {
+  padding: 0 15px;
+  line-height: 4.5;
+}
+
+.chat-list-search-unput {
+  width: 100%;
+  height: 50px;
+  font-size: 16px;
+  text-align: center;  /* Плейсхолдер теперь центрирован */
+  padding: 10px;
   background-color: var(--secondary-background-color);
+  border: none;
+  border-radius: 7px;
+
+  &:focus {
+    outline: none;
+  }
+
 }
 
 .chat-list {
@@ -276,12 +310,17 @@ h2 {
 }
 
 .chat-list-item {
-  background-color: white;
-  background-color: var(--background-color);
+  &:hover {
+    background-color: var(--secondary-background-color);
+  }
 }
 
 .chat-list-item-active {
-  background-color: var(--secondary-background-color);
+  background-color: var(--active-chat-background-color);
+
+  &:hover {
+    background-color: var(--active-chat-background-color);
+  }
 }
 
 .chat-list-item-separator {
@@ -290,9 +329,9 @@ h2 {
 }
 .chat-list-item-grid {
   display: grid;
+  grid-template: 1fr 2fr / 70px auto 60px 40px;
   height: 90px;
   padding: 15px;
-  grid-template: 1fr 2fr / 70px auto 60px 40px;
 }
 
 .chat-list-item-avatar {

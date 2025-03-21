@@ -2,19 +2,25 @@
     <div class="menu-page">
         {{> Menu }}
         <div class="menu-page-content">
-    <div class="chats-box">
-        <div class="chats-sidebar">
-            <nav>
-                <ul class="chat-list">
-                    {{#each chats}}
-                        {{> ChatListItemBlock id=this.id party=this.party date=this.date preview=this.preview newMessages=this.newMessages }}
-                    {{/each}}
-                </ul>
-            </nav>
-        </div>
-        <div class="chats-chat-content" id="chat-content">
-        </div>
-    </div>
+            <div class="chats-box">
+                <div class="chats-sidebar">
+                    <p class="chat-list-header">
+                        {{> Button id="edit-profile" class="navigation-button" text="Профиль >"}}
+                        {{> Input id="chat-search" class="chat-list-search-unput" value=chat_search_value type="search" placeholder="🔎 Поиск" }}
+                        <div class="chat-list-item-separator">
+                        </div>
+                    </p>
+                    <nav>
+                        <ul class="chat-list">
+                            {{#each chats}}
+                                {{> ChatListItemBlock id=this.id party=this.party date=this.date preview=this.preview newMessages=this.newMessages }}
+                            {{/each}}
+                        </ul>
+                    </nav>
+                </div>
+                <div class="chats-chat-content" id="chat-content">
+                </div>
+            </div>
         </div>
     </div>
 </div>

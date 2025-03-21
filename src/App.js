@@ -59,10 +59,13 @@ export default class App {
                 {party: 'Chat 14', id: 'chat14', content: 'content of chat 14', newMessages: 0, preview: '', date: ''},
                 {party: 'Chat 15', id: 'chat15', content: 'content of chat 15', newMessages: 0, preview: '', date: ''},
             ],
+            chat_search_value: '',
+            chat_selection: [],
 
             questions: [],
             answers: [],
         };
+        this.state.chat_selection = [...this.state.chats];
         this.appElement = document.getElementById('app');
     }
 
@@ -100,7 +103,8 @@ export default class App {
             case 'chats':
                 template = Handlebars.compile(Pages.ChatsPage);
                 this.appElement.innerHTML = template({
-                    chats: this.state.chats,
+                    chats: this.state.chat_selection,
+                    chat_search_value: this.state.chat_search_value,
                 });
                 break;
             case 'createQuestionnaire': 
@@ -139,6 +143,7 @@ export default class App {
                 profileForm.addEventListener('submit', (e) => this.saveProfile(e));
                 break;
             case 'chats':
+                // chat links
                 const chatLinks = document.querySelectorAll('.chat-list-item');
                 chatLinks.forEach(link => {
                     // find chat content
@@ -156,7 +161,12 @@ export default class App {
                         chatContentsElement.innerHTML = chatContent;
                     });
                 })
-                // profileForm.addEventListener('submit', (e) => this.saveProfile(e));
+
+                // buttons and fields
+                const editProfile = document.getElementById('edit-profile');
+                editProfile.addEventListener('click', () => this.changePage('profile'))
+                const chatSearch = document.getElementById('chat-search');
+                chatSearch.addEventListener('keyup', (e) => this.chatSearch(e));
                 break;
             case 'createQuestionnaire':
                 const addButton = document.getElementById('add-question');
@@ -225,6 +235,7 @@ export default class App {
         alert('Вход' + 
             '\nлогин: ' + (this.state.login ? this.state.login : '<не задан>') + 
             '\nпароль: ' + (this.state.password ? this.state.password : '<не задан>'));
+        this.changePage('chats');
     }
 
     signup(event) {
@@ -244,6 +255,7 @@ export default class App {
             '\nпочта: ' + (this.state.email ? this.state.email : '<не задана>') + 
             '\nтелефон: ' + (this.state.phone ? this.state.phone : '<не задан>')
         );
+        this.changePage('login');
     }
 
     saveProfile(event) {
@@ -266,5 +278,21 @@ export default class App {
             '\nимя в чате: ' + (this.state.display_name ? this.state.display_name : '<не задано>') +
             '\nаватар: ' + (this.state.avatar ? this.state.avatar : '<не задан>')
         );
+        this.changePage('chats');
+    }
+
+    chatSearch(e, chatSearch) {
+        if (e.keyCode === 13) {
+            const searchValue = document.getElementById('chat-search')?.value;
+            if (searchValue !== this.state.chat_search_value) {
+                this.state.chat_search_value = searchValue;
+                if (searchValue) {
+                    this.state.chat_selection = this.state.chats.filter(chat => chat.party.includes(searchValue));
+                } else {
+                    this.state.chat_selection = [...this.state.chats];
+                }
+                this.render();
+            }
+        }
     }
 }
