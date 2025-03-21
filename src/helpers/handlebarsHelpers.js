@@ -7,3 +7,7 @@ Handlebars.registerHelper('concat', function() {
 Handlebars.registerHelper('greater', function(value1, value2) {
     return value1 > value2;
 });
+
+Handlebars.registerHelper('defined', function(value) {
+    return value !== undefined;
+});

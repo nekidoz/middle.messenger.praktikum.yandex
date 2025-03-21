@@ -18,7 +18,13 @@
                         </ul>
                     </nav>
                 </div>
+                
                 <div class="chats-chat-content" id="chat-content">
+                    {{#unless (defined selected_chat)}}
+                        <div class="chat-content-placeholder">
+                            {{> Text text="Выберите чат, чтобы отправить сообщение" }}
+                        </div>
+                    {{/unless}}
                 </div>
             </div>
         </div>
