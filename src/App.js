@@ -35,7 +35,7 @@ const PARTY_ME = 'me';
 export default class App {
     constructor() {
         this.state = {
-            currentPage: 'chats',
+            currentPage: 'login',
 
             login: '',
             password: '',
@@ -113,20 +113,16 @@ export default class App {
                     active_chat: this.state.active_chat,
                 });
                 break;
-            case 'createQuestionnaire': 
-                template = Handlebars.compile(Pages.CreatePage);
-                this.appElement.innerHTML = template({
-                    questions: this.state.questions,
-                    createButtonEnabled: this.state.questions.length === 0,
-                });
+            case 'page404': 
+                template = Handlebars.compile(Pages.Code404Page);
+                this.appElement.innerHTML = template({});
+                break;
+            case 'page5xx': 
+                template = Handlebars.compile(Pages.Code5xxPage);
+                this.appElement.innerHTML = template({});
                 break;
             default:
-                template = Handlebars.compile(Pages.AnswersPage);
-                this.appElement.innerHTML = template({
-                    questions: mockQuestions,
-                    answers: mockAnswers,
-                    answerOptions: ['Yes', 'No', 'Maybe'],
-                });
+                alert("Несуществующая страница: " + this.state.currentPage + " !!!");
                 break;
         }
         this.attachPageEventListeners();
@@ -161,6 +157,8 @@ export default class App {
                         alert('Chat ' + chatId + ' not found!');
                     } else {
                         link.addEventListener('click', () => this.activateChat(thisChat));
+                        // Оставил данный код для будущей оптимизации - отображение без перерисовки всей страницы
+                        
                         // link.addEventListener('click', function () {
                         //     // highlight chat in list
                         //     chatLinks.forEach(chatLink => chatLink.classList.remove('chat-list-item-active'));
@@ -188,16 +186,12 @@ export default class App {
                     messageInput.addEventListener('keyup', (e) => this.chatSendByEnter(e));
                 }
                 break;
-            case 'createQuestionnaire':
-                const addButton = document.getElementById('add-question');
-                const createButton = document.getElementById('create-questionnaire');
-
-                addButton.addEventListener('click', () => this.addQuestion())
-                createButton.addEventListener('click', () => this.createQuestionnaire())
+            case 'page404': 
+                break;
+            case 'page5xx': 
                 break;
             default: 
-                const submitButton = document.getElementById('submit-answers');
-                submitButton.addEventListener('click', () => this.submitAnswers())
+                alert("Не реализовано добавление лиснеров для страницы: " + this.state.currentPage + " !!!");
                 break;
         }        
 
@@ -226,26 +220,6 @@ export default class App {
     changePage(page) {
         this.state.currentPage = page;
         this.render();
-    }
-
-    addQuestion() {
-        const questionInput = document.getElementById('question-input');
-        if (questionInput.value.trim()) {
-            this.state.questions.push(questionInput.value);
-            questionInput.value = "";
-            this.render();
-        }
-    }
-
-    createQuestionnaire() {
-        if (this.state.questions.length > 0) {
-            this.state.currentPage = 'answerQuestionnaire';
-            this.render();
-        }
-    }
-
-    submitAnswers() {
-        alert('Answers submitted!');
     }
 
     login(event) {
