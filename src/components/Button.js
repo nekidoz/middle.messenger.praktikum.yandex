@@ -1,8 +1,9 @@
 export default `
-<button id="{{id}}" class="button"
+<button id="{{id}}" class="{{class}}" 
     {{#if disabled}}
       disabled
-    {{/if}}>
+    {{/if}}
+>
   {{text}}
 </button>
 `;
