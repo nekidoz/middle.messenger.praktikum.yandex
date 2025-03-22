@@ -12,6 +12,7 @@ import Link from './components/Link';
 import Menu from './components/Menu';
 import Select from './components/Select';
 import Text from './components/Text.js';
+import ChatContentBlock from './components/molecules/ChatContentBlock.js';
 import ChatListItemBlock from './components/molecules/ChatListItemBlock.js';
 import LoginSignupInputBlock from './components/molecules/LoginSignupInputBlock.js';
 import ProfileInputBlock from './components/molecules/ProfileInputBlock.js';
@@ -24,6 +25,7 @@ Handlebars.registerPartial('Link', Link);
 Handlebars.registerPartial('Menu', Menu);
 Handlebars.registerPartial('Select', Select);
 Handlebars.registerPartial('Text', Text);
+Handlebars.registerPartial('ChatContentBlock', ChatContentBlock);
 Handlebars.registerPartial('ChatListItemBlock', ChatListItemBlock);
 Handlebars.registerPartial('LoginSignupInputBlock', LoginSignupInputBlock);
 Handlebars.registerPartial('ProfileInputBlock', ProfileInputBlock);
@@ -43,24 +45,25 @@ export default class App {
             avatar: '',
 
             chats: [
-                {party: 'Chat 1', id: 'chat1', content: 'content of chat 1', newMessages: 0, preview: 'Это превью содержимого чата номер 1', date: 'Пн'},
-                {party: 'Chat 2', id: 'chat2', content: 'content of chat 2', newMessages: 0, preview: 'Это превью содержимого чата номер 2', date: '28 Фев 2025'},
-                {party: 'Chat 3', id: 'chat3', content: 'content of chat 3', newMessages: 5, preview: 'Это превью содержимого чата номер 3', date: 'Ср'},
-                {party: 'Chat 4', id: 'chat4', content: 'content of chat 4', newMessages: 0, preview: 'Это превью содержимого чата номер 4', date: 'Сб'},
-                {party: 'Chat 5', id: 'chat5', content: 'content of chat 5', newMessages: 150, preview: 'Это превью содержимого чата номер 5', date: '11 Мар 2024'},
-                {party: 'Chat 6', id: 'chat6', content: 'content of chat 6', newMessages: 0, preview: 'Это превью содержимого чата номер 6', date: 'Вчера'},
-                {party: 'Chat 7', id: 'chat7', content: 'content of chat 7', newMessages: 15, preview: 'Это превью содержимого чата номер 7', date: '10:15'},
-                {party: 'Chat 8', id: 'chat8', content: 'content of chat 8', newMessages: 0, preview: 'Это превью содержимого чата номер 8', date: 'Позавчера'},
-                {party: 'Chat 9', id: 'chat9', content: 'content of chat 9', newMessages: 0, preview: 'Это превью содержимого чата номер 9', date: 'Пн'},
-                {party: 'Chat 10', id: 'chat10', content: 'content of chat 10', newMessages: 0, preview: '', date: ''},
-                {party: 'Chat 11', id: 'chat11', content: 'content of chat 11', newMessages: 0, preview: '', date: ''},
-                {party: 'Chat 12', id: 'chat12', content: 'content of chat 12', newMessages: 0, preview: '', date: ''},
-                {party: 'Chat 13', id: 'chat13', content: 'content of chat 13', newMessages: 0, preview: '', date: ''},
-                {party: 'Chat 14', id: 'chat14', content: 'content of chat 14', newMessages: 0, preview: '', date: ''},
-                {party: 'Chat 15', id: 'chat15', content: 'content of chat 15', newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 1', chatId: 'chat1', content: 'content of chat 1', newMessages: 0, preview: 'Это превью содержимого чата номер 1', date: 'Пн'},
+                {party: 'Chat 2', chatId: 'chat2', content: 'content of chat 2', newMessages: 0, preview: 'Это превью содержимого чата номер 2', date: '28 Фев 2025'},
+                {party: 'Chat 3', chatId: 'chat3', content: 'content of chat 3', newMessages: 5, preview: 'Это превью содержимого чата номер 3', date: 'Ср'},
+                {party: 'Chat 4', chatId: 'chat4', content: 'content of chat 4', newMessages: 0, preview: 'Это превью содержимого чата номер 4', date: 'Сб'},
+                {party: 'Chat 5', chatId: 'chat5', content: 'content of chat 5', newMessages: 150, preview: 'Это превью содержимого чата номер 5', date: '11 Мар 2024'},
+                {party: 'Chat 6', chatId: 'chat6', content: 'content of chat 6', newMessages: 0, preview: 'Это превью содержимого чата номер 6', date: 'Вчера'},
+                {party: 'Chat 7', chatId: 'chat7', content: 'content of chat 7', newMessages: 15, preview: 'Это превью содержимого чата номер 7', date: '10:15'},
+                {party: 'Chat 8', chatId: 'chat8', content: 'content of chat 8', newMessages: 0, preview: 'Это превью содержимого чата номер 8', date: 'Позавчера'},
+                {party: 'Chat 9', chatId: 'chat9', content: 'content of chat 9', newMessages: 0, preview: 'Это превью содержимого чата номер 9', date: 'Пн'},
+                {party: 'Chat 10', chatId: 'chat10', content: 'content of chat 10', newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 11', chatId: 'chat11', content: 'content of chat 11', newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 12', chatId: 'chat12', content: 'content of chat 12', newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 13', chatId: 'chat13', content: 'content of chat 13', newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 14', chatId: 'chat14', content: 'content of chat 14', newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 15', chatId: 'chat15', content: 'content of chat 15', newMessages: 0, preview: '', date: ''},
             ],
             chat_search_value: '',
             chat_selection: [],
+            active_chat: undefined,
 
             questions: [],
             answers: [],
@@ -105,6 +108,7 @@ export default class App {
                 this.appElement.innerHTML = template({
                     chats: this.state.chat_selection,
                     chat_search_value: this.state.chat_search_value,
+                    active_chat: this.state.active_chat,
                 });
                 break;
             case 'createQuestionnaire': 
@@ -148,18 +152,22 @@ export default class App {
                 chatLinks.forEach(link => {
                     // find chat content
                     const chatId = link.id;
-                    const chatContent = this.state.chats.find(chat => chat.id === chatId)?.content;
-                    if (!chatContent) {
+                    const thisChat = this.state.chats.find(chat => chat.chatId === chatId);
+                    // const chatContent = this.state.chats.find(chat => chat.chatId === chatId)?.content;
+                    // if (!chatContent) {
+                    if (!thisChat) {
                         alert('Chat ' + chatId + ' not found!');
+                    } else {
+                        link.addEventListener('click', () => this.activateChat(thisChat));
+                        // link.addEventListener('click', function () {
+                        //     // highlight chat in list
+                        //     chatLinks.forEach(chatLink => chatLink.classList.remove('chat-list-item-active'));
+                        //     this.classList.add('chat-list-item-active');
+                        //     // display chat content
+                        //     const chatContentsElement = document.getElementById('chat-content');
+                        //     chatContentsElement.innerHTML = chatContent;
+                        // });    
                     }
-                    link.addEventListener('click', function () {
-                        chatLinks.forEach(chatLink => chatLink.classList.remove('chat-list-item-active'));
-                        this.classList.add('chat-list-item-active');
-
-                        // display chat content
-                        const chatContentsElement = document.getElementById('chat-content');
-                        chatContentsElement.innerHTML = chatContent;
-                    });
                 })
 
                 // buttons and fields
@@ -291,8 +299,14 @@ export default class App {
                 } else {
                     this.state.chat_selection = [...this.state.chats];
                 }
+                this.state.active_chat = undefined;
                 this.render();
             }
         }
+    }
+
+    activateChat(chat) {
+        this.state.active_chat = chat;
+        this.render();
     }
 }

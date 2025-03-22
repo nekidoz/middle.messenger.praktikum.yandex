@@ -1,4 +1,10 @@
-export default `<li class="chat-list-item" id={{id}}>
+export default `<li class=
+    {{#if active}}
+        "chat-list-item chat-list-item-active" 
+    {{else}}
+        "chat-list-item" 
+    {{/if}}
+id={{chatId}}>
     <div class="chat-list-item-grid">
         {{> Image class="chat-list-item-avatar" source="/avatar.png" }}
         {{> Text class="chat-list-item-party" text=party}}
