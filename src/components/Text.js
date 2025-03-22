@@ -1,1 +1,1 @@
-export default `<span class={{class}}>{{text}}</span>`
+export default `<span class="{{class}}">{{text}}</span>`

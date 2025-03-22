@@ -30,6 +30,8 @@ Handlebars.registerPartial('ChatListItemBlock', ChatListItemBlock);
 Handlebars.registerPartial('LoginSignupInputBlock', LoginSignupInputBlock);
 Handlebars.registerPartial('ProfileInputBlock', ProfileInputBlock);
 
+const PARTY_ME = 'me';
+
 export default class App {
     constructor() {
         this.state = {
@@ -45,21 +47,21 @@ export default class App {
             avatar: '',
 
             chats: [
-                {party: 'Chat 1', chatId: 'chat1', content: 'content of chat 1', newMessages: 0, preview: 'Это превью содержимого чата номер 1', date: 'Пн'},
-                {party: 'Chat 2', chatId: 'chat2', content: 'content of chat 2', newMessages: 0, preview: 'Это превью содержимого чата номер 2', date: '28 Фев 2025'},
-                {party: 'Chat 3', chatId: 'chat3', content: 'content of chat 3', newMessages: 5, preview: 'Это превью содержимого чата номер 3', date: 'Ср'},
-                {party: 'Chat 4', chatId: 'chat4', content: 'content of chat 4', newMessages: 0, preview: 'Это превью содержимого чата номер 4', date: 'Сб'},
-                {party: 'Chat 5', chatId: 'chat5', content: 'content of chat 5', newMessages: 150, preview: 'Это превью содержимого чата номер 5', date: '11 Мар 2024'},
-                {party: 'Chat 6', chatId: 'chat6', content: 'content of chat 6', newMessages: 0, preview: 'Это превью содержимого чата номер 6', date: 'Вчера'},
-                {party: 'Chat 7', chatId: 'chat7', content: 'content of chat 7', newMessages: 15, preview: 'Это превью содержимого чата номер 7', date: '10:15'},
-                {party: 'Chat 8', chatId: 'chat8', content: 'content of chat 8', newMessages: 0, preview: 'Это превью содержимого чата номер 8', date: 'Позавчера'},
-                {party: 'Chat 9', chatId: 'chat9', content: 'content of chat 9', newMessages: 0, preview: 'Это превью содержимого чата номер 9', date: 'Пн'},
-                {party: 'Chat 10', chatId: 'chat10', content: 'content of chat 10', newMessages: 0, preview: '', date: ''},
-                {party: 'Chat 11', chatId: 'chat11', content: 'content of chat 11', newMessages: 0, preview: '', date: ''},
-                {party: 'Chat 12', chatId: 'chat12', content: 'content of chat 12', newMessages: 0, preview: '', date: ''},
-                {party: 'Chat 13', chatId: 'chat13', content: 'content of chat 13', newMessages: 0, preview: '', date: ''},
-                {party: 'Chat 14', chatId: 'chat14', content: 'content of chat 14', newMessages: 0, preview: '', date: ''},
-                {party: 'Chat 15', chatId: 'chat15', content: 'content of chat 15', newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 1', chatId: 'chat1', content: [{party: 'other', message: 'content of chat 1'}], newMessages: 0, preview: 'Это превью содержимого чата номер 1', date: 'Пн'},
+                {party: 'Chat 2', chatId: 'chat2', content: [{party: 'other', message: 'content of chat 2'}], newMessages: 0, preview: 'Это превью содержимого чата номер 2', date: '28 Фев 2025'},
+                {party: 'Chat 3', chatId: 'chat3', content: [{party: 'other', message: 'content of chat 3'}], newMessages: 5, preview: 'Это превью содержимого чата номер 3', date: 'Ср'},
+                {party: 'Chat 4', chatId: 'chat4', content: [{party: 'other', message: 'content of chat 4'}], newMessages: 0, preview: 'Это превью содержимого чата номер 4', date: 'Сб'},
+                {party: 'Chat 5', chatId: 'chat5', content: [{party: 'other', message: 'content of chat 5'}], newMessages: 150, preview: 'Это превью содержимого чата номер 5', date: '11 Мар 2024'},
+                {party: 'Chat 6', chatId: 'chat6', content: [{party: 'other', message: 'content of chat 6'}], newMessages: 0, preview: 'Это превью содержимого чата номер 6', date: 'Вчера'},
+                {party: 'Chat 7', chatId: 'chat7', content: [{party: 'other', message: 'content of chat 7'}], newMessages: 15, preview: 'Это превью содержимого чата номер 7', date: '10:15'},
+                {party: 'Chat 8', chatId: 'chat8', content: [{party: 'other', message: 'content of chat 8'}], newMessages: 0, preview: 'Это превью содержимого чата номер 8', date: 'Позавчера'},
+                {party: 'Chat 9', chatId: 'chat9', content: [{party: 'other', message: 'content of chat 9'}], newMessages: 0, preview: 'Это превью содержимого чата номер 9', date: 'Пн'},
+                {party: 'Chat 10', chatId: 'chat10', content: [{party: 'other', message: 'content of chat 10'}], newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 11', chatId: 'chat11', content: [{party: 'other', message: 'content of chat 11'}], newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 12', chatId: 'chat12', content: [{party: 'other', message: 'content of chat 12'}], newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 13', chatId: 'chat13', content: [{party: 'other', message: 'content of chat 13'}], newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 14', chatId: 'chat14', content: [{party: 'other', message: 'content of chat 14'}], newMessages: 0, preview: '', date: ''},
+                {party: 'Chat 15', chatId: 'chat15', content: [{party: 'other', message: 'content of chat 15'}], newMessages: 0, preview: '', date: ''},
             ],
             chat_search_value: '',
             chat_selection: [],
@@ -175,6 +177,16 @@ export default class App {
                 editProfile.addEventListener('click', () => this.changePage('profile'))
                 const chatSearch = document.getElementById('chat-search');
                 chatSearch.addEventListener('keyup', (e) => this.chatSearch(e));
+                if (this.state.active_chat) {
+                    const chatAction = document.getElementById('chat-action');
+                    chatAction.addEventListener('click', () => this.chatAction());
+                    const chatAttach = document.getElementById('chat-attach');
+                    chatAttach.addEventListener('click', () => this.chatAttach());
+                    const chatSend = document.getElementById('chat-send');
+                    chatSend.addEventListener('click', () => this.chatSend());
+                    const messageInput = document.getElementById('message');
+                    messageInput.addEventListener('keyup', (e) => this.chatSendByEnter(e));
+                }
                 break;
             case 'createQuestionnaire':
                 const addButton = document.getElementById('add-question');
@@ -308,5 +320,29 @@ export default class App {
     activateChat(chat) {
         this.state.active_chat = chat;
         this.render();
+    }
+
+    chatAction() {
+        alert('Здесь будут реализованы действия с чатом (если потребуется)');
+    }
+
+    chatAttach() {
+        alert('Здесь может быть даже можно будет что-нибудь прикрепить к чату');
+    }
+
+    chatSend() {
+        const message = document.getElementById('message')?.value;
+        if (!message) {
+            alert('Введите сообщение в поле "Сообщение"');
+        } else {
+            this.state.active_chat.content.push({party: PARTY_ME, message: message});
+            this.render();
+        }
+    }
+
+    chatSendByEnter(e) {
+        if (e.keyCode === 13) {
+            this.chatSend();
+        }
     }
 }
