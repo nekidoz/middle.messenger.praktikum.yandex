@@ -1,6 +1,5 @@
 import Handlebars from 'handlebars';
 import * as Pages from './pages';
-import { mockQuestions, mockAnswers } from './mockData.js';
 import './helpers/handlebarsHelpers.js';
 
 // Import and register partials in Handlebars
