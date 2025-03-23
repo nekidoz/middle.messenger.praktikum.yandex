@@ -23,10 +23,10 @@ https://www.figma.com/design/XVwaW1KoyfnovlTbWOqhDz/middle.messenger.praktikum.y
 
 ### Веб-приложение на Netlify
 
-https://67d70680eb0c055b0e9483c9--nekidoz-mid-front-praktikum-yandex.netlify.app
+https://nekidoz-mid-front-praktikum-yandex.netlify.app/
 
 ### Сверстанные страницы
 
 Для просмотра сверстанных страниц предлагается воспользоваться меню, расположенным сверху страницы приложения.
 
-https://67d70680eb0c055b0e9483c9--nekidoz-mid-front-praktikum-yandex.netlify.app
+https://nekidoz-mid-front-praktikum-yandex.netlify.app/
