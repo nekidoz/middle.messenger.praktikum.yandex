@@ -1,12 +1,12 @@
 <div class="app">
     <div class="menu-page">
         {{> Menu }}
-        <div class="error-page-container">
+        <main class="error-page-container">
             <div class="error-page-box">
                 {{> Text class="error-page-text" text="500" }}
                 <h2>Мы уже фиксим</h2>
-                {{> Link href="#" class="footer-link" data-page="chats" text="Назад к чатам" }}
+                {{> Link href="#" class="menu-page-menu-item" data-page="chats" text="Назад к чатам" }}
             </div>
-        </div>
+        </main>
     </div>
 </div>
