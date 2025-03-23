@@ -1,6 +1,7 @@
 <div class="app">
-    <div class="profile-box">
-        {{> Image source="/avatar.png" class="profile-avatar" }}
+    {{> Menu class="footer" }}
+    <main class="profile-box">
+        {{> Image source="/avatar.png" class="profile-avatar" caption="Аватар" }}
         <h2>
             {{#if display_name}}{{display_name}}{{/if}}
             {{#unless display_name}}(имя не задано){{/unless}}
@@ -20,9 +21,8 @@
             {{> ProfileInputBlock id="repeat_password" type="password" caption="Новый пароль (еще раз)" placeholder="Новый пароль (еще раз)" }}
             <div class="button-stack">
                 {{> Input id="btn-save-profile" class="regular-button" type="submit" value="Сохранить" }}
-                {{> Link href="#" class="footer-link" data-page="login" text="Выйти"}}
+                {{> Link href="#" class="menu-page-menu-item" data-page="login" text="Выйти"}}
             </div>
         </form>
-    </div>
-    {{> Footer}}
+    </main>
 </div>

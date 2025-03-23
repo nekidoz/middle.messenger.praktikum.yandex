@@ -6,7 +6,7 @@ export default `<li class=
     {{/if}}
 id={{chatId}}>
     <div class="chat-list-item-grid">
-        {{> Image class="chat-list-item-avatar" source="/avatar.png" }}
+        {{> Image class="chat-list-item-avatar" source="/avatar.png" caption="Аватар" }}
         {{> Text class="chat-list-item-party" text=party}}
         {{> Text class="chat-list-item-date" text=date}}
         {{> Text class="chat-list-item-preview" text=preview}}

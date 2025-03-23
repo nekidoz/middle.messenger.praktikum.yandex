@@ -4,7 +4,6 @@ import './helpers/handlebarsHelpers.js';
 
 // Import and register partials in Handlebars
 import Button from './components/Button';
-import Footer from './components/Footer';
 import Image from './components/Image';
 import Input from './components/Input';
 import Link from './components/Link';
@@ -17,7 +16,6 @@ import LoginSignupInputBlock from './components/molecules/LoginSignupInputBlock.
 import ProfileInputBlock from './components/molecules/ProfileInputBlock.js';
 
 Handlebars.registerPartial('Button', Button);
-Handlebars.registerPartial('Footer', Footer);
 Handlebars.registerPartial('Image', Image);
 Handlebars.registerPartial('Input', Input);
 Handlebars.registerPartial('Link', Link);
@@ -125,7 +123,6 @@ export default class App {
                 break;
         }
         this.attachPageEventListeners();
-        this.attachFooterEventListeners();
         this.attachMenuEventListeners();
     }
 
@@ -179,10 +176,8 @@ export default class App {
                     chatAction.addEventListener('click', () => this.chatAction());
                     const chatAttach = document.getElementById('chat-attach');
                     chatAttach.addEventListener('click', () => this.chatAttach());
-                    const chatSend = document.getElementById('chat-send');
-                    chatSend.addEventListener('click', () => this.chatSend());
-                    const messageInput = document.getElementById('message');
-                    messageInput.addEventListener('keyup', (e) => this.chatSendByEnter(e));
+                    const messageForm = document.getElementById('chat-message-form');
+                    messageForm.addEventListener('submit', (e) => this.chatSend(e));
                 }
                 break;
             case 'page404': 
@@ -194,16 +189,6 @@ export default class App {
                 break;
         }        
 
-    }
-
-    attachFooterEventListeners() {
-        const footerLinks = document.querySelectorAll('.footer-link');
-        footerLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.changePage(e.target.dataset.page);
-            })
-        })
     }
 
     attachMenuEventListeners() {
@@ -303,19 +288,15 @@ export default class App {
         alert('Здесь может быть даже можно будет что-нибудь прикрепить к чату');
     }
 
-    chatSend() {
-        const message = document.getElementById('message')?.value;
+    chatSend(event) {
+        event.preventDefault();
+        const message = event.target.message.value?.trim();
+        // const message = document.getElementById('message')?.value;
         if (!message) {
             alert('Введите сообщение в поле "Сообщение"');
         } else {
             this.state.active_chat.content.push({party: PARTY_ME, message: message});
             this.render();
-        }
-    }
-
-    chatSendByEnter(e) {
-        if (e.keyCode === 13) {
-            this.chatSend();
         }
     }
 }
