@@ -1,0 +1,19 @@
+<div class="app">
+    {{> Menu class="footer" }}
+    <main class="login-signup-box">
+        <h2>Регистрация</h2>
+        <form id="signup-form">
+            {{> LoginSignupInputBlock id="email" type="email" value=email caption="Почта" placeholder="Почта" }}
+            {{> LoginSignupInputBlock id="login" type="text" value=login caption="Логин" placeholder="Логин" error="Здесь могла бы быть ужасная ошибка" }}
+            {{> LoginSignupInputBlock id="first_name" type="text" value=first_name caption="Имя" placeholder="Имя" }}
+            {{> LoginSignupInputBlock id="second_name" type="text" value=second_name caption="Фамилия" placeholder="Фамилия" }}
+            {{> LoginSignupInputBlock id="phone" type="tel" value=phone caption="Телефон" placeholder="Телефон" }}
+            {{> LoginSignupInputBlock id="password" type="password" caption="Пароль" placeholder="Пароль" }}
+            {{> LoginSignupInputBlock id="repeat_password" type="password" caption="Пароль (еще раз)" placeholder="Пароль (еще раз)" }}
+            <div class="button-stack">
+                {{> Input id="btn-signup" class="regular-button" type="submit" value="Зарегистрироваться" }}
+                {{> Link href="#" class="menu-page-menu-item" data-page="login" text="Уже есть аккаунт?"}}
+            </div>
+        </form>
+    </main>
+</div>
