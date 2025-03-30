@@ -61,3 +61,14 @@ Check NodeJS version7/7 ✗ Check NodeJS version
      `[[ "$output" = "null" ]] && fatal "$output" # "node" in "engines" section in package.json' failed
    null
 ):
+## Установка TypeScript
+### Установка компилятора
+    npm install --save-dev typescript
+#### Компиляция файла
+Для валидации без компиляции запустить в папке проекта в отдельном окне (опция --watch постоянно следит за изменениями):
+    [./node_modules/.bin/]tsc --noEmit --watch
+### Утилита позволяет компилировать и сразу запускать .ts файлы
+~$ npm install --save-dev ts-node
+~$ ts-node script.ts
+### Config
+Сделать конфиг tsconfig.json

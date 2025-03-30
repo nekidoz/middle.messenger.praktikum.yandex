@@ -1,6 +1,6 @@
 import Handlebars from 'handlebars';
 import * as Pages from './pages';
-import './helpers/handlebarsHelpers.js';
+import './helpers/handlebarsHelpers.ts';
 
 // Import and register partials in Handlebars
 import Button from './components/Button';
@@ -9,11 +9,11 @@ import Input from './components/Input';
 import Link from './components/Link';
 import Menu from './components/Menu';
 import Select from './components/Select';
-import Text from './components/Text.js';
-import ChatContentBlock from './components/molecules/ChatContentBlock.js';
-import ChatListItemBlock from './components/molecules/ChatListItemBlock.js';
-import LoginSignupInputBlock from './components/molecules/LoginSignupInputBlock.js';
-import ProfileInputBlock from './components/molecules/ProfileInputBlock.js';
+import Text from './components/Text';
+import ChatContentBlock from './components/molecules/ChatContentBlock';
+import ChatListItemBlock from './components/molecules/ChatListItemBlock';
+import LoginSignupInputBlock from './components/molecules/LoginSignupInputBlock';
+import ProfileInputBlock from './components/molecules/ProfileInputBlock';
 
 Handlebars.registerPartial('Button', Button);
 Handlebars.registerPartial('Image', Image);
@@ -29,7 +29,38 @@ Handlebars.registerPartial('ProfileInputBlock', ProfileInputBlock);
 
 const PARTY_ME = 'me';
 
+type Nullable<T> = T | null;
+
+type Chat = {
+    party: string; 
+    chatId: string; 
+    content: { 
+        party: string; 
+        message: string; 
+    }[]; 
+    newMessages: number; 
+    preview: string; 
+    date: string;     
+};
+
 export default class App {
+    state: { 
+        currentPage: string | undefined; 
+        login: string; 
+        password: string; 
+        first_name: string; 
+        second_name: string; 
+        email: string; 
+        phone: string; 
+        display_name: string; 
+        avatar: string; 
+        chats: Chat[]; 
+        chat_search_value: string; 
+        chat_selection: Chat[]; 
+        active_chat: Chat | undefined; 
+    };
+    appElement: HTMLElement | null;
+
     constructor() {
         this.state = {
             currentPage: 'login',
@@ -64,8 +95,6 @@ export default class App {
             chat_selection: [],
             active_chat: undefined,
 
-            questions: [],
-            answers: [],
         };
         this.state.chat_selection = [...this.state.chats];
         this.appElement = document.getElementById('app');
@@ -73,6 +102,10 @@ export default class App {
 
     render() {
         let template;
+        if (!this.appElement) {
+            alert('Не найден тэг приложения - обратитесь к разработчику!');
+            return;
+        }
         switch (this.state.currentPage) {
             case 'login':
                 template = Handlebars.compile(Pages.LoginPage);
@@ -130,15 +163,15 @@ export default class App {
         switch (this.state.currentPage) {
             case 'login':
                 const loginForm = document.getElementById('login-form');
-                loginForm.addEventListener('submit', (e) => this.login(e));
+                loginForm?.addEventListener('submit', (e) => this.login(e));
                 break;
             case 'signup':
                 const signupForm = document.getElementById('signup-form');
-                signupForm.addEventListener('submit', (e) => this.signup(e));
+                signupForm?.addEventListener('submit', (e) => this.signup(e));
                 break;
             case 'profile':
                 const profileForm = document.getElementById('profile-form');
-                profileForm.addEventListener('submit', (e) => this.saveProfile(e));
+                profileForm?.addEventListener('submit', (e) => this.saveProfile(e));
                 break;
             case 'chats':
                 // chat links
@@ -168,16 +201,16 @@ export default class App {
 
                 // buttons and fields
                 const editProfile = document.getElementById('edit-profile');
-                editProfile.addEventListener('click', () => this.changePage('profile'))
+                editProfile?.addEventListener('click', () => this.changePage('profile'))
                 const chatSearch = document.getElementById('chat-search');
-                chatSearch.addEventListener('keyup', (e) => this.chatSearch(e));
+                chatSearch?.addEventListener('keyup', (e) => this.chatSearch(e));
                 if (this.state.active_chat) {
                     const chatAction = document.getElementById('chat-action');
-                    chatAction.addEventListener('click', () => this.chatAction());
+                    chatAction?.addEventListener('click', () => this.chatAction());
                     const chatAttach = document.getElementById('chat-attach');
-                    chatAttach.addEventListener('click', () => this.chatAttach());
+                    chatAttach?.addEventListener('click', () => this.chatAttach());
                     const messageForm = document.getElementById('chat-message-form');
-                    messageForm.addEventListener('submit', (e) => this.chatSend(e));
+                    messageForm?.addEventListener('submit', (e) => this.chatSend(e));
                 }
                 break;
             case 'page404': 
@@ -196,35 +229,38 @@ export default class App {
         menuItems.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                this.changePage(e.target.dataset.page);
+                const linkElement = e.target as HTMLLinkElement;
+                this.changePage(linkElement?.dataset.page);
             })
         })
     }
 
-    changePage(page) {
+    changePage(page: string | undefined) {
         this.state.currentPage = page;
         this.render();
     }
 
-    login(event) {
+    login(event: SubmitEvent) {
         event.preventDefault();
-        this.state.login = event.target.login.value;
-        this.state.password = event.target.password.value;
+        const formElement = event.target as HTMLFormElement;
+        this.state.login = formElement?.login.value;
+        this.state.password = formElement?.password.value;
         alert('Вход' + 
             '\nлогин: ' + (this.state.login ? this.state.login : '<не задан>') + 
             '\nпароль: ' + (this.state.password ? this.state.password : '<не задан>'));
         this.changePage('chats');
     }
 
-    signup(event) {
+    signup(event: SubmitEvent) {
         event.preventDefault();
-        this.state.login = event.target.login.value;
-        this.state.password = event.target.password.value;
-        this.state.first_name = event.target.first_name.value;
-        this.state.second_name = event.target.second_name.value;
-        this.state.email = event.target.email.value;
-        this.state.phone = event.target.phone.value;
-        this.state.display_name = event.target.first_name.value;
+        const formElement = event.target as HTMLFormElement;
+        this.state.login = formElement?.login.value;
+        this.state.password = formElement?.password.value;
+        this.state.first_name = formElement?.first_name.value;
+        this.state.second_name = formElement?.second_name.value;
+        this.state.email = formElement?.email.value;
+        this.state.phone = formElement?.phone.value;
+        this.state.display_name = formElement?.first_name.value;
         alert('Регистрация'+ 
             '\nлогин: ' + (this.state.login ? this.state.login : '<не задан>') + 
             '\nпароль: ' + (this.state.password ? this.state.password : '<не задан>') + 
@@ -236,16 +272,17 @@ export default class App {
         this.changePage('login');
     }
 
-    saveProfile(event) {
+    saveProfile(event: SubmitEvent) {
         event.preventDefault();
-        this.state.login = event.target.login.value;
-        this.state.password = event.target.newPassword.value;
-        this.state.first_name = event.target.first_name.value;
-        this.state.second_name = event.target.second_name.value;
-        this.state.email = event.target.email.value;
-        this.state.phone = event.target.phone.value;
-        this.state.display_name = event.target.display_name.value;
-        this.state.avatar = event.target.avatar.value;
+        const formElement = event.target as HTMLFormElement;
+        this.state.login = formElement?.login.value;
+        this.state.password = formElement?.newPassword.value;
+        this.state.first_name = formElement?.first_name.value;
+        this.state.second_name = formElement?.second_name.value;
+        this.state.email = formElement?.email.value;
+        this.state.phone = formElement?.phone.value;
+        this.state.display_name = formElement?.display_name.value;
+        this.state.avatar = formElement?.avatar.value;
         alert('Регистрация'+ 
             '\nлогин: ' + (this.state.login ? this.state.login : '<не задан>') + 
             '\nновый пароль: ' + (this.state.password ? this.state.password : '<не задан>') + 
@@ -259,9 +296,10 @@ export default class App {
         this.changePage('chats');
     }
 
-    chatSearch(e, chatSearch) {
+    chatSearch(e: KeyboardEvent) {
         if (e.keyCode === 13) {
-            const searchValue = document.getElementById('chat-search')?.value;
+            const chatSearchField :Nullable<HTMLInputElement> = document.getElementById('chat-search') as HTMLInputElement;
+            const searchValue = chatSearchField?.value;
             if (searchValue !== this.state.chat_search_value) {
                 this.state.chat_search_value = searchValue;
                 if (searchValue) {
@@ -275,7 +313,7 @@ export default class App {
         }
     }
 
-    activateChat(chat) {
+    activateChat(chat: Chat) {
         this.state.active_chat = chat;
         this.render();
     }
@@ -288,12 +326,15 @@ export default class App {
         alert('Здесь может быть даже можно будет что-нибудь прикрепить к чату');
     }
 
-    chatSend(event) {
+    chatSend(event: SubmitEvent) {
         event.preventDefault();
-        const message = event.target.message.value?.trim();
+        const formElement = event.target as HTMLFormElement;
+        const message = formElement?.message.value?.trim();
         // const message = document.getElementById('message')?.value;
         if (!message) {
             alert('Введите сообщение в поле "Сообщение"');
+        } else if (!this.state.active_chat) {
+            alert('Чат не выбран - обратитесь к разработчику!');
         } else {
             this.state.active_chat.content.push({party: PARTY_ME, message: message});
             this.render();
