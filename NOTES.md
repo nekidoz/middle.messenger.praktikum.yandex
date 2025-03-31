@@ -12,18 +12,22 @@
 ### Конфигурация Vite
 В папке проекта Vite создать файл конфигурации:
     vite.config.js
+
 ## Шаблонизатор
 Шаблонизатор Handlebars
     npm install vite-plugin-handlebars
 Добавить в конфиг vite.config.js
+
 ## Препроцессор CSS - НЕ НУЖЕН
 Установка LESS в проект (больше ничего для Vite не требуется):
     npm add -D less
+
 ## PostCSS
 Установить postcss:
     npm install postcss-nested
 Создать postcss.config.cjs .
 Добавить секцию css в vite.config.js .
+
 ## Git
 Установить локального пользователя, если нужно
     git config --local user.name "Nekidoz" 
@@ -38,6 +42,7 @@
 - Создать новый upstream для другого пользователя
     remote add origin git@nekidoz-github:nekidoz/middle.messenger.praktikum.yandex.git
 где nekidoz-github - имя хоста в ssh config
+
 ## Конфигурация Express для Production - npm run start
 Установить Express:
     npm install express
@@ -45,14 +50,17 @@
     server.cjs
 В package.json в раздел scripts добавить строку дополнительно к тому, что генерирует vite:
     "start": "vite build && node server.cjs",
+
 ## Установка требуемых зависимостей
 Установить все, что есть в package-lock.json:
     npm i
+
 ## Deploy на Netlify
 1. Создать или переключиться на ветку deploy
 	git checkout [-b] deploy
 2. В файле .gitignore убираем папку dist/ (папка dist/ должна деплоиться)
 3. Сделать коммит ветки на GitHub
+
 ## Чтобы прошли автотесты в Pull Request
 Добавить разделы node и engines в package.json (ошибка:
 Check NodeJS version7/7 ✗ Check NodeJS version
@@ -61,6 +69,7 @@ Check NodeJS version7/7 ✗ Check NodeJS version
      `[[ "$output" = "null" ]] && fatal "$output" # "node" in "engines" section in package.json' failed
    null
 ):
+
 ## Установка TypeScript
 ### Установка компилятора
     npm install --save-dev typescript
@@ -85,14 +94,18 @@ Check NodeJS version7/7 ✗ Check NodeJS version
 ### Утилита позволяет компилировать и сразу запускать .ts файлы
 ~$ npm install --save-dev ts-node
 ~$ ts-node script.ts
+
 ## Стиль кода
 ### Codestyle.md
 Вербальное описание соглашений
 ### .editorconfig
 Конфигурация IDE
-### Линтер ESLint (версия 9 +)
-Установка для режима разработки:
+
+## Линтер JavaScript/TypeScript - ESLint (версия 9 +)
+### Установка
+Установка для режима разработки (только там он и нужен):
     npm install --save-dev eslint
+### Конфигурация
 Создать конфиг:
     .eslintrc.json .
 
@@ -115,7 +128,23 @@ Check NodeJS version7/7 ✗ Check NodeJS version
         /* eslint max-params: [2, 4] */
     Для следующей строки:
         // eslint-disable-next-line import/no-unresolved
+### Запуск
 Запустить линтер для проверки проекта:
     node_modules/.bin/eslint .
-или через npm:
+а лучше через npm, потому про предыдущий формат не находит проблем:
     npm run lint
+
+## Линтер CSS - Stylelint
+### Установка
+Установить stylelint:
+    npm install --save-dev stylelint
+и дополнительные компоненты:
+    npm install --save-dev stylelint-config-standard stylelint-order
+### Конфигурация
+Создать конфиг:
+    .stylelintrc.json .
+Список игнорируемых файлов:
+    .stylelintignore
+Добавить в package.json скрипт lint:style и lint:style:fix , чтобы запускать через npm.
+### Запуск
+    npm run lint:style
