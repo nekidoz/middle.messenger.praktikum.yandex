@@ -1,1 +1,2 @@
-export default `<span class="{{class}}">{{text}}</span>`
+/* eslint quotes: off */
+export default `<span class="{{class}}">{{text}}</span>`;

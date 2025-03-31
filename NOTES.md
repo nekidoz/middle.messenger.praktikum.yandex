@@ -85,3 +85,37 @@ Check NodeJS version7/7 ✗ Check NodeJS version
 ### Утилита позволяет компилировать и сразу запускать .ts файлы
 ~$ npm install --save-dev ts-node
 ~$ ts-node script.ts
+## Стиль кода
+### Codestyle.md
+Вербальное описание соглашений
+### .editorconfig
+Конфигурация IDE
+### Линтер ESLint (версия 9 +)
+Установка для режима разработки:
+    npm install --save-dev eslint
+Создать конфиг:
+    .eslintrc.json .
+
+!!!ВАЖНО!!! Так как не установлен реакт, чтобы избежать ошибки линтера, указана произвольная версия, надо ее заменить при установке react на detect.
+
+Установить (при необходимости) готовые наборы правил, например, AirBnB:
+    npm install --save-dev eslint-config-airbnb
+Создать список игнорируемых файлов - файл:
+    .eslintignore
+Установить плагины для TypeScript:
+    npm install --save-dev @typescript-eslint/parser
+    npm install --save-dev @typescript-eslint/eslint-plugin
+и добавить их в .eslintrc.json .
+Добавить секцию include в tsconfig.json с указанием файлов TypeScript и конфига ESLint (указано в видео, в моем случае ничего не изменилось).
+Добавить в package.json скрипты lint и lint:fix , чтобы запускать через npm.
+В коде можно указывать, какие правила игнорировать или изменить:
+    Для всего файла:
+        /* eslint-disable import/prefer-default-export */
+        /* eslint no-unused-vars: 0 */
+        /* eslint max-params: [2, 4] */
+    Для следующей строки:
+        // eslint-disable-next-line import/no-unresolved
+Запустить линтер для проверки проекта:
+    node_modules/.bin/eslint .
+или через npm:
+    npm run lint

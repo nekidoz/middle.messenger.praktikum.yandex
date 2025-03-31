@@ -16,17 +16,25 @@
     "prebuild": "tsc --noEmit",
     "build": "vite build",
     "start": "npm run prebuild && vite build && node server.cjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb": "^19.0.4",
     "less": "^4.2.2",
     "typescript": "^5.8.2",
     "vite": "^6.2.0"
   },
   "dependencies": {
     "express": "^4.21.2",
+    "handlebars": "^4.7.8",
     "postcss": "^8.5.3",
     "postcss-nested": "^7.0.2",
+    "vite": "^6.2.0",
     "vite-plugin-handlebars": "^2.0.0"
   }
 }
