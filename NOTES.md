@@ -64,11 +64,24 @@ Check NodeJS version7/7 ✗ Check NodeJS version
 ## Установка TypeScript
 ### Установка компилятора
     npm install --save-dev typescript
-#### Компиляция файла
+### Config
+Сделать конфиг tsconfig.json
+### Валидация в режиме разработки (dev)
 Для валидации без компиляции запустить в папке проекта в отдельном окне (опция --watch постоянно следит за изменениями):
     [./node_modules/.bin/]tsc --noEmit --watch
+### Валидация в режиме production
+Добавить в package.json раздел prebuild, он будет автоматически исполняться перед build:
+    "scripts": {
+        "prebuild": "tsc --noEmit",
+    },
+Если автоматически не исполняется, также модифицировать раздел build:
+    "scripts": {
+        "build": "npm run prebuild && vite build",
+    },
+Если npm run start не запускает проверку typescript, модифицировать раздел start:
+    "scripts": {
+        "start": "npm run prebuild && vite build && node server.cjs",
+    },
 ### Утилита позволяет компилировать и сразу запускать .ts файлы
 ~$ npm install --save-dev ts-node
 ~$ ts-node script.ts
-### Config
-Сделать конфиг tsconfig.json

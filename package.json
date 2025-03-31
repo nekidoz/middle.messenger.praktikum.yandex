@@ -13,8 +13,9 @@
   },
   "scripts": {
     "dev": "vite",
+    "prebuild": "tsc --noEmit",
     "build": "vite build",
-    "start": "vite build && node server.cjs",
+    "start": "npm run prebuild && vite build && node server.cjs",
     "preview": "vite preview"
   },
   "devDependencies": {
