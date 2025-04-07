@@ -1,29 +1,29 @@
 class EventBus {
-    listners: Record<string, Function[]>;
+    listeners: Record<string, Function[]>;
 
     constructor() {
-        this.listners = {};
+        this.listeners = {};
     }
 
     on(event: string, callback: Function) {
-        if (!this.listners[event]) {
-            this.listners[event] = [];
+        if (!this.listeners[event]) {
+            this.listeners[event] = [];
         }
-        this.listners[event].push(callback);
+        this.listeners[event].push(callback);
     }
 
     off(event: string, callback: Function) {
-        if (!this.listners[event]) {
-            this.listners[event] = [];
+        if (!this.listeners[event]) {
+            this.listeners[event] = [];
         }
-        this.listners[event] = this.listners[event].filter((listner) => listner !== callback);
+        this.listeners[event] = this.listeners[event].filter((listener) => listener !== callback);
     }
 
     emit(event: string, ...args: unknown[]) {
-        if (!this.listners[event]) {
+        if (!this.listeners[event]) {
             throw new Error(`Событие не зарегистрировано: ${event}`);
         }
-        this.listners[event].forEach((listner) => { listner(...args); });
+        this.listeners[event].forEach((listener) => { listener(...args); });
     }
 }
 

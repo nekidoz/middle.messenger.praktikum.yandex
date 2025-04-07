@@ -7,14 +7,27 @@ class App {
     constructor() {
         this.button = new Button({
             className: 'regular-button',
-            child: 'click me!'
+            child: 'click me!',
+            settings: {
+                withInternalID: true
+            }
         });
     }
 
     render() {
-        console.log('App render');
-        console.log(this.button);
         render("#app", this.button);
+
+        setTimeout(() => {
+            this.button.setProps({
+                className: 'navigation-button',
+                child: 'click me, please!!!',
+                events: {
+                    click: (event: Event) => {
+                        console.log(event);
+                    }
+                }
+            });
+        }, 1000);
     }
 }
 

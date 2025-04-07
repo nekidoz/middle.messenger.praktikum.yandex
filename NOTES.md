@@ -148,3 +148,7 @@ Check NodeJS version7/7 ✗ Check NodeJS version
 Добавить в package.json скрипт lint:style и lint:style:fix , чтобы запускать через npm.
 ### Запуск
     npm run lint:style
+
+## Другие пакеты
+### UUID (для компонента Block)
+    npm install uuid
