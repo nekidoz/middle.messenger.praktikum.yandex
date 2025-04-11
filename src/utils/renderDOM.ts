@@ -1,6 +1,6 @@
 import Block from '../framework/block';
 
-export function render(query: string, block: Block) {
+function render(query: string, block: Block) {
     const root = document.querySelector(query) as HTMLElement;
     // Можно завязаться на реализации вашего класса Block
     if (root) {
@@ -9,3 +9,5 @@ export function render(query: string, block: Block) {
     }
     return root;
 }
+
+export default render;

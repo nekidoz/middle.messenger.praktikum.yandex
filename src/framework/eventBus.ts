@@ -20,6 +20,7 @@ class EventBus {
     }
 
     emit(event: string, ...args: unknown[]) {
+        console.log(`EventBus: ${event} emitted`);
         if (!this.listeners[event]) {
             throw new Error(`Событие не зарегистрировано: ${event}`);
         }

@@ -1,26 +1,23 @@
-import Button from './components/button/Button';
-import { render } from './utils/renderDom';
+import LoginSignupInputBlock from './components/blocks/loginSignupInputBlock';
+import render from './utils/renderDOM';
 
 class App {
-    private button;
+    // private button;
+    private loginSignupInputBlock;
 
     constructor() {
-        this.button = new Button({
-            className: 'regular-button',
-            child: 'click me!',
-            settings: {
-                withInternalID: true
-            }
+        this.loginSignupInputBlock = new LoginSignupInputBlock({
+            userName: 'John Doe',
+            buttonText: 'click me!',
         });
     }
 
     render() {
-        render("#app", this.button);
+        render('#app', this.loginSignupInputBlock);
 
         setTimeout(() => {
-            this.button.setProps({
-                className: 'navigation-button',
-                child: 'click me, please!!!',
+            this.loginSignupInputBlock.setProps({
+                buttonText: 'click me, please!!!',
                 events: {
                     click: (event: Event) => {
                         console.log(event);

@@ -1,5 +1,3 @@
-/* eslint-disable import/no-unresolved */
-/* eslint-disable import/extensions */
 /* eslint max-len: [1, 200] */
 
 import Handlebars from 'handlebars';
