@@ -2,7 +2,7 @@ import Block, {PropsRecord} from '../../framework/block';
 
 export class Link extends Block {
     constructor(props: PropsRecord) {
-        super('a', {
+        super({
             ...props,
             events: {
                 click: (e: Event) => {

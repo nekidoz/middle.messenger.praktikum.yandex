@@ -33,7 +33,9 @@ abstract class Block {
 
     private _id: string | null = null;
 
-    constructor(tagName: string = 'div', propsAndChildren: PropsRecord = {}) {
+    // constructor(tagName: string = 'div', propsAndChildren: PropsRecord = {}) {
+    constructor(propsAndChildren: PropsRecord = {}) {
+        const tagName = 'div'; 
         this._eventBus = new EventBus();
 
         // Get and save props in meta

@@ -5,7 +5,7 @@ import template from './template';
 export default class Button extends Block {
     constructor(props: PropsRecord) {
         // Создаём враппер DOM-элемент button
-        super('button', props);
+        super(props);
     }
 
     render() {

@@ -2,8 +2,6 @@ import Block, { PropsRecord } from '../../../framework/block';
 import Button from '../../button/Button';
 import Menu from '../menu/Menu';
 import template from './template';
-import Input from '../../input/index';
-import Text from '../../text/index';
 import LoginSignupInputBlock from '../loginSignupInputBlock/index';
 
 export default class TestBlock extends Block {
@@ -17,20 +15,13 @@ export default class TestBlock extends Block {
             },
         });
         propsAndChildren.list = ['First', 'Second', 'Third'];
-        propsAndChildren.caption = new Text({
-            class: "login-signup-caption",
-            text: "Sample text"
-        })
-        propsAndChildren.input = new Input({
-            class: "login-signup-input"
-        });
         propsAndChildren.menu = new Menu();
         propsAndChildren.inputBlock = new LoginSignupInputBlock({
             caption: "Last name",
             error: "Oh my god!!!!!",
         })
 
-        super('div', propsAndChildren);
+        super(propsAndChildren);
     }
 
     render() {

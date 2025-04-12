@@ -3,7 +3,7 @@ import { Link } from '../../link/Link';
 
 export default class Menu extends Block {
     constructor() {
-        super('nav', {
+        super({
             LinkLogin: new Link({
                 href: '#',
                 class: 'menu-page-menu-item',

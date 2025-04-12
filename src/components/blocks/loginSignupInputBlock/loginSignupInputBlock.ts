@@ -1,6 +1,6 @@
 import Block, { PropsRecord } from '../../../framework/block';
-import Input from '../../input/input';
-import Text from '../../text/text';
+import Input from '../../atoms/input/input';
+import Text from '../../atoms/text/text';
 import template from './template';
 
 export default class LoginSignupInputBlock extends Block {
@@ -23,7 +23,7 @@ export default class LoginSignupInputBlock extends Block {
             text: propsAndChildren.error,
         });
 
-        super('div', {
+        super({
             ...propsAndChildren,
             template,
         });
