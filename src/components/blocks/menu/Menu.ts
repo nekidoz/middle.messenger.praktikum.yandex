@@ -1,7 +1,7 @@
 import Block from '../../../framework/block';
 import { Link } from '../../link/Link';
 
-export class Menu extends Block {
+export default class Menu extends Block {
     constructor() {
         super('nav', {
             LinkLogin: new Link({

@@ -1,31 +1,29 @@
-import LoginSignupInputBlock from './components/blocks/loginSignupInputBlock';
+import TestBlock from './components/blocks/testBlock';
 import render from './utils/renderDOM';
 
-class App {
+export default class App {
     // private button;
-    private loginSignupInputBlock;
+    private testBlock;
 
     constructor() {
-        this.loginSignupInputBlock = new LoginSignupInputBlock({
+        this.testBlock = new TestBlock({
             userName: 'John Doe',
             buttonText: 'click me!',
         });
     }
 
     render() {
-        render('#app', this.loginSignupInputBlock);
+        render('#app', this.testBlock);
 
-        setTimeout(() => {
-            this.loginSignupInputBlock.setProps({
-                buttonText: 'click me, please!!!',
-                events: {
-                    click: (event: Event) => {
-                        console.log(event);
-                    }
-                }
-            });
-        }, 1000);
+        // setTimeout(() => {
+        //     this.testBlock.setProps({
+        //         buttonText: 'click me, please!!!',
+        //         events: {
+        //             click: (event: Event) => {
+        //                 console.log(event);
+        //             }
+        //         }
+        //     });
+        // }, 1000);
     }
 }
-
-export default App;

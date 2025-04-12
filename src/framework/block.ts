@@ -16,7 +16,7 @@ type BlocksRecord = Record<string, Block>;
 type BlockListRecord = Record<string, unknown[]>;
 
 abstract class Block {
-    private _element: HTMLElement | null = null;
+    protected _element: HTMLElement | null = null;
 
     private _meta: {
         tagName: string,
@@ -296,8 +296,15 @@ abstract class Block {
 
     }
 
-    // Переопределяется пользователем. Необходимо вернуть разметку
-    abstract render(): HTMLElement;
+    // Может переопределяться пользователем. Необходимо вернуть элемент
+    render(): HTMLElement {
+        return this.compile(this.getTemplate(), this._props);
+    }
+
+    // Может переопределяться пользователем. Необходимо вернуть шапблон разметки HTML
+    getTemplate(): string {
+        return this._props.template as string;
+    }
 
     getContent() {
         return this._element;

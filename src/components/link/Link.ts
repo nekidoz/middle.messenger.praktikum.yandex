@@ -7,7 +7,8 @@ export class Link extends Block {
             events: {
                 click: (e: Event) => {
                     this.changeStyles();
-                    props.onClick(e);
+                    const clickFunc = props.onClick as (e: Event) => void;
+                    clickFunc(e);
                 },
             },
             attrs: {

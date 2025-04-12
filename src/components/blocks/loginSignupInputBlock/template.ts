@@ -1,1 +1,7 @@
-export default '<div>{{ userName }}<p>{{{ button }}}<p>{{{list}}}<p>{{{menu}}}</div>';
+export default `<div class="login-signup-input-block">
+    <div class="login-signup-input-block-inner">
+        {{{captionComponent}}}<p>
+        {{{inputComponent}}}
+    </div>
+    {{{errorComponent}}}<p>
+</div>`;
