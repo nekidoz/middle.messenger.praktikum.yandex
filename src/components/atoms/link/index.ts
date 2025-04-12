@@ -1,3 +1,3 @@
-import Link from './blink';
+import Link from './link';
 
 export default Link;
