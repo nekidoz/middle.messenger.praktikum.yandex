@@ -1,3 +1,5 @@
+import logger from '../utils/logger';
+
 class EventBus {
     listeners: Record<string, Function[]>;
 
@@ -20,7 +22,7 @@ class EventBus {
     }
 
     emit(event: string, ...args: unknown[]) {
-        console.log(`EventBus: ${event} emitted`);
+        logger.log(`EventBus: ${event} emitted`);
         if (!this.listeners[event]) {
             throw new Error(`Событие не зарегистрировано: ${event}`);
         }

@@ -1,5 +1,6 @@
 import TestBlock from './components/blocks/testBlock';
 import render from './utils/renderDOM';
+// import logger from './utils/logger';
 
 export default class App {
     // private button;
@@ -20,7 +21,7 @@ export default class App {
         //         buttonText: 'click me, please!!!',
         //         events: {
         //             click: (event: Event) => {
-        //                 console.log(event);
+        //                 logger.log(event);
         //             }
         //         }
         //     });

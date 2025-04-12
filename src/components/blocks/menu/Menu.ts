@@ -1,5 +1,6 @@
 import Block from '../../../framework/block';
 import { Link } from '../../link/Link';
+import logger from '../../../utils/logger';
 
 export default class Menu extends Block {
     constructor() {
@@ -10,7 +11,7 @@ export default class Menu extends Block {
                 datapage: 'login',
                 text: 'Login',
                 onClick: (event: Event) => {
-                    console.log('CLICK');
+                    logger.log('CLICK');
                     event.preventDefault();
                     event.stopPropagation();
                 },

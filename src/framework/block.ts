@@ -1,6 +1,7 @@
 import { v4 as makeUUID } from 'uuid';
 import Handlebars from 'handlebars';
 import EventBus from './eventBus';
+import logger from '../utils/logger';
 
 const enum EVENTS {
     INIT = 'init',
@@ -52,13 +53,13 @@ abstract class Block {
         // if (settings?.withInternalID) {
             this._id = makeUUID();
             props.__id = this._id;
-            console.log(`${this._id}: Construct ${tagName}: `
+            logger.log(`${this._id}: Construct ${tagName}: `
                 + `${Object.keys(props).length} props, `
                 + `${Object.keys(children).length} children, `
                 + `${Object.keys(lists).length} lists`, 
                 propsAndChildren);
         // } else {
-        //     console.log(`Construct ${tagName} without UUID`);
+        //     logger.log(`Construct ${tagName} without UUID`);
         // }
 
         // Save props and generate PROPS proxies
@@ -67,7 +68,7 @@ abstract class Block {
         this._lists = this._makePropsProxy(lists) as BlockListRecord;
 
         this._registerEvents();
-        console.log(`${this._id}: Emitting INIT`);
+        logger.log(`${this._id}: Emitting INIT`);
         this._eventBus.emit(EVENTS.INIT);
     }
 
@@ -91,29 +92,29 @@ abstract class Block {
 
     compile(template: string, props: PropsRecord = {}): HTMLElement {
         const propsAndStubs = { ...this._props, ...props };
-        console.log('Compile: ', template, props);
+        logger.log('Compile: ', template, props);
 
         // Resolve and add children's stubs into element
         Object.entries(this._children).forEach(([key, child]) => {
-            console.log(`Compile: child ${key} with id ${child._id}`);
+            logger.log(`Compile: child ${key} with id ${child._id}`);
             propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
         });
 
         // Resolve and add lists's stubs into element
         const listUUID = makeUUID();
         Object.entries(this._lists).forEach(([key]) => {
-            console.log(`Compile: list ${key} - assign common ID ${listUUID}`);
+            logger.log(`Compile: list ${key} - assign common ID ${listUUID}`);
             propsAndStubs[key] = `<div data-id="${listUUID}"></div>`;
         });
         
         // Create temporary element (fragment) not to render intermediate results on screen
-        console.log(`Compile: create template fragment for element`);
+        logger.log(`Compile: create template fragment for element`);
         const fragment = this._createDocumentElement('template') as HTMLTemplateElement;
 
         // Compile element with stubs using Handlebars and place it into fragment
         const renderFunc = Handlebars.compile(template);
         const renderString = renderFunc(propsAndStubs);
-        console.log(`Compile: Handlebars-compiled string: ${renderString}`);
+        logger.log(`Compile: Handlebars-compiled string: ${renderString}`);
         fragment.innerHTML = renderString;
 
         // Replace child stubs with real children's content
@@ -121,11 +122,11 @@ abstract class Block {
             const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
             const content = child.getContent();
             if (!stub) {
-                console.error(`Compile: stub ${child._id} not found`);
+                logger.error(`Compile: stub ${child._id} not found`);
             } else if (!content) {
-                console.error(`Compile: child ${child._id} has no content`);
+                logger.error(`Compile: child ${child._id} has no content`);
             } else {
-                console.log(`Compile: replacing child ${child._id} with content: `, content);
+                logger.log(`Compile: replacing child ${child._id} with content: `, content);
                 stub.replaceWith(content);
             }
         });
@@ -133,38 +134,38 @@ abstract class Block {
         // Replace list stubs with real lists's content
         Object.values(this._lists).forEach((list) => {
             // Create fragment for this individual list
-            console.log(`Compile: create template fragment for list`);
+            logger.log(`Compile: create template fragment for list`);
             const listFragment = this._createDocumentElement('template') as HTMLTemplateElement;
 
             list.forEach((item) => {
                 if (item instanceof Block) {
                     const content = item.getContent();
                     if (!content) {
-                        console.error(`List item ${item._id} has no content`);
+                        logger.error(`List item ${item._id} has no content`);
                     } else {
                         listFragment.content.append(content);
                     }
-                    console.log(`Compile: appended list block ${item._id}: `, content);
+                    logger.log(`Compile: appended list block ${item._id}: `, content);
                 } else {
                     listFragment.content.append(`${item}`);
-                    console.log(`Compile: appended list item: ${item}`);
+                    logger.log(`Compile: appended list item: ${item}`);
                 }
 
             })
             const stub = fragment.content.querySelector(`[data-id="${listUUID}"]`);
             if (!stub) {
-                console.error(`List stub not found!`);
+                logger.error(`List stub not found!`);
             } else {
                 stub.replaceWith(listFragment.content);
-                console.log(`Compile: replaced template fragment for list`, listFragment);
+                logger.log(`Compile: replaced template fragment for list`, listFragment);
             }
         });
 
         // Find and return the first child element - the first real element
         const newElement = fragment.content.firstElementChild as HTMLElement;
-        // console.log('Fragment', fragment.innerHTML);
+        // logger.log('Fragment', fragment.innerHTML);
         // const newElement = fragment.content.firstChild as HTMLElement;
-        console.log(`Compile: complete element: `, newElement);
+        logger.log(`Compile: complete element: `, newElement);
         return newElement;
     }
 
@@ -181,9 +182,9 @@ abstract class Block {
     }
 
     _init() {
-        console.log(`${this._id}: _init()`)
+        logger.log(`${this._id}: _init()`)
         this._createResources();
-        console.log(`${this._id}: Emitting FLOW_RENDER`);
+        logger.log(`${this._id}: Emitting FLOW_RENDER`);
         this._eventBus.emit(EVENTS.FLOW_RENDER);
     }
 
@@ -219,7 +220,7 @@ abstract class Block {
         if (!nextProps) {
             return;
         }
-        console.log(`${this._id}: setProps (old, new):`, this._props, nextProps);
+        logger.log(`${this._id}: setProps (old, new):`, this._props, nextProps);
         Object.assign(this._props, nextProps);
     };
 
@@ -231,12 +232,12 @@ abstract class Block {
         const events: EventsRecord = this._props.events as EventsRecord;
         const element = this._element;
         if (events && element) {
-            console.log(`${this._id}: _addEvents: _element exists, adding ${Object.keys(events).length} events`);
+            logger.log(`${this._id}: _addEvents: _element exists, adding ${Object.keys(events).length} events`);
             Object.keys(events).forEach((eventName) => {
                 element.addEventListener(eventName, events[eventName]);
             });
         } else {
-            console.log(`${this._id}: _addEvents: no _element or no events`);
+            logger.log(`${this._id}: _addEvents: no _element or no events`);
         }
     }
 
@@ -244,25 +245,25 @@ abstract class Block {
         const events: EventsRecord = this._props.events as EventsRecord;
         const element = this._element;
         if (events && element) {
-            console.log(`${this._id}: _removeEvents: _element exists, removing ${Object.keys(events).length} events`);
+            logger.log(`${this._id}: _removeEvents: _element exists, removing ${Object.keys(events).length} events`);
             Object.entries(events).forEach(([eventName, listener]) => {
                 element.removeEventListener(eventName, listener);
             });
         } else {
-            console.log(`${this._id}: _removeEvents: no _element or no events`);
+            logger.log(`${this._id}: _removeEvents: no _element or no events`);
         }
     }
 
     setAttributes(attrs: PropsRecord) {
         if (attrs) {
-            console.log(`${this._id}: setAttributes: setting ${Object.keys(attrs).length} attributes`, attrs);
+            logger.log(`${this._id}: setAttributes: setting ${Object.keys(attrs).length} attributes`, attrs);
             Object.entries(attrs).forEach(([key, value]) => {
                 if (this._element) {
                     this._element.setAttribute(key, value as string);
                 }
             })
         } else {
-            console.log(`${this._id}: setAttributes: no attributes`);
+            logger.log(`${this._id}: setAttributes: no attributes`);
         }
     }
 
@@ -272,25 +273,25 @@ abstract class Block {
     }
 
     _render() {
-        console.log(`${this._id}: _render: calling user-defined render() function`);
+        logger.log(`${this._id}: _render: calling user-defined render() function`);
         const block = this.render();
         if (block) {
-            console.log(`${this._id}: _render: user-defined render() function returned block`, block);            
+            logger.log(`${this._id}: _render: user-defined render() function returned block`, block);            
         }
 
         // remove existing events
         this._removeEvents();
     
         // replace element
-        console.log(`${this._id}: _render: replace element`);
-        console.log(`${this._id}: _render: _element before replacement`, this._element);   
+        logger.log(`${this._id}: _render: replace element`);
+        logger.log(`${this._id}: _render: _element before replacement`, this._element);   
         //  command to DOM         
         if (this._element && block) {
             this._element.replaceWith(block);
         }
         //  save element
         this._element = block;
-        console.log(`${this._id}: _render: _element after replacement`, this._element);            
+        logger.log(`${this._id}: _render: _element after replacement`, this._element);            
 
         // reinstate events
         this._addEvents();
@@ -326,7 +327,7 @@ abstract class Block {
                 // This is the essense of this function - to reassign its parameter
                 /* eslint-disable-next-line no-param-reassign */
                 target[prop] = value;
-                console.log(`${self._id}: PropsProxy: assigned new value to \"${prop}\". Emitting FLOW_CDU`, value);
+                logger.log(`${self._id}: PropsProxy: assigned new value to \"${prop}\". Emitting FLOW_CDU`, value);
                 self._eventBus.emit(EVENTS.FLOW_CDU, oldTarget, target);
                 return true;
             },
@@ -345,7 +346,7 @@ abstract class Block {
         if (this._id) {
             element.setAttribute('data-id', this._id);
         }
-        console.log(`${this._id}: _createDocumentElement: ${tagName}`, element);
+        logger.log(`${this._id}: _createDocumentElement: ${tagName}`, element);
         return element;
     }
 
