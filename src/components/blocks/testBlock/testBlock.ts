@@ -3,6 +3,7 @@ import Button from '../../button/Button';
 import Menu from '../menu/Menu';
 import template from './template';
 import LoginSignupInputBlock from '../loginSignupInputBlock/index';
+import LoginBox from '../../organisms/loginBox'; 
 
 export default class TestBlock extends Block {
     constructor(props: PropsRecord = {}) {
@@ -18,8 +19,10 @@ export default class TestBlock extends Block {
         propsAndChildren.menu = new Menu();
         propsAndChildren.inputBlock = new LoginSignupInputBlock({
             caption: "Last name",
+            placeholder: "Enter last name",
             error: "Oh my god!!!!!",
         })
+        propsAndChildren.loginBox = new LoginBox({login: 'Nikita'});
 
         super(propsAndChildren);
     }

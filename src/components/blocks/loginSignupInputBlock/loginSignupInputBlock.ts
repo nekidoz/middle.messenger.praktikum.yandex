@@ -1,6 +1,6 @@
 import Block, { PropsRecord } from '../../../framework/block';
-import Input from '../../atoms/input/input';
-import Text from '../../atoms/text/text';
+import Input from '../../atoms/input';
+import Text from '../../atoms/text';
 import template from './template';
 
 export default class LoginSignupInputBlock extends Block {
@@ -15,7 +15,7 @@ export default class LoginSignupInputBlock extends Block {
             id: propsAndChildren.id,
             type: propsAndChildren.type,
             accept: propsAndChildren.accept,
-            placeholder: propsAndChildren.caption,
+            placeholder: propsAndChildren.placeholder,
             value: propsAndChildren.value,
         })
         propsAndChildren.errorComponent = new Text({
