@@ -1,17 +1,3 @@
-/* 
-    <main class="login-signup-box">
-        <h2>Вход</h2>
-        <form id="login-form">
-            {{> LoginSignupInputBlock id="login" type="text" value=login caption="Логин" placeholder="Логин" error="Здесь могла бы быть ужасная ошибка" }}
-            {{> LoginSignupInputBlock id="password" type="password" caption="Пароль" placeholder="Пароль" }}
-            <div class="button-stack">
-                {{> Input id="btn-login" class="regular-button" type="submit" value="Войти" }}
-                {{> Link href="#" class="menu-page-menu-item" data-page="signup" text="Нет аккаунта?" }}
-            </div>
-        </form>
-    </main>
- */
-
 import Block, { PropsRecord } from '../../../framework/block';
 import Input from '../../atoms/input';
 import Link from '../../atoms/link';

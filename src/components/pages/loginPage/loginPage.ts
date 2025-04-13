@@ -1,20 +1,14 @@
-import Block, { PropsRecord } from '../../framework/block';
-import Button from '../../components/button/Button';
-import Menu from '../../components/blocks/menu/Menu';
+import { PropsRecord } from "../../../framework/block";
+import PageTemplate from "../../organisms/pageTemplate";
+import LoginBox from "../../organisms/loginBox";
 
-export default class LoginPage extends Block {
+export default class LoginPage extends PageTemplate {
     constructor(props: PropsRecord = {}) {
-        const propsAndChildren = { ...props };
-        propsAndChildren.button = new Button({
-            className: 'regular-button',
-            text: propsAndChildren.buttonText,
-            settings: {
-                withInternalID: true,
-            },
-        });
-        propsAndChildren.list = ['First', 'Second', 'Third'];
-        propsAndChildren.menu = new Menu();
-
-        super(propsAndChildren);
+        super({
+            ...props,
+            mainComponent: new LoginBox({
+                login: props.login,
+            })
+        })
     }
 }

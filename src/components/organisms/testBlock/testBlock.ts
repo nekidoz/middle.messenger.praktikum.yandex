@@ -1,8 +1,7 @@
 import Block, { PropsRecord } from '../../../framework/block';
 import Button from '../../button/Button';
-import Menu from '../menu/Menu';
+import Menu from '../menu';
 import template from './template';
-import LoginSignupInputBlock from '../loginSignupInputBlock/index';
 import LoginBox from '../../organisms/loginBox'; 
 
 export default class TestBlock extends Block {
@@ -17,11 +16,6 @@ export default class TestBlock extends Block {
         });
         propsAndChildren.list = ['First', 'Second', 'Third'];
         propsAndChildren.menu = new Menu();
-        propsAndChildren.inputBlock = new LoginSignupInputBlock({
-            caption: "Last name",
-            placeholder: "Enter last name",
-            error: "Oh my god!!!!!",
-        })
         propsAndChildren.loginBox = new LoginBox({login: 'Nikita'});
 
         super(propsAndChildren);
