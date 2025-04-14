@@ -6,6 +6,8 @@ import render from './utils/renderDOM';
 import LoginPage from './components/pages/loginPage';
 import SignupPage from './components/pages/signupPage';
 import ProfilePage from './components/pages/profilePage';
+import Code404Page from './components/pages/code404Page';
+import Code5xxPage from './components/pages/code5xxPage';
 
 import Handlebars from 'handlebars';
 import * as Pages from './pages';
@@ -185,12 +187,18 @@ export default class App {
                 });
                 break;
             case 'page404':
-                template = Handlebars.compile(Pages.Code404Page);
-                this.appElement.innerHTML = template({});
+                const code404Page = new Code404Page();
+                render('#app', code404Page);
+
+                // template = Handlebars.compile(Pages.Code404Page);
+                // this.appElement.innerHTML = template({});
                 break;
             case 'page5xx':
-                template = Handlebars.compile(Pages.Code5xxPage);
-                this.appElement.innerHTML = template({});
+                const code5xxPage = new Code5xxPage();
+                render('#app', code5xxPage);
+
+                // template = Handlebars.compile(Pages.Code5xxPage);
+                // this.appElement.innerHTML = template({});
                 break;
             default:
                 alert(`Несуществующая страница: ${this.state.currentPage} !!!`);
