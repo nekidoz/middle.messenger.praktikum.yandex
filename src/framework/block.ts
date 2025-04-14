@@ -122,7 +122,7 @@ abstract class Block {
             const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
             const content = child.getContent();
             if (!stub) {
-                logger.error(`Compile: stub ${child._id} not found`);
+                logger.warning(`Compile: stub ${child._id} not found - probably not rendered`);
             } else if (!content) {
                 logger.error(`Compile: child ${child._id} has no content`);
             } else {

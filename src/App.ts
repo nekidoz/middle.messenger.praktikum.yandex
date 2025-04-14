@@ -178,7 +178,6 @@ export default class App {
                 // });
                 break;
             case 'chats':
-                logger.log('Rendering chats');
                 template = Handlebars.compile(Pages.ChatsPage);
                 this.appElement.innerHTML = template({
                     chats: this.state.chat_selection,

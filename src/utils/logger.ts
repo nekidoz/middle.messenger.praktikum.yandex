@@ -3,6 +3,10 @@ export default class Logger {
         console.log(...params);
     }
 
+    static warning(...params: unknown[]) {
+        console.warn(...params);
+    }
+
     static error(...params: unknown[]) {
         console.error(...params);
     }
