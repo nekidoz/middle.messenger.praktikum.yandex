@@ -1,5 +1,5 @@
 export default '<main class="login-signup-box">\
-        <h2>Вход</h2>\
+        <h2>Регистрация</h2>\
         {{{form}}}\
     </main>';
     

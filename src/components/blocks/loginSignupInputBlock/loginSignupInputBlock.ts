@@ -5,26 +5,24 @@ import template from './template';
 
 export default class LoginSignupInputBlock extends Block {
     constructor(props: PropsRecord = {}) {
-        const propsAndChildren = { ...props };
-        propsAndChildren.captionComponent = new Text({
-            class: 'login-signup-caption',
-            text: propsAndChildren.caption,
-        });
-        propsAndChildren.inputComponent = new Input({
-            class: 'login-signup-input',
-            id: propsAndChildren.id,
-            type: propsAndChildren.type,
-            accept: propsAndChildren.accept,
-            placeholder: propsAndChildren.placeholder,
-            value: propsAndChildren.value,
-        })
-        propsAndChildren.errorComponent = new Text({
-            class: 'login-signup-error',
-            text: propsAndChildren.error,
-        });
-
         super({
-            ...propsAndChildren,
+            ...props,
+            captionComponent: new Text({
+                class: 'login-signup-caption',
+                text: props.caption,
+            }),
+            inputComponent: new Input({
+                class: 'login-signup-input',
+                id: props.id,
+                type: props.type,
+                accept: props.accept,
+                placeholder: props.placeholder,
+                value: props.value,
+            }),
+            errorComponent: new Text({
+                class: 'login-signup-error',
+                text: props.error,
+            }),
             template,
         });
     }

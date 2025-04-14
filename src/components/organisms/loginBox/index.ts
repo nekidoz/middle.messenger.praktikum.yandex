@@ -1,3 +1,3 @@
-import LoginBox from "./loginBox";
+import LoginBox from './loginBox';
 
 export default LoginBox;

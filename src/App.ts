@@ -1,5 +1,11 @@
 /* eslint max-len: [1, 200] */
 
+// NEW IMPORTS
+import logger from './utils/logger';
+import LoginPage from './components/pages/loginPage';
+import SignupPage from './components/pages/signupPage';
+import render from './utils/renderDOM';
+
 import Handlebars from 'handlebars';
 import * as Pages from './pages';
 import './helpers/handlebarsHelpers.ts';
@@ -66,7 +72,7 @@ export default class App {
 
     constructor() {
         this.state = {
-            currentPage: 'login',
+            currentPage: 'signup',
 
             login: '',
             password: '',
@@ -109,22 +115,39 @@ export default class App {
             alert('Не найден тэг приложения - обратитесь к разработчику!');
             return;
         }
+        logger.log(this.state.currentPage, this);
         switch (this.state.currentPage) {
             case 'login':
-                template = Handlebars.compile(Pages.LoginPage);
-                this.appElement.innerHTML = template({
+                const loginPage = new LoginPage({
                     login: this.state.login,
+                    onSubmit: ((e: SubmitEvent) => this.login(e)).bind(this),
                 });
+                render('#app', loginPage);
+
+                // template = Handlebars.compile(Pages.LoginPage);
+                // this.appElement.innerHTML = template({
+                //     login: this.state.login,
+                // });
                 break;
             case 'signup':
-                template = Handlebars.compile(Pages.SignupPage);
-                this.appElement.innerHTML = template({
+                const signupPage = new SignupPage({
                     login: this.state.login,
                     first_name: this.state.first_name,
                     second_name: this.state.second_name,
                     email: this.state.email,
                     phone: this.state.phone,
+                    onSubmit: ((e: SubmitEvent) => this.signup(e)).bind(this),
                 });
+                render('#app', signupPage);
+
+                // template = Handlebars.compile(Pages.SignupPage);
+                // this.appElement.innerHTML = template({
+                //     login: this.state.login,
+                //     first_name: this.state.first_name,
+                //     second_name: this.state.second_name,
+                //     email: this.state.email,
+                //     phone: this.state.phone,
+                // });
                 break;
             case 'profile':
                 template = Handlebars.compile(Pages.ProfilePage);
@@ -139,6 +162,7 @@ export default class App {
                 });
                 break;
             case 'chats':
+                logger.log('Rendering chats');
                 template = Handlebars.compile(Pages.ChatsPage);
                 this.appElement.innerHTML = template({
                     chats: this.state.chat_selection,
@@ -165,16 +189,16 @@ export default class App {
     attachPageEventListeners() {
         switch (this.state.currentPage) {
             case 'login':
-                {
-                    const loginForm = document.getElementById('login-form');
-                    loginForm?.addEventListener('submit', (e) => this.login(e));
-                }
+                // {
+                //     const loginForm = document.getElementById('login-form');
+                //     loginForm?.addEventListener('submit', (e) => this.login(e));
+                // }
                 break;
             case 'signup':
-                {
-                    const signupForm = document.getElementById('signup-form');
-                    signupForm?.addEventListener('submit', (e) => this.signup(e));
-                }
+                // {
+                //     const signupForm = document.getElementById('signup-form');
+                //     signupForm?.addEventListener('submit', (e) => this.signup(e));
+                // }
                 break;
             case 'profile':
                 {
