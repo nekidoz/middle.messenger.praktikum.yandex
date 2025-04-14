@@ -2,9 +2,10 @@
 
 // NEW IMPORTS
 import logger from './utils/logger';
+import render from './utils/renderDOM';
 import LoginPage from './components/pages/loginPage';
 import SignupPage from './components/pages/signupPage';
-import render from './utils/renderDOM';
+import ProfilePage from './components/pages/profilePage';
 
 import Handlebars from 'handlebars';
 import * as Pages from './pages';
@@ -72,7 +73,7 @@ export default class App {
 
     constructor() {
         this.state = {
-            currentPage: 'signup',
+            currentPage: 'profile',
 
             login: '',
             password: '',
@@ -150,8 +151,8 @@ export default class App {
                 // });
                 break;
             case 'profile':
-                template = Handlebars.compile(Pages.ProfilePage);
-                this.appElement.innerHTML = template({
+                const profilePage = new ProfilePage({
+                    profile_avatar: '/avatar.png',
                     login: this.state.login,
                     first_name: this.state.first_name,
                     second_name: this.state.second_name,
@@ -159,7 +160,20 @@ export default class App {
                     phone: this.state.phone,
                     display_name: this.state.display_name,
                     avatar: this.state.avatar,
+                    onSubmit: ((e: SubmitEvent) => this.saveProfile(e)).bind(this),
                 });
+                render('#app', profilePage);
+
+                // template = Handlebars.compile(Pages.ProfilePage);
+                // this.appElement.innerHTML = template({
+                //     login: this.state.login,
+                //     first_name: this.state.first_name,
+                //     second_name: this.state.second_name,
+                //     email: this.state.email,
+                //     phone: this.state.phone,
+                //     display_name: this.state.display_name,
+                //     avatar: this.state.avatar,
+                // });
                 break;
             case 'chats':
                 logger.log('Rendering chats');
@@ -201,10 +215,10 @@ export default class App {
                 // }
                 break;
             case 'profile':
-                {
-                    const profileForm = document.getElementById('profile-form');
-                    profileForm?.addEventListener('submit', (e) => this.saveProfile(e));
-                }
+                // {
+                //     const profileForm = document.getElementById('profile-form');
+                //     profileForm?.addEventListener('submit', (e) => this.saveProfile(e));
+                // }
                 break;
             case 'chats':
                 {

@@ -1,5 +1,5 @@
-export default `<div class="login-signup-input-block">
-    <div class="login-signup-input-block-inner">
+export default `<div class="profile-input-block">
+    <div class="profile-input-block-inner">
         {{{captionComponent}}}<p>
         {{{inputComponent}}}
     </div>

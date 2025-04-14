@@ -3,16 +3,16 @@ import Input from '../../atoms/input';
 import Text from '../../atoms/text';
 import template from './template';
 
-export default class LoginSignupInputBlock extends Block {
+export default class ProfileInputBlock extends Block {
     constructor(props: PropsRecord = {}) {
         super({
             ...props,
             captionComponent: new Text({
-                class: 'login-signup-caption',
+                class: 'profile-caption',
                 text: props.caption,
             }),
             inputComponent: new Input({
-                class: 'login-signup-input',
+                class: 'profile-input',
                 id: props.id,
                 type: props.type,
                 accept: props.accept,
@@ -20,7 +20,7 @@ export default class LoginSignupInputBlock extends Block {
                 value: props.value,
             }),
             errorComponent: new Text({
-                class: 'login-signup-error',
+                class: 'profile-error',
                 text: props.error,
             }),
             template,
