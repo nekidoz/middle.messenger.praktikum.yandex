@@ -3,6 +3,7 @@
 // NEW IMPORTS
 import logger from './utils/logger';
 import render from './utils/renderDOM';
+import Chat from './types/Chat';
 import LoginPage from './components/pages/loginPage';
 import SignupPage from './components/pages/signupPage';
 import ProfilePage from './components/pages/profilePage';
@@ -11,7 +12,7 @@ import Code404Page from './components/pages/code404Page';
 import Code5xxPage from './components/pages/code5xxPage';
 
 import Handlebars from 'handlebars';
-import * as Pages from './pages';
+// import * as Pages from './pages';
 import './helpers/handlebarsHelpers.ts';
 
 // Import and register partials in Handlebars
@@ -42,18 +43,6 @@ Handlebars.registerPartial('ProfileInputBlock', ProfileInputBlock);
 const PARTY_ME = 'me';
 
 type Nullable<T> = T | null;
-
-type Chat = {
-    party: string;
-    chatId: string;
-    content: {
-        party: string;
-        message: string;
-    }[];
-    newMessages: number;
-    preview: string;
-    date: string;
-};
 
 export default class App {
     state: {
