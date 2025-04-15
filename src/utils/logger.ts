@@ -1,13 +1,35 @@
+enum Level {
+    debug,
+    info,
+    warning,
+    error,
+    critical
+};
+
 export default class Logger {
-    static log(...params: unknown[]) {
-        console.log(...params);
+    constructor(level: Level = Level.debug) {
+        this.level = level;
     }
 
-    static warning(...params: unknown[]) {
-        console.warn(...params);
+    private level: Level;
+
+    log(...params: unknown[]) {
+        if (this.level <= Level.debug) {
+            console.log(...params);
+        }
     }
 
-    static error(...params: unknown[]) {
-        console.error(...params);
+    warning(...params: unknown[]) {
+        if (this.level <= Level.warning) {
+            console.warn(...params);
+        }
+    }
+
+    error(...params: unknown[]) {
+        if (this.level <= Level.error) {
+            console.error(...params);
+        }
     }
 }
+
+export { Level };

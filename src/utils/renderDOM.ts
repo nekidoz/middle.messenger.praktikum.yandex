@@ -1,8 +1,9 @@
 import Block from '../framework/block';
-import logger from './logger';
+import Logger, { Level } from './logger';
 
 function render(query: string, block: Block) {
     const root = document.querySelector(query) as HTMLElement;
+    const logger = new Logger(Level.debug);
     // Можно завязаться на реализации вашего класса Block
     if (root) {
         logger.log('renderDOM: render', block, root);

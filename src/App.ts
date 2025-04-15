@@ -1,7 +1,7 @@
 /* eslint max-len: [1, 200] */
 
 // NEW IMPORTS
-import logger from './utils/logger';
+import Logger, { Level } from './utils/logger';
 import render from './utils/renderDOM';
 import Chat from './types/Chat';
 import LoginPage from './components/pages/loginPage';
@@ -62,8 +62,10 @@ export default class App {
     };
 
     appElement: HTMLElement | null;
+    logger: Logger;
 
     constructor() {
+        this.logger = new Logger(Level.debug);
         this.state = {
             currentPage: 'chats',
 
@@ -108,7 +110,7 @@ export default class App {
             alert('Не найден тэг приложения - обратитесь к разработчику!');
             return;
         }
-        logger.log(this.state.currentPage, this);
+        this.logger.log(this.state.currentPage, this);
         switch (this.state.currentPage) {
             case 'login':
                 const loginPage = new LoginPage({
