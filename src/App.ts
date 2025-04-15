@@ -6,6 +6,7 @@ import render from './utils/renderDOM';
 import LoginPage from './components/pages/loginPage';
 import SignupPage from './components/pages/signupPage';
 import ProfilePage from './components/pages/profilePage';
+import ChatsPage from './components/pages/chatsPage';
 import Code404Page from './components/pages/code404Page';
 import Code5xxPage from './components/pages/code5xxPage';
 
@@ -75,7 +76,7 @@ export default class App {
 
     constructor() {
         this.state = {
-            currentPage: 'profile',
+            currentPage: 'chats',
 
             login: '',
             password: '',
@@ -178,12 +179,19 @@ export default class App {
                 // });
                 break;
             case 'chats':
-                template = Handlebars.compile(Pages.ChatsPage);
-                this.appElement.innerHTML = template({
+                const chatsPage = new ChatsPage({
                     chats: this.state.chat_selection,
                     chat_search_value: this.state.chat_search_value,
                     active_chat: this.state.active_chat,
                 });
+                render('#app', chatsPage);
+
+                // template = Handlebars.compile(Pages.ChatsPage);
+                // this.appElement.innerHTML = template({
+                //     chats: this.state.chat_selection,
+                //     chat_search_value: this.state.chat_search_value,
+                //     active_chat: this.state.active_chat,
+                // });
                 break;
             case 'page404':
                 const code404Page = new Code404Page();
