@@ -1,9 +1,6 @@
 /* eslint max-len: [1, 200] */
 
-// NEW IMPORTS
 import Logger, { Level } from './utils/logger';
-// import render from './utils/renderDOM';
-// import Nullable from './types/Nullable';
 import Chat from './types/Chat';
 import LoginPage from './components/pages/loginPage';
 import SignupPage from './components/pages/signupPage';
@@ -11,37 +8,7 @@ import ProfilePage from './components/pages/profilePage';
 import ChatsPage from './components/pages/chatsPage';
 import Code404Page from './components/pages/code404Page';
 import Code5xxPage from './components/pages/code5xxPage';
-
-// import Handlebars from 'handlebars';
-// import * as Pages from './pages';
-// import './helpers/handlebarsHelpers.ts';
-
-// // Import and register partials in Handlebars
-// import Button from './components/Button';
-// import Image from './components/Image';
-// import Input from './components/Input';
-// import Link from './components/Link';
-// import Menu from './components/Menu';
-// import Select from './components/Select';
-// import Text from './components/Text';
-// import ChatContentBlock from './components/molecules/ChatContentBlock';
-// import ChatListItemBlock from './components/molecules/ChatListItemBlock';
-// import LoginSignupInputBlock from './components/molecules/LoginSignupInputBlock';
-// import ProfileInputBlock from './components/molecules/ProfileInputBlock';
-
-// Handlebars.registerPartial('Button', Button);
-// Handlebars.registerPartial('Image', Image);
-// Handlebars.registerPartial('Input', Input);
-// Handlebars.registerPartial('Link', Link);
-// Handlebars.registerPartial('Menu', Menu);
-// Handlebars.registerPartial('Select', Select);
-// Handlebars.registerPartial('Text', Text);
-// Handlebars.registerPartial('ChatContentBlock', ChatContentBlock);
-// Handlebars.registerPartial('ChatListItemBlock', ChatListItemBlock);
-// Handlebars.registerPartial('LoginSignupInputBlock', LoginSignupInputBlock);
-// Handlebars.registerPartial('ProfileInputBlock', ProfileInputBlock);
-
-const PARTY_ME = 'me';
+import { PARTY_ME } from './types/ChatMessage';
 
 export default class App {
     state: {
@@ -106,12 +73,12 @@ export default class App {
     }
 
     render() {
-        // let template;
         if (!this.appElement) {
             alert('Не найден тэг приложения - обратитесь к разработчику!');
             return;
         }
         let block;
+        // for menu and other links
         const commonProps = {
             change_page: ((e: Event) => this.changePageByLink(e)).bind(this),
         };
@@ -121,14 +88,8 @@ export default class App {
                 block = new LoginPage({
                     login: this.state.login,
                     onSubmit: ((e: SubmitEvent) => this.login(e)).bind(this),
-                    // for menu and other links
                     ...commonProps,
                 });
-
-                // template = Handlebars.compile(Pages.LoginPage);
-                // this.appElement.innerHTML = template({
-                //     login: this.state.login,
-                // });
                 break;
             case 'signup':
                 block = new SignupPage({
@@ -138,18 +99,8 @@ export default class App {
                     email: this.state.email,
                     phone: this.state.phone,
                     onSubmit: ((e: SubmitEvent) => this.signup(e)).bind(this),
-                    // for menu and other links
                     ...commonProps,
                 });
-
-                // template = Handlebars.compile(Pages.SignupPage);
-                // this.appElement.innerHTML = template({
-                //     login: this.state.login,
-                //     first_name: this.state.first_name,
-                //     second_name: this.state.second_name,
-                //     email: this.state.email,
-                //     phone: this.state.phone,
-                // });
                 break;
             case 'profile':
                 block = new ProfilePage({
@@ -162,20 +113,8 @@ export default class App {
                     display_name: this.state.display_name,
                     avatar: this.state.avatar,
                     onSubmit: ((e: SubmitEvent) => this.saveProfile(e)).bind(this),
-                    // for menu and other links
                     ...commonProps,
                 });
-
-                // template = Handlebars.compile(Pages.ProfilePage);
-                // this.appElement.innerHTML = template({
-                //     login: this.state.login,
-                //     first_name: this.state.first_name,
-                //     second_name: this.state.second_name,
-                //     email: this.state.email,
-                //     phone: this.state.phone,
-                //     display_name: this.state.display_name,
-                //     avatar: this.state.avatar,
-                // });
                 break;
             case 'chats':
                 block = new ChatsPage({
@@ -190,137 +129,33 @@ export default class App {
                     do_chat_action: (() => this.chatAction()).bind(this),
                     attach_to_chat: (() => this.chatAttach()).bind(this),
                     send_message: ((e: SubmitEvent) => this.chatSend(e)).bind(this),
-                    // for menu and other links
                     ...commonProps,
                 });
-
-                // template = Handlebars.compile(Pages.ChatsPage);
-                // this.appElement.innerHTML = template({
-                //     chats: this.state.chat_selection,
-                //     chat_search_value: this.state.chat_search_value,
-                //     active_chat: this.state.active_chat,
-                // });
                 break;
             case 'page404':
                 block = new Code404Page({
-                    // for menu and other links
                     ...commonProps,
                 });
-
-                // template = Handlebars.compile(Pages.Code404Page);
-                // this.appElement.innerHTML = template({});
                 break;
             case 'page5xx':
                 block = new Code5xxPage({
-                    // for menu and other links
                     ...commonProps,
                 });
-
-                // template = Handlebars.compile(Pages.Code5xxPage);
-                // this.appElement.innerHTML = template({});
                 break;
             default:
                 alert(`Несуществующая страница: ${this.state.currentPage} !!!`);
                 block = new Code404Page({
-                    // for menu and other links
                     ...commonProps,
                 });
                 break;
         }
-        // render('#app', block);
         // render in DOM
         this.appElement.replaceWith(block.getContent() as Node);
         // save in appElement
         this.appElement = block.getContent();
         // emit CDM
         block.dispatchComponentDidMount();
-        // attach listeners
-        // this.attachPageEventListeners();
-        // this.attachMenuEventListeners();
     }
-
-    attachPageEventListeners() {
-        switch (this.state.currentPage) {
-            case 'login':
-                // {
-                //     const loginForm = document.getElementById('login-form');
-                //     loginForm?.addEventListener('submit', (e) => this.login(e));
-                // }
-                break;
-            case 'signup':
-                // {
-                //     const signupForm = document.getElementById('signup-form');
-                //     signupForm?.addEventListener('submit', (e) => this.signup(e));
-                // }
-                break;
-            case 'profile':
-                // {
-                //     const profileForm = document.getElementById('profile-form');
-                //     profileForm?.addEventListener('submit', (e) => this.saveProfile(e));
-                // }
-                break;
-            case 'chats':
-                {
-                    // // chat links
-                    // const chatLinks = document.querySelectorAll('.chat-list-item');
-                    // chatLinks.forEach((link) => {
-                    //     // find chat content
-                    //     const chatId = link.id;
-                    //     const thisChat = this.state.chats.find((chat) => chat.chatId === chatId);
-                    //     // const chatContent = this.state.chats.find(chat => chat.chatId === chatId)?.content;
-                    //     // if (!chatContent) {
-                    //     if (!thisChat) {
-                    //         alert(`Chat ${chatId} not found!`);
-                    //     } else {
-                    //         link.addEventListener('click', () => this.activateChat(thisChat));
-                    //         // Оставил данный код для будущей оптимизации - отображение без перерисовки всей страницы
-
-                    //         // link.addEventListener('click', function () {
-                    //         //     // highlight chat in list
-                    //         //     chatLinks.forEach(chatLink => chatLink.classList.remove('chat-list-item-active'));
-                    //         //     this.classList.add('chat-list-item-active');
-                    //         //     // display chat content
-                    //         //     const chatContentsElement = document.getElementById('chat-content');
-                    //         //     chatContentsElement.innerHTML = chatContent;
-                    //         // });
-                    //     }
-                    // });
-
-                    // buttons and fields
-                    // const editProfile = document.getElementById('edit-profile');
-                    // editProfile?.addEventListener('click', () => this.changePage('profile'));
-                    // const chatSearch = document.getElementById('chat-search');
-                    // chatSearch?.addEventListener('keyup', (e) => this.chatSearch(e));
-                    // if (this.state.active_chat) {
-                    //     const chatAction = document.getElementById('chat-action');
-                    //     chatAction?.addEventListener('click', () => this.chatAction());
-                    //     const chatAttach = document.getElementById('chat-attach');
-                    //     chatAttach?.addEventListener('click', () => this.chatAttach());
-                    //     const messageForm = document.getElementById('chat-message-form');
-                    //     messageForm?.addEventListener('submit', (e) => this.chatSend(e));
-                    // }
-                }
-                break;
-            case 'page404':
-                break;
-            case 'page5xx':
-                break;
-            default:
-                alert(`Не реализовано добавление лиснеров для страницы: ${this.state.currentPage} !!!`);
-                break;
-        }
-    }
-
-    // attachMenuEventListeners() {
-    //     const menuItems = document.querySelectorAll('.menu-page-menu-item');
-    //     menuItems.forEach((link) => {
-    //         link.addEventListener('click', (e) => {
-    //             e.preventDefault();
-    //             const linkElement = e.target as HTMLLinkElement;
-    //             this.changePage(linkElement?.dataset.page);
-    //         });
-    //     });
-    // }
 
     changePage(page: string | undefined) {
         this.state.currentPage = page;
@@ -386,23 +221,6 @@ export default class App {
             + `\nаватар: ${this.state.avatar ? this.state.avatar : '<не задан>'}`);
         this.changePage('chats');
     }
-
-    // chatSearch(e: KeyboardEvent) {
-    //     if (e.keyCode === 13) {
-    //         const chatSearchField :Nullable<HTMLInputElement> = document.getElementById('chat-search') as HTMLInputElement;
-    //         const searchValue = chatSearchField?.value;
-    //         if (searchValue !== this.state.chat_search_value) {
-    //             this.state.chat_search_value = searchValue;
-    //             if (searchValue) {
-    //                 this.state.chat_selection = this.state.chats.filter((chat) => chat.party.includes(searchValue));
-    //             } else {
-    //                 this.state.chat_selection = [...this.state.chats];
-    //             }
-    //             this.state.active_chat = undefined;
-    //             this.render();
-    //         }
-    //     }
-    // }
 
     chatSearch(searchValue: string) {
             if (searchValue !== this.state.chat_search_value) {

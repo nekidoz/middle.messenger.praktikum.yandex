@@ -1,4 +1,4 @@
-import Block, { PropsRecord } from '../../../framework/block';
+import Block from '../../../framework/block';
 import template from './template';
 
 export default class ChatContentPlaceholder extends Block {
