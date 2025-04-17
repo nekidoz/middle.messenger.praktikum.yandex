@@ -2,7 +2,7 @@
 
 // NEW IMPORTS
 import Logger, { Level } from './utils/logger';
-import render from './utils/renderDOM';
+// import render from './utils/renderDOM';
 import Chat from './types/Chat';
 import LoginPage from './components/pages/loginPage';
 import SignupPage from './components/pages/signupPage';
@@ -11,34 +11,34 @@ import ChatsPage from './components/pages/chatsPage';
 import Code404Page from './components/pages/code404Page';
 import Code5xxPage from './components/pages/code5xxPage';
 
-import Handlebars from 'handlebars';
+// import Handlebars from 'handlebars';
 // import * as Pages from './pages';
-import './helpers/handlebarsHelpers.ts';
+// import './helpers/handlebarsHelpers.ts';
 
-// Import and register partials in Handlebars
-import Button from './components/Button';
-import Image from './components/Image';
-import Input from './components/Input';
-import Link from './components/Link';
-import Menu from './components/Menu';
-import Select from './components/Select';
-import Text from './components/Text';
-import ChatContentBlock from './components/molecules/ChatContentBlock';
-import ChatListItemBlock from './components/molecules/ChatListItemBlock';
-import LoginSignupInputBlock from './components/molecules/LoginSignupInputBlock';
-import ProfileInputBlock from './components/molecules/ProfileInputBlock';
+// // Import and register partials in Handlebars
+// import Button from './components/Button';
+// import Image from './components/Image';
+// import Input from './components/Input';
+// import Link from './components/Link';
+// import Menu from './components/Menu';
+// import Select from './components/Select';
+// import Text from './components/Text';
+// import ChatContentBlock from './components/molecules/ChatContentBlock';
+// import ChatListItemBlock from './components/molecules/ChatListItemBlock';
+// import LoginSignupInputBlock from './components/molecules/LoginSignupInputBlock';
+// import ProfileInputBlock from './components/molecules/ProfileInputBlock';
 
-Handlebars.registerPartial('Button', Button);
-Handlebars.registerPartial('Image', Image);
-Handlebars.registerPartial('Input', Input);
-Handlebars.registerPartial('Link', Link);
-Handlebars.registerPartial('Menu', Menu);
-Handlebars.registerPartial('Select', Select);
-Handlebars.registerPartial('Text', Text);
-Handlebars.registerPartial('ChatContentBlock', ChatContentBlock);
-Handlebars.registerPartial('ChatListItemBlock', ChatListItemBlock);
-Handlebars.registerPartial('LoginSignupInputBlock', LoginSignupInputBlock);
-Handlebars.registerPartial('ProfileInputBlock', ProfileInputBlock);
+// Handlebars.registerPartial('Button', Button);
+// Handlebars.registerPartial('Image', Image);
+// Handlebars.registerPartial('Input', Input);
+// Handlebars.registerPartial('Link', Link);
+// Handlebars.registerPartial('Menu', Menu);
+// Handlebars.registerPartial('Select', Select);
+// Handlebars.registerPartial('Text', Text);
+// Handlebars.registerPartial('ChatContentBlock', ChatContentBlock);
+// Handlebars.registerPartial('ChatListItemBlock', ChatListItemBlock);
+// Handlebars.registerPartial('LoginSignupInputBlock', LoginSignupInputBlock);
+// Handlebars.registerPartial('ProfileInputBlock', ProfileInputBlock);
 
 const PARTY_ME = 'me';
 
@@ -101,23 +101,25 @@ export default class App {
 
         };
         this.state.chat_selection = [...this.state.chats];
+        // The following two are equal
+        // this.appElement = document.querySelector('#app');
         this.appElement = document.getElementById('app');
     }
 
     render() {
-        let template;
+        // let template;
         if (!this.appElement) {
             alert('Не найден тэг приложения - обратитесь к разработчику!');
             return;
         }
+        let block;
         this.logger.log(this.state.currentPage, this);
         switch (this.state.currentPage) {
             case 'login':
-                const loginPage = new LoginPage({
+                block = new LoginPage({
                     login: this.state.login,
                     onSubmit: ((e: SubmitEvent) => this.login(e)).bind(this),
                 });
-                render('#app', loginPage);
 
                 // template = Handlebars.compile(Pages.LoginPage);
                 // this.appElement.innerHTML = template({
@@ -125,7 +127,7 @@ export default class App {
                 // });
                 break;
             case 'signup':
-                const signupPage = new SignupPage({
+                block = new SignupPage({
                     login: this.state.login,
                     first_name: this.state.first_name,
                     second_name: this.state.second_name,
@@ -133,7 +135,6 @@ export default class App {
                     phone: this.state.phone,
                     onSubmit: ((e: SubmitEvent) => this.signup(e)).bind(this),
                 });
-                render('#app', signupPage);
 
                 // template = Handlebars.compile(Pages.SignupPage);
                 // this.appElement.innerHTML = template({
@@ -145,7 +146,7 @@ export default class App {
                 // });
                 break;
             case 'profile':
-                const profilePage = new ProfilePage({
+                block = new ProfilePage({
                     profile_avatar: '/avatar.png',
                     login: this.state.login,
                     first_name: this.state.first_name,
@@ -156,7 +157,6 @@ export default class App {
                     avatar: this.state.avatar,
                     onSubmit: ((e: SubmitEvent) => this.saveProfile(e)).bind(this),
                 });
-                render('#app', profilePage);
 
                 // template = Handlebars.compile(Pages.ProfilePage);
                 // this.appElement.innerHTML = template({
@@ -170,12 +170,19 @@ export default class App {
                 // });
                 break;
             case 'chats':
-                const chatsPage = new ChatsPage({
+                block = new ChatsPage({
                     chats: this.state.chat_selection,
                     chat_search_value: this.state.chat_search_value,
                     active_chat: this.state.active_chat,
+                    // chat list header listeners
+                    activate_chat: ((chat: Chat) => this.activateChat(chat)).bind(this),
+                    edit_profile: (() => this.changePage('profile')).bind(this),
+                    search_chats: ((e: KeyboardEvent) => this.chatSearch(e)).bind(this),
+                    // chat body listeners
+                    do_chat_action: (() => this.chatAction()).bind(this),
+                    attach_to_chat: (() => this.chatAttach()).bind(this),
+                    send_message: ((e: SubmitEvent) => this.chatSend(e)).bind(this),
                 });
-                render('#app', chatsPage);
 
                 // template = Handlebars.compile(Pages.ChatsPage);
                 // this.appElement.innerHTML = template({
@@ -185,24 +192,31 @@ export default class App {
                 // });
                 break;
             case 'page404':
-                const code404Page = new Code404Page();
-                render('#app', code404Page);
+                block = new Code404Page();
 
                 // template = Handlebars.compile(Pages.Code404Page);
                 // this.appElement.innerHTML = template({});
                 break;
             case 'page5xx':
-                const code5xxPage = new Code5xxPage();
-                render('#app', code5xxPage);
+                block = new Code5xxPage();
 
                 // template = Handlebars.compile(Pages.Code5xxPage);
                 // this.appElement.innerHTML = template({});
                 break;
             default:
                 alert(`Несуществующая страница: ${this.state.currentPage} !!!`);
+                block = new Code404Page();
                 break;
         }
-        this.attachPageEventListeners();
+        // render('#app', block);
+        // render in DOM
+        this.appElement.replaceWith(block.getContent() as Node);
+        // save in appElement
+        this.appElement = block.getContent();
+        // emit CDM
+        block.dispatchComponentDidMount();
+        // attach listeners
+        // this.attachPageEventListeners();
         this.attachMenuEventListeners();
     }
 
@@ -228,44 +242,44 @@ export default class App {
                 break;
             case 'chats':
                 {
-                    // chat links
-                    const chatLinks = document.querySelectorAll('.chat-list-item');
-                    chatLinks.forEach((link) => {
-                        // find chat content
-                        const chatId = link.id;
-                        const thisChat = this.state.chats.find((chat) => chat.chatId === chatId);
-                        // const chatContent = this.state.chats.find(chat => chat.chatId === chatId)?.content;
-                        // if (!chatContent) {
-                        if (!thisChat) {
-                            alert(`Chat ${chatId} not found!`);
-                        } else {
-                            link.addEventListener('click', () => this.activateChat(thisChat));
-                            // Оставил данный код для будущей оптимизации - отображение без перерисовки всей страницы
+                    // // chat links
+                    // const chatLinks = document.querySelectorAll('.chat-list-item');
+                    // chatLinks.forEach((link) => {
+                    //     // find chat content
+                    //     const chatId = link.id;
+                    //     const thisChat = this.state.chats.find((chat) => chat.chatId === chatId);
+                    //     // const chatContent = this.state.chats.find(chat => chat.chatId === chatId)?.content;
+                    //     // if (!chatContent) {
+                    //     if (!thisChat) {
+                    //         alert(`Chat ${chatId} not found!`);
+                    //     } else {
+                    //         link.addEventListener('click', () => this.activateChat(thisChat));
+                    //         // Оставил данный код для будущей оптимизации - отображение без перерисовки всей страницы
 
-                            // link.addEventListener('click', function () {
-                            //     // highlight chat in list
-                            //     chatLinks.forEach(chatLink => chatLink.classList.remove('chat-list-item-active'));
-                            //     this.classList.add('chat-list-item-active');
-                            //     // display chat content
-                            //     const chatContentsElement = document.getElementById('chat-content');
-                            //     chatContentsElement.innerHTML = chatContent;
-                            // });
-                        }
-                    });
+                    //         // link.addEventListener('click', function () {
+                    //         //     // highlight chat in list
+                    //         //     chatLinks.forEach(chatLink => chatLink.classList.remove('chat-list-item-active'));
+                    //         //     this.classList.add('chat-list-item-active');
+                    //         //     // display chat content
+                    //         //     const chatContentsElement = document.getElementById('chat-content');
+                    //         //     chatContentsElement.innerHTML = chatContent;
+                    //         // });
+                    //     }
+                    // });
 
                     // buttons and fields
-                    const editProfile = document.getElementById('edit-profile');
-                    editProfile?.addEventListener('click', () => this.changePage('profile'));
-                    const chatSearch = document.getElementById('chat-search');
-                    chatSearch?.addEventListener('keyup', (e) => this.chatSearch(e));
-                    if (this.state.active_chat) {
-                        const chatAction = document.getElementById('chat-action');
-                        chatAction?.addEventListener('click', () => this.chatAction());
-                        const chatAttach = document.getElementById('chat-attach');
-                        chatAttach?.addEventListener('click', () => this.chatAttach());
-                        const messageForm = document.getElementById('chat-message-form');
-                        messageForm?.addEventListener('submit', (e) => this.chatSend(e));
-                    }
+                    // const editProfile = document.getElementById('edit-profile');
+                    // editProfile?.addEventListener('click', () => this.changePage('profile'));
+                    // const chatSearch = document.getElementById('chat-search');
+                    // chatSearch?.addEventListener('keyup', (e) => this.chatSearch(e));
+                    // if (this.state.active_chat) {
+                    //     const chatAction = document.getElementById('chat-action');
+                    //     chatAction?.addEventListener('click', () => this.chatAction());
+                    //     const chatAttach = document.getElementById('chat-attach');
+                    //     chatAttach?.addEventListener('click', () => this.chatAttach());
+                    //     const messageForm = document.getElementById('chat-message-form');
+                    //     messageForm?.addEventListener('submit', (e) => this.chatSend(e));
+                    // }
                 }
                 break;
             case 'page404':

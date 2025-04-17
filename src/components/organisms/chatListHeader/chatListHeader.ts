@@ -12,6 +12,9 @@ export default class ChatListHeader extends Block {
                 id: 'edit-profile',
                 class: 'navigation-button',
                 text: 'Профиль >',
+                events: {
+                    'click': props.edit_profile,
+                }
             }),
             chatSearchInput: new Input({
                 id: 'chat-search',
@@ -19,6 +22,9 @@ export default class ChatListHeader extends Block {
                 value: props.chat_search_value,
                 type: 'search',
                 placeholder: '🔎 Поиск',
+                events: {
+                    'keyup': props.search_chats,
+                }
             }),
             spacer: new Spacer({
                 class: 'chat-list-item-separator',

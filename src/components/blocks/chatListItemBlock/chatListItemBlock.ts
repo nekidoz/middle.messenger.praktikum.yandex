@@ -35,6 +35,7 @@ export default class ChatListItemBlock extends Block {
             spacer: new Spacer({
                 class: 'chat-list-item-separator',
             }),
+            events: props.events,
             template,
         });
     }

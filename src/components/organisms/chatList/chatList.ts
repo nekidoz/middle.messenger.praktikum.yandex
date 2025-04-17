@@ -12,6 +12,9 @@ export default class ChatList extends Block {
                 (props.chats as Chat[]).forEach((chat) => chats.push(new ChatListItemBlock({
                     ...chat,
                     active: chat === props.active_chat,
+                    events: {
+                        'click': () => (props.activate_chat as (chat: Chat) => void)(chat),
+                    }
                 })));
                 return chats;
             })(),

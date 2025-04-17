@@ -3,7 +3,5 @@ export default `<div class="profile-input-block">
         {{{captionComponent}}}<p>
         {{{inputComponent}}}
     </div>
-    {{#if error}}
-        {{{errorComponent}}}<p>
-    {{/if}}
+    {{{errorComponent}}}
 </div>`;

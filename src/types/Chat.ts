@@ -1,10 +1,9 @@
+import ChatMessage from "./ChatMessage";
+
 type Chat = {
     party: string;
     chatId: string;
-    content: {
-        party: string;
-        message: string;
-    }[];
+    content: ChatMessage[];
     newMessages: number;
     preview: string;
     date: string;
