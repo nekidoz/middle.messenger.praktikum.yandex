@@ -74,6 +74,7 @@ export default class SignupBox extends Block {
                                 class: 'menu-page-menu-item',
                                 datapage: 'login',
                                 text: 'Уже есть аккаунт?',
+                                change_page: props.change_page,
                             }),
                         ]
                     })

@@ -3,6 +3,7 @@
 // NEW IMPORTS
 import Logger, { Level } from './utils/logger';
 // import render from './utils/renderDOM';
+// import Nullable from './types/Nullable';
 import Chat from './types/Chat';
 import LoginPage from './components/pages/loginPage';
 import SignupPage from './components/pages/signupPage';
@@ -41,8 +42,6 @@ import Code5xxPage from './components/pages/code5xxPage';
 // Handlebars.registerPartial('ProfileInputBlock', ProfileInputBlock);
 
 const PARTY_ME = 'me';
-
-type Nullable<T> = T | null;
 
 export default class App {
     state: {
@@ -113,12 +112,17 @@ export default class App {
             return;
         }
         let block;
+        const commonProps = {
+            change_page: ((e: Event) => this.changePageByLink(e)).bind(this),
+        };
         this.logger.log(this.state.currentPage, this);
         switch (this.state.currentPage) {
             case 'login':
                 block = new LoginPage({
                     login: this.state.login,
                     onSubmit: ((e: SubmitEvent) => this.login(e)).bind(this),
+                    // for menu and other links
+                    ...commonProps,
                 });
 
                 // template = Handlebars.compile(Pages.LoginPage);
@@ -134,6 +138,8 @@ export default class App {
                     email: this.state.email,
                     phone: this.state.phone,
                     onSubmit: ((e: SubmitEvent) => this.signup(e)).bind(this),
+                    // for menu and other links
+                    ...commonProps,
                 });
 
                 // template = Handlebars.compile(Pages.SignupPage);
@@ -156,6 +162,8 @@ export default class App {
                     display_name: this.state.display_name,
                     avatar: this.state.avatar,
                     onSubmit: ((e: SubmitEvent) => this.saveProfile(e)).bind(this),
+                    // for menu and other links
+                    ...commonProps,
                 });
 
                 // template = Handlebars.compile(Pages.ProfilePage);
@@ -177,11 +185,13 @@ export default class App {
                     // chat list header listeners
                     activate_chat: ((chat: Chat) => this.activateChat(chat)).bind(this),
                     edit_profile: (() => this.changePage('profile')).bind(this),
-                    search_chats: ((e: KeyboardEvent) => this.chatSearch(e)).bind(this),
+                    search_chats: ((value: string) => this.chatSearch(value)).bind(this),
                     // chat body listeners
                     do_chat_action: (() => this.chatAction()).bind(this),
                     attach_to_chat: (() => this.chatAttach()).bind(this),
                     send_message: ((e: SubmitEvent) => this.chatSend(e)).bind(this),
+                    // for menu and other links
+                    ...commonProps,
                 });
 
                 // template = Handlebars.compile(Pages.ChatsPage);
@@ -192,20 +202,29 @@ export default class App {
                 // });
                 break;
             case 'page404':
-                block = new Code404Page();
+                block = new Code404Page({
+                    // for menu and other links
+                    ...commonProps,
+                });
 
                 // template = Handlebars.compile(Pages.Code404Page);
                 // this.appElement.innerHTML = template({});
                 break;
             case 'page5xx':
-                block = new Code5xxPage();
+                block = new Code5xxPage({
+                    // for menu and other links
+                    ...commonProps,
+                });
 
                 // template = Handlebars.compile(Pages.Code5xxPage);
                 // this.appElement.innerHTML = template({});
                 break;
             default:
                 alert(`Несуществующая страница: ${this.state.currentPage} !!!`);
-                block = new Code404Page();
+                block = new Code404Page({
+                    // for menu and other links
+                    ...commonProps,
+                });
                 break;
         }
         // render('#app', block);
@@ -217,7 +236,7 @@ export default class App {
         block.dispatchComponentDidMount();
         // attach listeners
         // this.attachPageEventListeners();
-        this.attachMenuEventListeners();
+        // this.attachMenuEventListeners();
     }
 
     attachPageEventListeners() {
@@ -292,20 +311,26 @@ export default class App {
         }
     }
 
-    attachMenuEventListeners() {
-        const menuItems = document.querySelectorAll('.menu-page-menu-item');
-        menuItems.forEach((link) => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const linkElement = e.target as HTMLLinkElement;
-                this.changePage(linkElement?.dataset.page);
-            });
-        });
-    }
+    // attachMenuEventListeners() {
+    //     const menuItems = document.querySelectorAll('.menu-page-menu-item');
+    //     menuItems.forEach((link) => {
+    //         link.addEventListener('click', (e) => {
+    //             e.preventDefault();
+    //             const linkElement = e.target as HTMLLinkElement;
+    //             this.changePage(linkElement?.dataset.page);
+    //         });
+    //     });
+    // }
 
     changePage(page: string | undefined) {
         this.state.currentPage = page;
         this.render();
+    }
+
+    changePageByLink(e: Event) {
+        e.preventDefault();
+        const linkElement = e.target as HTMLLinkElement;
+        this.changePage(linkElement?.dataset.page);
     }
 
     login(event: SubmitEvent) {
@@ -362,10 +387,24 @@ export default class App {
         this.changePage('chats');
     }
 
-    chatSearch(e: KeyboardEvent) {
-        if (e.keyCode === 13) {
-            const chatSearchField :Nullable<HTMLInputElement> = document.getElementById('chat-search') as HTMLInputElement;
-            const searchValue = chatSearchField?.value;
+    // chatSearch(e: KeyboardEvent) {
+    //     if (e.keyCode === 13) {
+    //         const chatSearchField :Nullable<HTMLInputElement> = document.getElementById('chat-search') as HTMLInputElement;
+    //         const searchValue = chatSearchField?.value;
+    //         if (searchValue !== this.state.chat_search_value) {
+    //             this.state.chat_search_value = searchValue;
+    //             if (searchValue) {
+    //                 this.state.chat_selection = this.state.chats.filter((chat) => chat.party.includes(searchValue));
+    //             } else {
+    //                 this.state.chat_selection = [...this.state.chats];
+    //             }
+    //             this.state.active_chat = undefined;
+    //             this.render();
+    //         }
+    //     }
+    // }
+
+    chatSearch(searchValue: string) {
             if (searchValue !== this.state.chat_search_value) {
                 this.state.chat_search_value = searchValue;
                 if (searchValue) {
@@ -376,7 +415,6 @@ export default class App {
                 this.state.active_chat = undefined;
                 this.render();
             }
-        }
     }
 
     activateChat(chat: Chat) {

@@ -17,6 +17,7 @@ export default class ErrorPageBox extends Block {
                 class: 'menu-page-menu-item',
                 datapage: 'chats',
                 text: 'Назад к чатам',
+                change_page: props.change_page,
             }),
             template,
         });

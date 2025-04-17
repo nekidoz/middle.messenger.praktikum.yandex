@@ -109,6 +109,7 @@ export default class ProfileBox extends Block {
                                 class: 'menu-page-menu-item',
                                 datapage: 'login',
                                 text: 'Выйти',
+                                change_page: props.change_page,
                             }),
                         ]
                     })

@@ -23,7 +23,12 @@ export default class ChatListHeader extends Block {
                 type: 'search',
                 placeholder: '🔎 Поиск',
                 events: {
-                    'keyup': props.search_chats,
+                    'keyup': (e: KeyboardEvent) => {
+                        if (e.keyCode === 13) {
+                            const target = e.target as HTMLInputElement;
+                            (props.search_chats as (value: string) => void)(target?.value);
+                        }
+                    },
                 }
             }),
             spacer: new Spacer({

@@ -4,42 +4,41 @@ import template from './template';
 
 export default class Menu extends Block {
     constructor(props: PropsRecord = {}) {
+        const commonProps = {
+            href: '#',
+            class: 'menu-page-menu-item',
+            change_page: props.change_page,
+        }
         super({ 
             ...props,
             links: [
                 new Link({
-                    href: '#',
-                    class: 'menu-page-menu-item',
+                    ...commonProps,
                     datapage: 'login',
                     text: 'Вход',
                 }),
                 new Link({
-                    href: '#',
-                    class: 'menu-page-menu-item',
+                    ...commonProps,
                     datapage: 'signup',
                     text: 'Регистрация',
                 }),
                 new Link({
-                    href: '#',
-                    class: 'menu-page-menu-item',
+                    ...commonProps,
                     datapage: 'profile',
                     text: 'Профиль',
                 }),
                 new Link({
-                    href: '#',
-                    class: 'menu-page-menu-item',
+                    ...commonProps,
                     datapage: 'chats',
                     text: 'Чаты',
                 }),
                 new Link({
-                    href: '#',
-                    class: 'menu-page-menu-item',
+                    ...commonProps,
                     datapage: 'page404',
                     text: '404',
                 }),
                 new Link({
-                    href: '#',
-                    class: 'menu-page-menu-item',
+                    ...commonProps,
                     datapage: 'page5xx',
                     text: '5xx',
                 }),

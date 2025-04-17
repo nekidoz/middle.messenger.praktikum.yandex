@@ -9,6 +9,7 @@ export default class Code5xxPage extends PageTemplate {
             mainComponent: new ErrorPageBox({
                 error_code: '500',
                 error: 'Мы уже фиксим',
+                change_page: props.change_page,
             }),
         })
     }

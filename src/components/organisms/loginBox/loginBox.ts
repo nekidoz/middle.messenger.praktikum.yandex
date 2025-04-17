@@ -40,6 +40,7 @@ export default class LoginBox extends Block {
                                 class: 'menu-page-menu-item',
                                 datapage: 'signup',
                                 text: 'Нет аккаунта?',
+                                change_page: props.change_page,
                             }),
                         ]
                     })

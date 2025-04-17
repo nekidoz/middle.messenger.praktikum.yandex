@@ -9,6 +9,7 @@ export default class Code404Page extends PageTemplate {
             mainComponent: new ErrorPageBox({
                 error_code: '404',
                 error: 'Не туда попали',
+                change_page: props.change_page,
             }),
         })
     }
