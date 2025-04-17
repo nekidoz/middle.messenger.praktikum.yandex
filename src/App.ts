@@ -173,7 +173,7 @@ export default class App {
         const formElement = event.target as HTMLFormElement;
         this.state.login = formElement?.login.value;
         this.state.password = formElement?.password.value;
-        alert('Вход'
+        console.log('Вход'
             + `\nлогин: ${this.state.login ? this.state.login : '<не задан>'}`
             + `\nпароль: ${this.state.password ? this.state.password : '<не задан>'}`);
         this.changePage('chats');
@@ -189,7 +189,7 @@ export default class App {
         this.state.email = formElement?.email.value;
         this.state.phone = formElement?.phone.value;
         this.state.display_name = formElement?.first_name.value;
-        alert('Регистрация'
+        console.log('Регистрация'
             + `\nлогин: ${this.state.login ? this.state.login : '<не задан>'}`
             + `\nпароль: ${this.state.password ? this.state.password : '<не задан>'}`
             + `\nимя: ${this.state.first_name ? this.state.first_name : '<не задано>'}`
@@ -210,7 +210,7 @@ export default class App {
         this.state.phone = formElement?.phone.value;
         this.state.display_name = formElement?.display_name.value;
         this.state.avatar = formElement?.avatar.value;
-        alert('Регистрация'
+        console.log('Регистрация'
             + `\nлогин: ${this.state.login ? this.state.login : '<не задан>'}`
             + `\nновый пароль: ${this.state.password ? this.state.password : '<не задан>'}`
             + `\nимя: ${this.state.first_name ? this.state.first_name : '<не задано>'}`
@@ -260,6 +260,7 @@ export default class App {
         } else if (!this.state.active_chat) {
             alert('Чат не выбран - обратитесь к разработчику!');
         } else {
+            console.log(`Сообщение\nтекст: ${message}`);
             this.state.active_chat.content.push({ party: PARTY_ME, message });
             this.render();
         }
