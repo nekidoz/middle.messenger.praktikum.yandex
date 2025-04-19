@@ -13,7 +13,7 @@ const enum EVENTS {
 export type PropsRecord = Record<string, unknown>;
 type EventsRecord = Record<string, () => void>;
 /* eslint-disable-next-line no-use-before-define */
-type BlocksRecord = Record<string, Block>;
+export type BlocksRecord = Record<string, Block>;
 type BlockListRecord = Record<string, unknown[]>;
 
 abstract class Block {
@@ -28,9 +28,9 @@ abstract class Block {
 
     protected _props;
 
-    protected _children;
+    _children;
 
-    protected _lists: BlockListRecord;
+    _lists: BlockListRecord;
 
     private _id: string | null = null;
 
@@ -331,7 +331,7 @@ abstract class Block {
                 // This is the essense of this function - to reassign its parameter
                 /* eslint-disable-next-line no-param-reassign */
                 target[prop] = value;
-                this.logger.log(`${self._id}: PropsProxy: assigned new value to \"${prop}\". Emitting FLOW_CDU`, value);
+                self.logger.log(`${self._id}: PropsProxy: assigned new value to \"${prop}\". Emitting FLOW_CDU`, value);
                 self._eventBus.emit(EVENTS.FLOW_CDU, oldTarget, target);
                 return true;
             },

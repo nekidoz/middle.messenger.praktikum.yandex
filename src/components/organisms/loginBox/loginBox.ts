@@ -17,13 +17,13 @@ export default class LoginBox extends Block {
                         id: 'login',
                         type: 'text',
                         value: props.login,
-                        caption: 'Логин',
+                        caption: '* Логин',
                         placeholder: 'Логин',
                     }),
                     new LoginSignupInputBlock({
                         id: 'password',
                         type: 'password',
-                        caption: 'Пароль',
+                        caption: '* Пароль',
                         placeholder: 'Пароль',
                     }),
                     new Div({
@@ -46,10 +46,34 @@ export default class LoginBox extends Block {
                     })
                 ],
                 events: {
-                    'submit': props.onSubmit,
+                    'submit': (e: SubmitEvent) => this.validate(e),
                 }
             }),
             template,
         });
+    }
+
+    validate(e: SubmitEvent) {
+        e.preventDefault();
+        let success = true;
+        let firstFailure: HTMLElement | null = this.getContent();
+        Object.values(this._children.form._lists.content).forEach((block) => {
+            if (block instanceof LoginSignupInputBlock) {
+                const component = block._children.inputComponent.getContent();
+                if (!block.isValid) {
+                    component?.focus();
+                    component?.blur();
+                }
+                if (success && !block.isValid) {
+                    success = false;
+                    firstFailure = component;
+                }
+            }
+        })
+        if (success) {
+            (this._props.onSubmit as (e: SubmitEvent) => void)(e);
+        } else {
+            firstFailure?.focus();
+        }
     }
 }

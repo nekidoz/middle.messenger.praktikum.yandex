@@ -11,7 +11,6 @@ import { PARTY_ME } from '../../../types/ChatMessage';
 export default class ChatContentBlock extends Block {
     constructor(props: PropsRecord = {}) {
         const active_chat = props.active_chat as Chat;
-        const party_me = PARTY_ME;
         super({
             avatar: new Image({
                 class: 'chat-content-avatar',
@@ -34,7 +33,7 @@ export default class ChatContentBlock extends Block {
                 const messages: Text[] = [];
                 active_chat?.content.forEach((message) => messages.push(new Text({
                     text: message.message,
-                    class: `chat-content-message ${message.party === party_me 
+                    class: `chat-content-message ${message.party === PARTY_ME 
                         ? 'chat-content-message-self' 
                         : 'chat-content-message-party'}`,
                 })));

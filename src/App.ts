@@ -33,7 +33,7 @@ export default class App {
     constructor() {
         this.logger = new Logger(Level.debug);
         this.state = {
-            currentPage: 'chats',
+            currentPage: 'login',
 
             login: '',
             password: '',

@@ -17,21 +17,21 @@ export default class SignupBox extends Block {
                         id: 'email',
                         type: 'email',
                         value: props.email,
-                        caption: 'Почта',
+                        caption: '* Почта',
                         placeholder: 'Почта',
                     }),
                     new LoginSignupInputBlock({
                         id: 'login',
                         type: 'text',
                         value: props.login,
-                        caption: 'Логин',
+                        caption: '* Логин',
                         placeholder: 'Логин',
                     }),
                     new LoginSignupInputBlock({
                         id: 'first_name',
                         type: 'text',
                         value: props.first_name,
-                        caption: 'Имя',
+                        caption: '* Имя',
                         placeholder: 'Имя',
                     }),
                     new LoginSignupInputBlock({
@@ -51,13 +51,13 @@ export default class SignupBox extends Block {
                     new LoginSignupInputBlock({
                         id: 'password',
                         type: 'password',
-                        caption: 'Пароль',
+                        caption: '* Пароль',
                         placeholder: 'Пароль',
                     }),
                     new LoginSignupInputBlock({
                         id: 'repeat_password',
                         type: 'password',
-                        caption: 'Пароль (еще раз)',
+                        caption: '* Пароль (еще раз)',
                         placeholder: 'Пароль (еще раз)',
                     }),
                     new Div({
