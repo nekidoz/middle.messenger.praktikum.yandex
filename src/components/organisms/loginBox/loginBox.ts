@@ -5,6 +5,7 @@ import Form from '../../atoms/form';
 import Div from '../../atoms/div';
 import LoginSignupInputBlock from '../../blocks/loginSignupInputBlock';
 import template from './template';
+import InputBoxValidationMixin from '../../mixins/inputBoxValidationMixin';
 
 export default class LoginBox extends Block {
     constructor(props: PropsRecord = {}) {
@@ -46,34 +47,22 @@ export default class LoginBox extends Block {
                     })
                 ],
                 events: {
-                    'submit': (e: SubmitEvent) => this.validate(e),
+                    'submit': (e: SubmitEvent) => {
+                        if (this.validate(e)) {
+                            (this._props.onSubmit as (e: SubmitEvent) => void)(e);
+                        }
+                    },
                 }
             }),
             template,
         });
     }
 
-    validate(e: SubmitEvent) {
-        e.preventDefault();
-        let success = true;
-        let firstFailure: HTMLElement | null = this.getContent();
-        Object.values(this._children.form._lists.content).forEach((block) => {
-            if (block instanceof LoginSignupInputBlock) {
-                const component = block._children.inputComponent.getContent();
-                if (!block.isValid) {
-                    component?.focus();
-                    component?.blur();
-                }
-                if (success && !block.isValid) {
-                    success = false;
-                    firstFailure = component;
-                }
-            }
-        })
-        if (success) {
-            (this._props.onSubmit as (e: SubmitEvent) => void)(e);
-        } else {
-            firstFailure?.focus();
-        }
+    // The following is replaced with implementation from InputBoxValidationMixin
+    validate(e: SubmitEvent): boolean {
+        console.log(e);
+        return true;
     }
 }
+
+Object.assign(LoginBox.prototype, InputBoxValidationMixin);
