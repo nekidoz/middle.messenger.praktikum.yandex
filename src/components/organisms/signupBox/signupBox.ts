@@ -93,11 +93,11 @@ export default class SignupBox extends Block {
         });
     }
 
-        // The following is replaced with implementation from InputBoxValidationMixin
-        validate(matchingFields: string[] = [], mismatchMessage: string = ''): boolean {
-            console.log(matchingFields, mismatchMessage);
-            return true;
-        }    
+    // The following is replaced with implementation from InputBoxValidationMixin
+    validate(matchingFields: string[] = [], mismatchMessage: string = ''): boolean {
+        console.log(matchingFields, mismatchMessage);
+        return true;
+    }    
 }
 
 Object.assign(SignupBox.prototype, InputBoxValidationMixin);

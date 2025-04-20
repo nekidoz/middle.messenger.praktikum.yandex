@@ -1,4 +1,5 @@
 import LoginSignupInputBlock from "../../blocks/loginSignupInputBlock";
+import ProfileInputBlock from "../../blocks/profileInputBlock";
 
 const InputBoxValidationMixin = {
     /**
@@ -14,7 +15,7 @@ const InputBoxValidationMixin = {
         let firstFailure: HTMLElement | null = this.getContent();
         let referenceValue: string;
         Object.values(this._children.form._lists.content).forEach((block) => {
-            if (block instanceof LoginSignupInputBlock) {
+            if (block instanceof LoginSignupInputBlock || block instanceof ProfileInputBlock) {
                 const element = block._children.inputComponent.getContent();
                 if (!block.isValid) {
                     // force validation if was invalid or not yet validated

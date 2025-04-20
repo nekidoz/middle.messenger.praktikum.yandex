@@ -7,7 +7,7 @@ type Hints = {
 };
 
 const LOGIN_HINTS: Hints = {
-    format: 'Логин должен начинаться с буквы и содержать буквы, цифры и подчеркивание',
+    format: 'Логин должен начинаться с латинской буквы и содержать латинские буквы, цифры и подчеркивание',
     isNull: 'Необходимо указать логин',
     tooShort: null,
     tooLong: null,
@@ -23,7 +23,7 @@ const PASSWORD_HINTS: Hints = {
 };
 
 const EMAIL_HINTS: Hints = {
-    format: 'Почтовый адрес должен состоять из букв, цифр и знаков: +-_.\' и быть в домене второго уровня',
+    format: 'Почтовый адрес должен состоять из латинских букв, цифр и знаков: +-_.\' и быть в домене второго уровня',
     isNull: 'Необходимо указать почтовый адрес',
     tooShort: null,
     tooLong: null,
@@ -41,14 +41,6 @@ const NAME_HINTS: Hints = {
 const PHONE_HINTS: Hints = {
     format: 'Ну вы сами знаете, как выглядит телефон 🙄',
     isNull: 'Необходимо указать телефон',
-    tooShort: null,
-    tooLong: null,
-    notExact: null,
-};
-
-const DISPLAY_NAME_HINTS: Hints = {
-    format: 'Имя в чате должно начинаться с буквы и содержать буквы, цифры и подчеркивание',
-    isNull: 'Необходимо указать имя в чате',
     tooShort: null,
     tooLong: null,
     notExact: null,
@@ -95,15 +87,11 @@ export default class Validate {
     }
 
     static isName(value: string, required: boolean = false): [boolean, string | null] {
-        return this.isValid(value, required, /^[a-zA-Zа-яА-Я ]+$/, NAME_HINTS);
+        return this.isValid(value, required, /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я ]*$/, NAME_HINTS);
     }
 
     static isPhone(value: string, required: boolean = false): [boolean, string | null] {
         return this.isValid(value, required, /^[\+]?[0-9]{0,3}[ ]?[(]?[0-9]{3}[)]?[- ]?[0-9]{3}[- ]?[0-9]{4,6}$/im, PHONE_HINTS);
-    }
-
-    static isDisplayName(value: string, required: boolean = false): [boolean, string | null] {
-        return this.isValid(value, required, /^[a-zA-Z]\w*$/, DISPLAY_NAME_HINTS);
     }
 
     static validate(key: string, value: string): [boolean, string | null] {
@@ -120,13 +108,12 @@ export default class Validate {
             case 'email':
                 return Validate.isEmail(value, true);
             case 'first_name':
+            case 'display_name':
                 return Validate.isName(value, true);
             case 'second_name':
                 return Validate.isName(value, false);
             case 'phone':
                 return Validate.isPhone(value, false);
-            case 'display_name':
-                return Validate.isDisplayName(value, true);
             case 'avatar':
                 return [true, null];
             default:
