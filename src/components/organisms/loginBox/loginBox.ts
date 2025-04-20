@@ -48,7 +48,8 @@ export default class LoginBox extends Block {
                 ],
                 events: {
                     'submit': (e: SubmitEvent) => {
-                        if (this.validate(e)) {
+                        e.preventDefault();
+                        if (this.validate()) {
                             (this._props.onSubmit as (e: SubmitEvent) => void)(e);
                         }
                     },
@@ -59,8 +60,8 @@ export default class LoginBox extends Block {
     }
 
     // The following is replaced with implementation from InputBoxValidationMixin
-    validate(e: SubmitEvent): boolean {
-        console.log(e);
+    validate(matchingFields: string[] = [], mismatchMessage: string = ''): boolean {
+        console.log(matchingFields, mismatchMessage);
         return true;
     }
 }

@@ -5,6 +5,7 @@ import Form from '../../atoms/form';
 import Div from '../../atoms/div';
 import LoginSignupInputBlock from '../../blocks/loginSignupInputBlock';
 import template from './template';
+import InputBoxValidationMixin from '../../mixins/inputBoxValidationMixin';
 
 export default class SignupBox extends Block {
     constructor(props: PropsRecord = {}) {
@@ -80,10 +81,23 @@ export default class SignupBox extends Block {
                     })
                 ],
                 events: {
-                    'submit': props.onSubmit,
+                    'submit': (e: SubmitEvent) => {
+                        e.preventDefault();
+                        if (this.validate(['password', 'repeat_password'], 'Пароль неверно введен повторно')) {
+                            (this._props.onSubmit as (e: SubmitEvent) => void)(e);
+                        }
+                    },
                 }
             }),
             template,
         });
     }
+
+        // The following is replaced with implementation from InputBoxValidationMixin
+        validate(matchingFields: string[] = [], mismatchMessage: string = ''): boolean {
+            console.log(matchingFields, mismatchMessage);
+            return true;
+        }    
 }
+
+Object.assign(SignupBox.prototype, InputBoxValidationMixin);
