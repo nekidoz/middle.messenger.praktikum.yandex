@@ -28,21 +28,21 @@ export default class ProfileBox extends Block {
                         id: 'email',
                         type: 'email',
                         value: props.email,
-                        caption: 'Почта',
+                        caption: '* Почта',
                         placeholder: 'Почта',
                     }),
                     new ProfileInputBlock({
                         id: 'login',
                         type: 'text',
                         value: props.login,
-                        caption: 'Логин',
+                        caption: '* Логин',
                         placeholder: 'Логин',
                     }),
                     new ProfileInputBlock({
                         id: 'first_name',
                         type: 'text',
                         value: props.first_name,
-                        caption: 'Имя',
+                        caption: '* Имя',
                         placeholder: 'Имя',
                     }),
                     new ProfileInputBlock({
@@ -56,7 +56,7 @@ export default class ProfileBox extends Block {
                         id: 'display_name',
                         type: 'text',
                         value: props.display_name,
-                        caption: 'Имя в чате',
+                        caption: '* Имя в чате',
                         placeholder: 'Имя в чате',
                     }),
                     new ProfileInputBlock({
@@ -90,7 +90,7 @@ export default class ProfileBox extends Block {
                         placeholder: 'Новый пароль',
                     }),
                     new ProfileInputBlock({
-                        id: 'repeat_password',
+                        id: 'repeatNewPassword',
                         type: 'password',
                         caption: 'Новый пароль (еще раз)',
                         placeholder: 'Новый пароль (еще раз)',

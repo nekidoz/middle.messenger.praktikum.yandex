@@ -46,6 +46,14 @@ const PHONE_HINTS: Hints = {
     notExact: null,
 };
 
+const DISPLAY_NAME_HINTS: Hints = {
+    format: 'Имя в чате должно начинаться с буквы и содержать буквы, цифры и подчеркивание',
+    isNull: 'Необходимо указать имя в чате',
+    tooShort: null,
+    tooLong: null,
+    notExact: null,
+};
+
 export type ValidateBundle = Record<string, string | null>;
 
 export default class Validate {
@@ -94,6 +102,10 @@ export default class Validate {
         return this.isValid(value, required, /^[\+]?[0-9]{0,3}[ ]?[(]?[0-9]{3}[)]?[- ]?[0-9]{3}[- ]?[0-9]{4,6}$/im, PHONE_HINTS);
     }
 
+    static isDisplayName(value: string, required: boolean = false): [boolean, string | null] {
+        return this.isValid(value, required, /^[a-zA-Z]\w*$/, DISPLAY_NAME_HINTS);
+    }
+
     static validate(key: string, value: string): [boolean, string | null] {
         switch(key) {
             case 'login':
@@ -101,6 +113,10 @@ export default class Validate {
             case 'password':
             case 'repeat_password':
                 return Validate.isPassword(value, true);
+            case 'oldPassword':
+            case 'newPassword':
+            case 'repeatNewPassword':
+                return Validate.isPassword(value, false);
             case 'email':
                 return Validate.isEmail(value, true);
             case 'first_name':
@@ -109,6 +125,10 @@ export default class Validate {
                 return Validate.isName(value, false);
             case 'phone':
                 return Validate.isPhone(value, false);
+            case 'display_name':
+                return Validate.isDisplayName(value, true);
+            case 'avatar':
+                return [true, null];
             default:
                 return [false, `Validating ${key} not implemented.`];
         }

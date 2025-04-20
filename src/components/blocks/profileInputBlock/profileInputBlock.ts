@@ -1,10 +1,12 @@
 import Block, { PropsRecord } from '../../../framework/block';
 import Input from '../../atoms/input';
 import Text from '../../atoms/text';
-import Stub from '../../atoms/stub';
 import template from './template';
+import Validate from '../../../utils/validate';
 
 export default class ProfileInputBlock extends Block {
+    isValid: boolean | null = null;
+
     constructor(props: PropsRecord = {}) {
         super({
             ...props,
@@ -19,13 +21,20 @@ export default class ProfileInputBlock extends Block {
                 accept: props.accept,
                 placeholder: props.placeholder,
                 value: props.value,
+                events: {
+                    'blur': ((e: Event) => {
+                        const [result, message] = Validate.validate(props.id as string, (e.target as HTMLInputElement)?.value);
+                        this.setProps({
+                            'error': message,
+                        });
+                        this.isValid = result;
+                    }),
+                },
             }),
-            errorComponent: props.error 
-                ? new Text({
-                    class: 'profile-error',
-                    text: props.error,
-                })
-                : new Stub(),
+            errorComponent: new Text({
+                class: `profile-error${props.error ? '' : ' hidden'}`,
+                text: props.error,
+            }),
             template,
         });
     }
