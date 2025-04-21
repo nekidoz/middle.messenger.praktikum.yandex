@@ -5,6 +5,6 @@ import { defineConfig } from 'vite';
 export default defineConfig({
     // plugins: [handlebars()],
     css: {
-      postcss: './postcss.config.cjs',
+        postcss: './postcss.config.cjs',
     },
 });
