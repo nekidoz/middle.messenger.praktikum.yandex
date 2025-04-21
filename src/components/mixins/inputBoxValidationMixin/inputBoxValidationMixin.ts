@@ -1,11 +1,11 @@
-import LoginSignupInputBlock from "../../blocks/loginSignupInputBlock";
-import ProfileInputBlock from "../../blocks/profileInputBlock";
+import LoginSignupInputBlock from '../../blocks/loginSignupInputBlock';
+import ProfileInputBlock from '../../blocks/profileInputBlock';
 
 const InputBoxValidationMixin = {
     /**
-     * Validates LoginBox, SignupBox and ProfileBox-like boxes input fields 
+     * Validates LoginBox, SignupBox and ProfileBox-like boxes input fields
      * using their input fields' blur() validation and isValid status field.
-     * 
+     *
      * @param {string[]} [matchingFields=[]] - specifies field names whose values should match (designed for password configuration fields)
      * @param {string} [mismatchMessage] - specified error message in case of field values mismatch
      * @return {boolean} true if validation successfull, false otherwise
@@ -29,29 +29,27 @@ const InputBoxValidationMixin = {
                         success = false;
                         firstFailure = element;
                     }
-                } else {
+                } else if (element) {
                     // for valid fields, check field value match
-                    if (element) {
-                        if (matchingFields.includes(element.id)) {
-                            if (!referenceValue) {
-                                referenceValue = (element as HTMLInputElement).value;
-                            } else if ((element as HTMLInputElement).value !== referenceValue) {
-                                block.setProps({error: mismatchMessage});
-                                if (success) {
-                                    success = false;
-                                    firstFailure = element;
-                                }          
+                    if (matchingFields.includes(element.id)) {
+                        if (!referenceValue) {
+                            referenceValue = (element as HTMLInputElement).value;
+                        } else if ((element as HTMLInputElement).value !== referenceValue) {
+                            block.setProps({ error: mismatchMessage });
+                            if (success) {
+                                success = false;
+                                firstFailure = element;
                             }
                         }
-                    }    
+                    }
                 }
             }
-        })
+        });
         if (!success) {
             firstFailure?.focus();
         }
         return success;
-    }
-}
+    },
+};
 
 export default InputBoxValidationMixin;

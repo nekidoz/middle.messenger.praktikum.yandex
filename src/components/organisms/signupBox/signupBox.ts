@@ -12,7 +12,7 @@ export default class SignupBox extends Block {
         super({
             ...props,
             form: new Form({
-                id: "signup-form",
+                id: 'signup-form',
                 content: [
                     new LoginSignupInputBlock({
                         id: 'email',
@@ -62,7 +62,7 @@ export default class SignupBox extends Block {
                         placeholder: 'Пароль (еще раз)',
                     }),
                     new Div({
-                        class: "button-stack",
+                        class: 'button-stack',
                         content: [
                             new Input({
                                 id: 'btn-signup',
@@ -77,17 +77,17 @@ export default class SignupBox extends Block {
                                 text: 'Уже есть аккаунт?',
                                 change_page: props.change_page,
                             }),
-                        ]
-                    })
+                        ],
+                    }),
                 ],
                 events: {
-                    'submit': (e: SubmitEvent) => {
+                    submit: (e: SubmitEvent) => {
                         e.preventDefault();
                         if (this.validate(['password', 'repeat_password'], 'Пароли не совпадают')) {
-                            (this._props.onSubmit as (e: SubmitEvent) => void)(e);
+                            (this._props.onSubmit as (event: SubmitEvent) => void)(e);
                         }
                     },
-                }
+                },
             }),
             template,
         });
@@ -95,9 +95,9 @@ export default class SignupBox extends Block {
 
     // The following is replaced with implementation from InputBoxValidationMixin
     validate(matchingFields: string[] = [], mismatchMessage: string = ''): boolean {
-        console.log(matchingFields, mismatchMessage);
+        this.logger.log(matchingFields, mismatchMessage);
         return true;
-    }    
+    }
 }
 
 Object.assign(SignupBox.prototype, InputBoxValidationMixin);

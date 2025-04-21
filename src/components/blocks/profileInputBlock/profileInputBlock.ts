@@ -22,17 +22,17 @@ export default class ProfileInputBlock extends Block {
                 placeholder: props.placeholder,
                 value: props.value,
                 events: {
-                    'blur': ((e: Event) => {
+                    blur: ((e: Event) => {
                         const [result, message] = Validate.validate(props.id as string, (e.target as HTMLInputElement)?.value);
                         this.setProps({
-                            'error': message,
+                            error: message,
                         });
                         this.isValid = result;
                     }),
                 },
             }),
             errorComponent: new Text({
-                class: `profile-error${props.error ? '' : ' hidden'}`,
+                class: 'profile-error',
                 text: props.error,
             }),
             template,

@@ -6,4 +6,3 @@ export default '<main class="profile-box">\
     </h2>\
     {{{form}}}\
 </main>';
-    

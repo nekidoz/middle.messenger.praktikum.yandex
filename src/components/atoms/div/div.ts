@@ -5,7 +5,7 @@ export default class Div extends Block {
     constructor(props: PropsRecord = {}) {
         super({
             ...props,
-            template
+            template,
         });
     }
 }

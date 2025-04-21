@@ -5,7 +5,7 @@ export default class Spacer extends Block {
     constructor(props: PropsRecord = {}) {
         super({
             ...props,
-            template
+            template,
         });
     }
 }

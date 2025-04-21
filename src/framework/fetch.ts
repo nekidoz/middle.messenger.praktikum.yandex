@@ -1,88 +1,95 @@
-const METHODS = {
-    GET: 'GET',
-    PUT: 'PUT',
-    POST: 'POST',
-    DELETE: 'DELETE',
-};
+import Logger, { Level } from '../utils/logger';
+
+const enum METHODS {
+    GET = 'GET',
+    PUT = 'PUT',
+    POST = 'POST',
+    DELETE = 'DELETE',
+}
+
+type StringDict = Record<string, string>;
+
+type HttpRequestOptions = {
+    timeout: number | undefined;
+    method: METHODS,
+    data: Object,
+    headers: StringDict,
+}
 
 /**
-  * Функция реализовывать здесь необязательно, но может помочь не плодить логику у GET-метода
-  * На входе: объект. Пример: {a: 1, b: 2, c: {d: 123}, k: [1, 2, 3]}
+  * Функция трансформирует объект в строку запроса HTML
+  * @param  На входе: объект. Пример: {a: 1, b: 2, c: {d: 123}, k: [1, 2, 3]}
   * На выходе: строка. Пример: ?a=1&b=2&c=[object Object]&k=1,2,3
 */
-function queryStringify(data) {
-  let result = '?';
-  Object.entries(data).forEach(([key, value]) => result += `${key}=${value}&`);
-  return result.length > 1 ? result.slice(0, result.length - 1) : result;
+export function queryStringify(data: Object) {
+    let result = '?';
+    Object.entries(data).forEach(([key, value]) => { result += `${key}=${value}&`; });
+    return result.length > 1 ? result.slice(0, result.length - 1) : result;
 }
 
-class HTTPTransport {
-  get = (url, options = {}) => {
-    return this.request(url, {...options, method: METHODS.GET}, options.timeout);
-  };
+export default class HTTPTransport {
+    logger: Logger;
 
-  put = (url, options = {}) => {
-    return this.request(url, {...options, method: METHODS.PUT}, options.timeout);
-  };
+    constructor() {
+        this.logger = new Logger(Level.info);
+    }
 
-  post = (url, options = {}) => {
-    return this.request(url, {...options, method: METHODS.POST}, options.timeout);
-  };
+    get = (url: string, options: Partial<HttpRequestOptions> = {}) => this.request(url, { ...options, method: METHODS.GET }, options.timeout);
 
-  delete = (url, options = {}) => {
-    return this.request(url, {...options, method: METHODS.DELETE}, options.timeout);
-  };
+    put = (url: string, options: Partial<HttpRequestOptions> = {}) => this.request(url, { ...options, method: METHODS.PUT }, options.timeout);
 
-  // options:
-  // headers — obj
-  // data — obj
-  request = (url = 'http://localhost', options = { method: METHODS.GET }, timeout = 5000) => {
-    const { method, data, headers = {} } = options;
-    console.log(method, data, headers);
+    post = (url: string, options: Partial<HttpRequestOptions> = {}) => this.request(url, { ...options, method: METHODS.POST }, options.timeout);
 
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      // Преобразовываем data в query string для метода GET
-      if (method === METHODS.GET && data) {
-        url += queryStringify(data);
-      }
-      console.log(method, url);
-      xhr.open(method, url);
-      console.log('Opened');
+    delete = (url: string, options: Partial<HttpRequestOptions> = {}) => this.request(url, { ...options, method: METHODS.DELETE }, options.timeout);
 
-      // Заголовки
-      Object.entries(headers).forEach(([key, value]) => {
-        console.log(`Header ${key}: ${value}`);
-        xhr.setRequestHeader(key, value)
-      });
-      //    для всех методов, кроме GET, по умолчанию устанавливается тип данных JSON
-      if (method !== METHODS.GET && (!headers || !headers['Content-Type'])) {
-        console.log('Default header');
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      }  
-      console.log('Headers done');
+    // options:
+    // headers — obj
+    // data — obj
+    request = (url = 'http://localhost', options: Partial<HttpRequestOptions> = { method: METHODS.GET }, timeout = 5000) => {
+        const { method, data, headers = {} } = options;
+        this.logger.log(method, data, headers);
+        let targetUrl = url;
 
-      // Таймаут
-      xhr.timeout = timeout;
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            // Преобразовываем data в query string для метода GET
+            if (method === METHODS.GET && data) {
+                targetUrl += queryStringify(data);
+            }
+            this.logger.log(method, targetUrl);
+            xhr.open(method as string, targetUrl);
+            this.logger.log('Opened');
 
-      xhr.onload = function() {
-        resolve(xhr);
-      };
+            // Заголовки
+            Object.entries(headers).forEach(([key, value]) => {
+                this.logger.log(`Header ${key}: ${value}`);
+                xhr.setRequestHeader(key, value);
+            });
+            //    для всех методов, кроме GET, по умолчанию устанавливается тип данных JSON
+            if (method !== METHODS.GET && (!headers || !headers['Content-Type'])) {
+                this.logger.log('Default header');
+                xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+            }
+            this.logger.log('Headers done');
 
-      xhr.onabort = reject;
-      xhr.onerror = reject;
-      xhr.ontimeout = reject;
+            // Таймаут
+            xhr.timeout = timeout;
 
-      if (method === METHODS.GET || !data) {
-        console.log('Get or no data');
-        xhr.send();
-      } else {
-        console.log('Not Get and data present');
-        xhr.send(data);
-      }
-    }); 
-  };
+            xhr.onload = () => {
+                resolve(xhr);
+            };
+
+            xhr.onabort = reject;
+            xhr.onerror = reject;
+            xhr.ontimeout = reject;
+
+            if (method === METHODS.GET || !data) {
+                this.logger.log('Get or no data');
+                xhr.send();
+            } else {
+                this.logger.log('Not Get and data present');
+                xhr.send(data as Document);
+            }
+        });
+    };
 }
-
-console.log(queryStringify({a: 1, b: 2, c: {d: 123}, k: [1, 2, 3]}));
-console.log(new HTTPTransport().get());

@@ -1,3 +1,3 @@
-import PageTemplate from "./pageTemplate";
+import PageTemplate from './pageTemplate';
 
 export default PageTemplate;

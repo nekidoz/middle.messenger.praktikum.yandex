@@ -6,7 +6,7 @@ export default class Link extends Block {
         super({
             ...props,
             events: {
-                click: (e: Event) => (props.change_page as (e: Event) => void)(e),
+                click: (e: Event) => (props.change_page as (event: Event) => void)(e),
             },
             template,
         });

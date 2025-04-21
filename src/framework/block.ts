@@ -40,7 +40,7 @@ abstract class Block {
     constructor(propsAndChildren: PropsRecord = {}) {
         this.logger = new Logger(Level.info);
 
-        const tagName = 'div'; 
+        const tagName = 'div';
         this._eventBus = new EventBus();
 
         // Get and save props in meta
@@ -50,18 +50,20 @@ abstract class Block {
             props,
         };
 
-        // Generate UUID if necessary
+        // Generate UUID if necessary - NOW ALWAYS GENERATED
         // !!! ID is necessary for compile - always created !!!
 
         // const settings = props.settings as PropsRecord;
         // if (settings?.withInternalID) {
-            this._id = makeUUID();
-            props.__id = this._id;
-            this.logger.log(`${this._id}: Construct ${tagName}: `
-                + `${Object.keys(props).length} props, `
-                + `${Object.keys(children).length} children, `
-                + `${Object.keys(lists).length} lists`, 
-                propsAndChildren);
+        this._id = makeUUID();
+        props.__id = this._id;
+        this.logger.log(
+            `${this._id}: Construct ${tagName}: `
+            + `${Object.keys(props).length} props, `
+            + `${Object.keys(children).length} children, `
+            + `${Object.keys(lists).length} lists`,
+            propsAndChildren,
+        );
         // } else {
         //     this.logger.log(`Construct ${tagName} without UUID`);
         // }
@@ -110,9 +112,9 @@ abstract class Block {
             this.logger.log(`Compile: list ${key} - assign common ID ${listUUID}`);
             propsAndStubs[key] = `<div data-id="${listUUID}"></div>`;
         });
-        
+
         // Create temporary element (fragment) not to render intermediate results on screen
-        this.logger.log(`Compile: create template fragment for element`);
+        this.logger.log('Compile: create template fragment for element');
         const fragment = this._createDocumentElement('template') as HTMLTemplateElement;
 
         // Compile element with stubs using Handlebars and place it into fragment
@@ -138,7 +140,7 @@ abstract class Block {
         // Replace list stubs with real lists's content
         Object.values(this._lists).forEach((list) => {
             // Create fragment for this individual list
-            this.logger.log(`Compile: create template fragment for list`);
+            this.logger.log('Compile: create template fragment for list');
             const listFragment = this._createDocumentElement('template') as HTMLTemplateElement;
 
             list.forEach((item) => {
@@ -154,14 +156,13 @@ abstract class Block {
                     listFragment.content.append(`${item}`);
                     this.logger.log(`Compile: appended list item: ${item}`);
                 }
-
-            })
+            });
             const stub = fragment.content.querySelector(`[data-id="${listUUID}"]`);
             if (!stub) {
-                this.logger.error(`List stub not found!`);
+                this.logger.error('List stub not found!');
             } else {
                 stub.replaceWith(listFragment.content);
-                this.logger.log(`Compile: replaced template fragment for list`, listFragment);
+                this.logger.log('Compile: replaced template fragment for list', listFragment);
             }
         });
 
@@ -169,7 +170,7 @@ abstract class Block {
         const newElement = fragment.content.firstElementChild as HTMLElement;
         // this.logger.log('Fragment', fragment.innerHTML);
         // const newElement = fragment.content.firstChild as HTMLElement;
-        this.logger.log(`Compile: complete element: `, newElement);
+        this.logger.log('Compile: complete element:', newElement);
         return newElement;
     }
 
@@ -186,7 +187,7 @@ abstract class Block {
     }
 
     _init() {
-        this.logger.log(`${this._id}: _init()`)
+        this.logger.log(`${this._id}: _init()`);
         this._createResources();
         this.logger.log(`${this._id}: Emitting FLOW_RENDER`);
         this._eventBus.emit(EVENTS.FLOW_RENDER);
@@ -265,7 +266,7 @@ abstract class Block {
                 if (this._element) {
                     this._element.setAttribute(key, value as string);
                 }
-            })
+            });
         } else {
             this.logger.log(`${this._id}: setAttributes: no attributes`);
         }
@@ -280,27 +281,26 @@ abstract class Block {
         this.logger.log(`${this._id}: _render: calling user-defined render() function`);
         const block = this.render();
         if (block) {
-            this.logger.log(`${this._id}: _render: user-defined render() function returned block`, block);            
+            this.logger.log(`${this._id}: _render: user-defined render() function returned block`, block);
         }
 
         // remove existing events
         this._removeEvents();
-    
+
         // replace element
         this.logger.log(`${this._id}: _render: replace element`);
-        this.logger.log(`${this._id}: _render: _element before replacement`, this._element);   
-        //  command to DOM         
+        this.logger.log(`${this._id}: _render: _element before replacement`, this._element);
+        //  command to DOM
         if (this._element && block) {
             this._element.replaceWith(block);
         }
         //  save element
         this._element = block;
-        this.logger.log(`${this._id}: _render: _element after replacement`, this._element);            
+        this.logger.log(`${this._id}: _render: _element after replacement`, this._element);
 
         // reinstate events
         this._addEvents();
         this.addAttributes();
-
     }
 
     // Может переопределяться пользователем. Необходимо вернуть элемент
@@ -331,7 +331,7 @@ abstract class Block {
                 // This is the essense of this function - to reassign its parameter
                 /* eslint-disable-next-line no-param-reassign */
                 target[prop] = value;
-                self.logger.log(`${self._id}: PropsProxy: assigned new value to \"${prop}\". Emitting FLOW_CDU`, value);
+                self.logger.log(`${self._id}: PropsProxy: assigned new value to "${prop}". Emitting FLOW_CDU`, value);
                 self._eventBus.emit(EVENTS.FLOW_CDU, oldTarget, target);
                 return true;
             },

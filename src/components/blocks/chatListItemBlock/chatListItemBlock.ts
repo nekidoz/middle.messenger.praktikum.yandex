@@ -26,7 +26,7 @@ export default class ChatListItemBlock extends Block {
                 class: 'chat-list-item-preview',
                 text: props.preview,
             }),
-            newMessages: props.newMessages 
+            newMessages: props.newMessages
                 ? new Text({
                     class: 'chat-list-item-new-messages',
                     text: props.newMessages as number > 99 ? '99+' : props.newMessages,

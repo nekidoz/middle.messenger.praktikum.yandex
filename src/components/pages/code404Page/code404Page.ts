@@ -1,6 +1,6 @@
-import { PropsRecord } from "../../../framework/block";
-import PageTemplate from "../../organisms/pageTemplate";
-import ErrorPageBox from "../../organisms/errorPageBox";
+import { PropsRecord } from '../../../framework/block';
+import PageTemplate from '../../organisms/pageTemplate';
+import ErrorPageBox from '../../organisms/errorPageBox';
 
 export default class Code404Page extends PageTemplate {
     constructor(props: PropsRecord = {}) {
@@ -11,6 +11,6 @@ export default class Code404Page extends PageTemplate {
                 error: 'Не туда попали',
                 change_page: props.change_page,
             }),
-        })
+        });
     }
 }

@@ -1,5 +1,3 @@
-/* eslint max-len: [1, 200] */
-
 import Logger, { Level } from './utils/logger';
 import Chat from './types/Chat';
 import LoginPage from './components/pages/loginPage';
@@ -9,6 +7,7 @@ import ChatsPage from './components/pages/chatsPage';
 import Code404Page from './components/pages/code404Page';
 import Code5xxPage from './components/pages/code5xxPage';
 import { PARTY_ME } from './types/ChatMessage';
+// import HTTPTransport, { queryStringify } from './framework/fetch';
 
 type FieldList = Record<string, string>;
 
@@ -30,6 +29,7 @@ export default class App {
     };
 
     appElement: HTMLElement | null;
+
     logger: Logger;
 
     constructor() {
@@ -72,6 +72,12 @@ export default class App {
         // The following two are equal
         // this.appElement = document.querySelector('#app');
         this.appElement = document.getElementById('app');
+
+        // console.log(queryStringify({a: 1, b: 2, c: {d: 123}, k: [1, 2, 3]}));
+        // console.log(new HTTPTransport()
+        // .get('https://dzen.ru')
+        // .then((data: any) => console.log('Response:', data))
+        // .catch((reason: any) => console.log('Reject:', reason)));
     }
 
     render() {
@@ -82,14 +88,14 @@ export default class App {
         let block;
         // for menu and other links
         const commonProps = {
-            change_page: ((e: Event) => this.changePageByLink(e)).bind(this),
+            change_page: ((e: Event) => this.changePageByLink(e)),
         };
         this.logger.log(this.state.currentPage, this);
         switch (this.state.currentPage) {
             case 'login':
                 block = new LoginPage({
                     login: this.state.login,
-                    onSubmit: ((e: SubmitEvent) => this.login(e)).bind(this),
+                    onSubmit: ((e: SubmitEvent) => this.login(e)),
                     ...commonProps,
                 });
                 break;
@@ -100,7 +106,7 @@ export default class App {
                     second_name: this.state.second_name,
                     email: this.state.email,
                     phone: this.state.phone,
-                    onSubmit: ((e: SubmitEvent) => this.signup(e)).bind(this),
+                    onSubmit: ((e: SubmitEvent) => this.signup(e)),
                     ...commonProps,
                 });
                 break;
@@ -114,7 +120,7 @@ export default class App {
                     phone: this.state.phone,
                     display_name: this.state.display_name,
                     avatar: this.state.avatar,
-                    onSubmit: ((e: SubmitEvent) => this.saveProfile(e)).bind(this),
+                    onSubmit: ((e: SubmitEvent) => this.saveProfile(e)),
                     ...commonProps,
                 });
                 break;
@@ -124,13 +130,13 @@ export default class App {
                     chat_search_value: this.state.chat_search_value,
                     active_chat: this.state.active_chat,
                     // chat list header listeners
-                    activate_chat: ((chat: Chat) => this.activateChat(chat)).bind(this),
-                    edit_profile: (() => this.changePage('profile')).bind(this),
-                    search_chats: ((value: string) => this.chatSearch(value)).bind(this),
+                    activate_chat: ((chat: Chat) => this.activateChat(chat)),
+                    edit_profile: (() => this.changePage('profile')),
+                    search_chats: ((value: string) => this.chatSearch(value)),
                     // chat body listeners
-                    do_chat_action: (() => this.chatAction()).bind(this),
-                    attach_to_chat: (() => this.chatAttach()).bind(this),
-                    send_message: ((e: SubmitEvent) => this.chatSend(e)).bind(this),
+                    do_chat_action: (() => this.chatAction()),
+                    attach_to_chat: (() => this.chatAttach()),
+                    send_message: ((e: SubmitEvent) => this.chatSend(e)),
                     ...commonProps,
                 });
                 break;
@@ -170,7 +176,6 @@ export default class App {
         this.changePage(linkElement?.dataset.page);
     }
 
-
     createFieldObjectFromFormSubmit(formElement: HTMLFormElement, fieldList: string[]): FieldList {
         const fieldObject: FieldList = {};
         fieldList.forEach((fieldName) => {
@@ -178,6 +183,7 @@ export default class App {
                 fieldObject[fieldName] = formElement[fieldName].value;
             }
         });
+        this.logger.log('Object:', fieldObject);
         return fieldObject;
     }
 
@@ -186,11 +192,10 @@ export default class App {
         const formElement = event.target as HTMLFormElement;
         this.state.login = formElement?.login.value;
         this.state.password = formElement?.password.value;
-        console.log('Вход'
+        this.logger.log('Вход'
             + `\nлогин: ${this.state.login ? this.state.login : '<не задан>'}`
             + `\nпароль: ${this.state.password ? this.state.password : '<не задан>'}`);
-        console.log('Object:', this.createFieldObjectFromFormSubmit(formElement, 
-            ['login', 'password']));
+        this.createFieldObjectFromFormSubmit(formElement, ['login', 'password']);
         this.changePage('chats');
     }
 
@@ -204,15 +209,14 @@ export default class App {
         this.state.email = formElement?.email.value;
         this.state.phone = formElement?.phone.value;
         this.state.display_name = formElement?.first_name.value;
-        console.log('Регистрация'
+        this.logger.log('Регистрация'
             + `\nлогин: ${this.state.login ? this.state.login : '<не задан>'}`
             + `\nпароль: ${this.state.password ? this.state.password : '<не задан>'}`
             + `\nимя: ${this.state.first_name ? this.state.first_name : '<не задано>'}`
             + `\nфамилия: ${this.state.second_name ? this.state.second_name : '<не задана>'}`
             + `\nпочта: ${this.state.email ? this.state.email : '<не задана>'}`
             + `\nтелефон: ${this.state.phone ? this.state.phone : '<не задан>'}`);
-        console.log('Object:', this.createFieldObjectFromFormSubmit(formElement, 
-            ['login', 'password', 'first_name', 'second_name', 'email', 'phone']));
+        this.createFieldObjectFromFormSubmit(formElement, ['login', 'password', 'first_name', 'second_name', 'email', 'phone']);
         this.changePage('login');
     }
 
@@ -227,7 +231,7 @@ export default class App {
         this.state.phone = formElement?.phone.value;
         this.state.display_name = formElement?.display_name.value;
         this.state.avatar = formElement?.avatar.value;
-        console.log('Редактирование профиля'
+        this.logger.log('Редактирование профиля'
             + `\nлогин: ${this.state.login ? this.state.login : '<не задан>'}`
             + `\nновый пароль: ${this.state.password ? this.state.password : '<не задан>'}`
             + `\nимя: ${this.state.first_name ? this.state.first_name : '<не задано>'}`
@@ -236,22 +240,21 @@ export default class App {
             + `\nтелефон: ${this.state.phone ? this.state.phone : '<не задан>'}`
             + `\nимя в чате: ${this.state.display_name ? this.state.display_name : '<не задано>'}`
             + `\nаватар: ${this.state.avatar ? this.state.avatar : '<не задан>'}`);
-        console.log('Object:', this.createFieldObjectFromFormSubmit(formElement, 
-            ['login', 'oldPassword', 'newPassword', 'first_name', 'second_name', 'email', 'phone', 'display_name', 'avatar']));
+        this.createFieldObjectFromFormSubmit(formElement, ['login', 'oldPassword', 'newPassword', 'first_name', 'second_name', 'email', 'phone', 'display_name', 'avatar']);
         this.changePage('chats');
     }
 
     chatSearch(searchValue: string) {
-            if (searchValue !== this.state.chat_search_value) {
-                this.state.chat_search_value = searchValue;
-                if (searchValue) {
-                    this.state.chat_selection = this.state.chats.filter((chat) => chat.party.includes(searchValue));
-                } else {
-                    this.state.chat_selection = [...this.state.chats];
-                }
-                this.state.active_chat = undefined;
-                this.render();
+        if (searchValue !== this.state.chat_search_value) {
+            this.state.chat_search_value = searchValue;
+            if (searchValue) {
+                this.state.chat_selection = this.state.chats.filter((chat) => chat.party.includes(searchValue));
+            } else {
+                this.state.chat_selection = [...this.state.chats];
             }
+            this.state.active_chat = undefined;
+            this.render();
+        }
     }
 
     activateChat(chat: Chat) {
@@ -279,10 +282,9 @@ export default class App {
         } else if (!this.state.active_chat) {
             alert('Чат не выбран - обратитесь к разработчику!');
         } else {
-            console.log(`Сообщение\nтекст: ${message}`);
+            this.logger.log(`Сообщение\nтекст: ${message}`);
             this.state.active_chat.content.push({ party: PARTY_ME, message });
-            console.log('Object:', this.createFieldObjectFromFormSubmit(formElement, 
-                ['message']));    
+            this.createFieldObjectFromFormSubmit(formElement, ['message']);
             this.render();
         }
     }

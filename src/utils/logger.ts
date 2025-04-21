@@ -1,10 +1,12 @@
+/* eslint no-console: 0 */
+
 enum Level {
     debug,
     info,
     warning,
     error,
     critical
-};
+}
 
 export default class Logger {
     constructor(level: Level = Level.debug) {

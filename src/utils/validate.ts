@@ -49,29 +49,34 @@ const PHONE_HINTS: Hints = {
 export type ValidateBundle = Record<string, string | null>;
 
 export default class Validate {
-    private static isValid(value: string, required: boolean, validationRegExp: RegExp, hints: Hints,
-        minLength: number | null = null, 
-        maxLength: number | null = null, 
-        exactLength:  number | null = null)
-        : [boolean, string | null] {
-
+    private static isValid(
+        value: string,
+        required: boolean,
+        validationRegExp: RegExp,
+        hints: Hints,
+        minLength: number | null = null,
+        maxLength: number | null = null,
+        exactLength: number | null = null,
+    ): [boolean, string | null] {
         if (!value) {
             if (required) {
                 return [false, hints.isNull];
-            } else {
-                return [true, null];
             }
-        } else if (minLength && value.length < minLength) {
-            return [false, hints.tooShort];
-        } else if (maxLength && value.length > maxLength) {
-            return [false, hints.tooLong];
-        } else if (exactLength && value.length !== exactLength) {
-            return [false, hints.notExact];
-        } else if (!validationRegExp.test(value)) {
-            return [false, hints.format];
-        } else {
             return [true, null];
-        };
+        }
+        if (minLength && value.length < minLength) {
+            return [false, hints.tooShort];
+        }
+        if (maxLength && value.length > maxLength) {
+            return [false, hints.tooLong];
+        }
+        if (exactLength && value.length !== exactLength) {
+            return [false, hints.notExact];
+        }
+        if (!validationRegExp.test(value)) {
+            return [false, hints.format];
+        }
+        return [true, null];
     }
 
     static isLogin(value: string, required: boolean = false): [boolean, string | null] {
@@ -82,32 +87,30 @@ export default class Validate {
         const [success, message] = this.isValid(value, required, /^\S+$/, PASSWORD_HINTS, 8, 40);
         if (success) {
             // Additional checks
-            if (!/[0-9]/.test(value) || !/[A-ZА-Я]/.test(value)) {
+            if (value && (!/[0-9]/.test(value) || !/[A-ZА-Я]/.test(value))) {
                 return [false, PASSWORD_HINTS.format];
-            } else {
-                return [true, null];
             }
-        } else {
-            return [success, message];
+            return [true, null];
         }
+        return [success, message];
     }
 
     static isEmail(value: string, required: boolean = false): [boolean, string | null] {
-        return this.isValid(value, required, /^[a-zA-Z0-9][a-zA-Z0-9\+\-\_\.\']*@[a-z0-9][a-z0-9\-\.]*\.[a-zA-Z]$/, EMAIL_HINTS);
+        return this.isValid(value, required, /^[a-zA-Z0-9][a-zA-Z0-9+\-_.']*@[a-z0-9][a-z0-9\-.]*\.[a-zA-Z]$/, EMAIL_HINTS);
     }
 
     static isName(value: string, required: boolean = false): [boolean, string | null] {
-        return this.isValid(value, required, /^[A-ZА-Я][a-zA-Zа-яА-Я\-]*$/, NAME_HINTS);
+        return this.isValid(value, required, /^[A-ZА-Я][a-zA-Zа-яА-Я-]*$/, NAME_HINTS);
     }
 
     static isPhone(value: string, required: boolean = false): [boolean, string | null] {
         // Simplified as per ToR
         // return this.isValid(value, required, /^[\+]?[0-9]{0,3}[ ]?[(]?[0-9]{3}[)]?[- ]?[0-9]{3}[- ]?[0-9]{4,6}$/im, PHONE_HINTS);
-        return this.isValid(value, required, /^[\+]?[0-9]{10,15}$/, PHONE_HINTS);
+        return this.isValid(value, required, /^[+]?[0-9]{10,15}$/, PHONE_HINTS);
     }
 
     static validate(key: string, value: string): [boolean, string | null] {
-        switch(key) {
+        switch (key) {
             case 'login':
                 return Validate.isLogin(value, true);
             case 'password':

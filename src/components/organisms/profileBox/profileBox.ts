@@ -20,7 +20,7 @@ export default class ProfileBox extends Block {
             }),
             display_name: props.display_name,
             form: new Form({
-                id: "profile-form",
+                id: 'profile-form',
                 content: [
                     new Spacer({
                         class: 'profile-spacer',
@@ -97,7 +97,7 @@ export default class ProfileBox extends Block {
                         placeholder: 'Новый пароль (еще раз)',
                     }),
                     new Div({
-                        class: "button-stack",
+                        class: 'button-stack',
                         content: [
                             new Input({
                                 id: 'btn-save-profile',
@@ -112,14 +112,14 @@ export default class ProfileBox extends Block {
                                 text: 'Выйти',
                                 change_page: props.change_page,
                             }),
-                        ]
-                    })
+                        ],
+                    }),
                 ],
                 events: {
-                    'submit': (e: SubmitEvent) => {
+                    submit: (e: SubmitEvent) => {
                         e.preventDefault();
                         if (this.validate(['newPassword', 'repeatNewPassword'], 'Пароли не совпадают')) {
-                            (this._props.onSubmit as (e: SubmitEvent) => void)(e);
+                            (this._props.onSubmit as (event: SubmitEvent) => void)(e);
                         }
                     },
                 },
@@ -130,9 +130,9 @@ export default class ProfileBox extends Block {
 
     // The following is replaced with implementation from InputBoxValidationMixin
     validate(matchingFields: string[] = [], mismatchMessage: string = ''): boolean {
-        console.log(matchingFields, mismatchMessage);
+        this.logger.log(matchingFields, mismatchMessage);
         return true;
-    }        
+    }
 }
 
 Object.assign(ProfileBox.prototype, InputBoxValidationMixin);

@@ -12,7 +12,7 @@ export default class LoginBox extends Block {
         super({
             ...props,
             form: new Form({
-                id: "login-form",
+                id: 'login-form',
                 content: [
                     new LoginSignupInputBlock({
                         id: 'login',
@@ -28,7 +28,7 @@ export default class LoginBox extends Block {
                         placeholder: 'Пароль',
                     }),
                     new Div({
-                        class: "button-stack",
+                        class: 'button-stack',
                         content: [
                             new Input({
                                 id: 'btn-login',
@@ -43,17 +43,17 @@ export default class LoginBox extends Block {
                                 text: 'Нет аккаунта?',
                                 change_page: props.change_page,
                             }),
-                        ]
-                    })
+                        ],
+                    }),
                 ],
                 events: {
-                    'submit': (e: SubmitEvent) => {
+                    submit: (e: SubmitEvent) => {
                         e.preventDefault();
                         if (this.validate()) {
-                            (this._props.onSubmit as (e: SubmitEvent) => void)(e);
+                            (this._props.onSubmit as (event: SubmitEvent) => void)(e);
                         }
                     },
-                }
+                },
             }),
             template,
         });
@@ -61,7 +61,7 @@ export default class LoginBox extends Block {
 
     // The following is replaced with implementation from InputBoxValidationMixin
     validate(matchingFields: string[] = [], mismatchMessage: string = ''): boolean {
-        console.log(matchingFields, mismatchMessage);
+        this.logger.log(matchingFields, mismatchMessage);
         return true;
     }
 }

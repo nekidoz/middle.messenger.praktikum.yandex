@@ -5,7 +5,6 @@ import template from './template';
 
 export default class ChatList extends Block {
     constructor(props: PropsRecord = {}) {
-
         super({
             chats: (() => {
                 const chats: ChatListItemBlock[] = [];
@@ -13,8 +12,8 @@ export default class ChatList extends Block {
                     ...chat,
                     active: chat === props.active_chat,
                     events: {
-                        'click': () => (props.activate_chat as (chat: Chat) => void)(chat),
-                    }
+                        click: () => (props.activate_chat as (c: Chat) => void)(chat),
+                    },
                 })));
                 return chats;
             })(),

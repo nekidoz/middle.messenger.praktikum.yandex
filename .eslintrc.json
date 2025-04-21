@@ -3,13 +3,15 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "max-params": [2, 3],
+    "max-len": [1, 200],
+    "max-params": [2, 7],
     "indent": ["error", 4, {"SwitchCase": 1}],
     "object-curly-newline": "off",
     "no-alert": "off",
     "import/no-unresolved": "off",
     "import/extensions": "off",
     "no-underscore-dangle": "off",
+    "no-multi-str": "off",
     // Следующее нужно, чтобы eslint не ругался на enum в TS
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "error"

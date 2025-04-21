@@ -13,8 +13,8 @@ export default class ChatListHeader extends Block {
                 class: 'navigation-button',
                 text: 'Профиль >',
                 events: {
-                    'click': props.edit_profile,
-                }
+                    click: props.edit_profile,
+                },
             }),
             chatSearchInput: new Input({
                 id: 'chat-search',
@@ -23,13 +23,13 @@ export default class ChatListHeader extends Block {
                 type: 'search',
                 placeholder: '🔎 Поиск',
                 events: {
-                    'keyup': (e: KeyboardEvent) => {
+                    keyup: (e: KeyboardEvent) => {
                         if (e.keyCode === 13) {
                             const target = e.target as HTMLInputElement;
                             (props.search_chats as (value: string) => void)(target?.value);
                         }
                     },
-                }
+                },
             }),
             spacer: new Spacer({
                 class: 'chat-list-item-separator',

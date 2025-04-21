@@ -5,4 +5,3 @@ export default '<main class="error-page-container">\
         {{{backLink}}}\
     </div>\
 </main>';
-    

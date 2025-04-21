@@ -1,3 +1,3 @@
-import InputBoxValidationMixin from "./inputBoxValidationMixin";
+import InputBoxValidationMixin from './inputBoxValidationMixin';
 
 export default InputBoxValidationMixin;

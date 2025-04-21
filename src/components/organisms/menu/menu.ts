@@ -8,8 +8,8 @@ export default class Menu extends Block {
             href: '#',
             class: 'menu-page-menu-item',
             change_page: props.change_page,
-        }
-        super({ 
+        };
+        super({
             ...props,
             links: [
                 new Link({
@@ -42,8 +42,8 @@ export default class Menu extends Block {
                     datapage: 'page5xx',
                     text: '5xx',
                 }),
-            ], 
-            template 
+            ],
+            template,
         });
     }
 }
