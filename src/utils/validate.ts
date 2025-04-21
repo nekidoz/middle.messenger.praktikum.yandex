@@ -87,7 +87,7 @@ export default class Validate {
         const [success, message] = this.isValid(value, required, /^\S+$/, PASSWORD_HINTS, 8, 40);
         if (success) {
             // Additional checks
-            if (value && (!/[0-9]/.test(value) || !/[A-ZА-Я]/.test(value))) {
+            if (value && (!/[0-9]/.test(value) || !/[A-ZА-ЯЁ]/.test(value))) {
                 return [false, PASSWORD_HINTS.format];
             }
             return [true, null];
@@ -96,11 +96,11 @@ export default class Validate {
     }
 
     static isEmail(value: string, required: boolean = false): [boolean, string | null] {
-        return this.isValid(value, required, /^[a-zA-Z0-9][a-zA-Z0-9+\-_.']*@[a-z0-9][a-z0-9\-.]*\.[a-zA-Z]$/, EMAIL_HINTS);
+        return this.isValid(value, required, /^[a-z0-9][a-z0-9+\-_.']*@[a-z0-9][a-z0-9\-.]*\.[a-z]+$/i, EMAIL_HINTS);
     }
 
     static isName(value: string, required: boolean = false): [boolean, string | null] {
-        return this.isValid(value, required, /^[A-ZА-Я][a-zA-Zа-яА-Я-]*$/, NAME_HINTS);
+        return this.isValid(value, required, /^[A-ZА-ЯЁ][a-zA-Zа-яёА-ЯЁ-]*$/, NAME_HINTS);
     }
 
     static isPhone(value: string, required: boolean = false): [boolean, string | null] {

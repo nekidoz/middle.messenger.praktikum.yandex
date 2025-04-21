@@ -23,7 +23,7 @@ type HttpRequestOptions = {
 */
 export function queryStringify(data: Object) {
     let result = '?';
-    Object.entries(data).forEach(([key, value]) => { result += `${key}=${value}&`; });
+    Object.entries(data).forEach(([key, value]) => { result += `${encodeURIComponent(key)}=${encodeURIComponent(value)}&`; });
     return result.length > 1 ? result.slice(0, result.length - 1) : result;
 }
 

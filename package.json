@@ -40,7 +40,6 @@
     "postcss": "^8.5.3",
     "postcss-nested": "^7.0.2",
     "uuid": "^11.1.0",
-    "vite": "^6.2.0",
     "vite-plugin-handlebars": "^2.0.0"
   }
 }

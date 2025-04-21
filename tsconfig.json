@@ -14,8 +14,7 @@
         "sourceMap": true,
         "strictNullChecks": true,
 
-        // to import Handlebars
-        "allowSyntheticDefaultImports": true,
+        "allowSyntheticDefaultImports": true
     },
     "include": [
         "src/**/*.ts",
