@@ -7,23 +7,23 @@ type Hints = {
 };
 
 const LOGIN_HINTS: Hints = {
-    format: 'Логин должен начинаться с латинской буквы и содержать латинские буквы, цифры и подчеркивание',
+    format: 'Логин должен начинаться с латинской буквы и может содержать латинские буквы, цифры, дефис и подчеркивание',
     isNull: 'Необходимо указать логин',
-    tooShort: null,
-    tooLong: null,
+    tooShort: 'Логин слишком короткий, минимум - 3 символа',
+    tooLong: 'Логин слишком длинный, максимум - 20 символов',
     notExact: null,
 };
 
 const PASSWORD_HINTS: Hints = {
-    format: 'Пароль не должен содержать пробелов',
+    format: 'Пароль не должен содержать пробелов, должна быть хотя бы одна заглавная буква и цифра',
     isNull: 'Необходимо указать пароль',
-    tooShort: 'Пароль должен иметь не менее 3 символов',
-    tooLong: null,
+    tooShort: 'Пароль слишком короткий, минимум - 8 символов',
+    tooLong: 'Пароль слишком длинный, максимум - 40 символов',
     notExact: null,
 };
 
 const EMAIL_HINTS: Hints = {
-    format: 'Почтовый адрес должен состоять из латинских букв, цифр и знаков: +-_.\' и быть в домене второго уровня',
+    format: 'Почтовый адрес должен состоять из латинских букв, цифр и знаков: +-_.\' и быть в домене второго (и ниже) уровня',
     isNull: 'Необходимо указать почтовый адрес',
     tooShort: null,
     tooLong: null,
@@ -31,7 +31,7 @@ const EMAIL_HINTS: Hints = {
 };
 
 const NAME_HINTS: Hints = {
-    format: 'Имена должны состоять из русских или латинских букв',
+    format: 'Имена должны состоять из русских или латинских букв и начинаться с большой буквы. Можно использовать дефис',
     isNull: 'Необходимо указать имя',
     tooShort: null,
     tooLong: null,
@@ -39,7 +39,7 @@ const NAME_HINTS: Hints = {
 };
 
 const PHONE_HINTS: Hints = {
-    format: 'Ну вы сами знаете, как выглядит телефон 🙄',
+    format: 'Телефон должен состоять из 10-15 цифр без пробелов и может начинаться с плюса',
     isNull: 'Необходимо указать телефон',
     tooShort: null,
     tooLong: null,
@@ -75,11 +75,21 @@ export default class Validate {
     }
 
     static isLogin(value: string, required: boolean = false): [boolean, string | null] {
-        return this.isValid(value, required, /^[a-zA-Z]\w*$/, LOGIN_HINTS);
+        return this.isValid(value, required, /^[a-zA-Z][a-zA-Z0-9\-_]*$/, LOGIN_HINTS, 3, 20);
     }
 
     static isPassword(value: string, required: boolean = false): [boolean, string | null] {
-        return this.isValid(value, required, /^\S+$/, PASSWORD_HINTS, 3);
+        const [success, message] = this.isValid(value, required, /^\S+$/, PASSWORD_HINTS, 8, 40);
+        if (success) {
+            // Additional checks
+            if (!/[0-9]/.test(value) || !/[A-ZА-Я]/.test(value)) {
+                return [false, PASSWORD_HINTS.format];
+            } else {
+                return [true, null];
+            }
+        } else {
+            return [success, message];
+        }
     }
 
     static isEmail(value: string, required: boolean = false): [boolean, string | null] {
@@ -87,11 +97,13 @@ export default class Validate {
     }
 
     static isName(value: string, required: boolean = false): [boolean, string | null] {
-        return this.isValid(value, required, /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я ]*$/, NAME_HINTS);
+        return this.isValid(value, required, /^[A-ZА-Я][a-zA-Zа-яА-Я\-]*$/, NAME_HINTS);
     }
 
     static isPhone(value: string, required: boolean = false): [boolean, string | null] {
-        return this.isValid(value, required, /^[\+]?[0-9]{0,3}[ ]?[(]?[0-9]{3}[)]?[- ]?[0-9]{3}[- ]?[0-9]{4,6}$/im, PHONE_HINTS);
+        // Simplified as per ToR
+        // return this.isValid(value, required, /^[\+]?[0-9]{0,3}[ ]?[(]?[0-9]{3}[)]?[- ]?[0-9]{3}[- ]?[0-9]{4,6}$/im, PHONE_HINTS);
+        return this.isValid(value, required, /^[\+]?[0-9]{10,15}$/, PHONE_HINTS);
     }
 
     static validate(key: string, value: string): [boolean, string | null] {

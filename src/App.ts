@@ -10,6 +10,8 @@ import Code404Page from './components/pages/code404Page';
 import Code5xxPage from './components/pages/code5xxPage';
 import { PARTY_ME } from './types/ChatMessage';
 
+type FieldList = Record<string, string>;
+
 export default class App {
     state: {
         currentPage: string | undefined;
@@ -168,6 +170,17 @@ export default class App {
         this.changePage(linkElement?.dataset.page);
     }
 
+
+    createFieldObjectFromFormSubmit(formElement: HTMLFormElement, fieldList: string[]): FieldList {
+        const fieldObject: FieldList = {};
+        fieldList.forEach((fieldName) => {
+            if (formElement[fieldName].value) {
+                fieldObject[fieldName] = formElement[fieldName].value;
+            }
+        });
+        return fieldObject;
+    }
+
     login(event: SubmitEvent) {
         event.preventDefault();
         const formElement = event.target as HTMLFormElement;
@@ -176,6 +189,8 @@ export default class App {
         console.log('Вход'
             + `\nлогин: ${this.state.login ? this.state.login : '<не задан>'}`
             + `\nпароль: ${this.state.password ? this.state.password : '<не задан>'}`);
+        console.log('Object:', this.createFieldObjectFromFormSubmit(formElement, 
+            ['login', 'password']));
         this.changePage('chats');
     }
 
@@ -196,6 +211,8 @@ export default class App {
             + `\nфамилия: ${this.state.second_name ? this.state.second_name : '<не задана>'}`
             + `\nпочта: ${this.state.email ? this.state.email : '<не задана>'}`
             + `\nтелефон: ${this.state.phone ? this.state.phone : '<не задан>'}`);
+        console.log('Object:', this.createFieldObjectFromFormSubmit(formElement, 
+            ['login', 'password', 'first_name', 'second_name', 'email', 'phone']));
         this.changePage('login');
     }
 
@@ -210,7 +227,7 @@ export default class App {
         this.state.phone = formElement?.phone.value;
         this.state.display_name = formElement?.display_name.value;
         this.state.avatar = formElement?.avatar.value;
-        console.log('Регистрация'
+        console.log('Редактирование профиля'
             + `\nлогин: ${this.state.login ? this.state.login : '<не задан>'}`
             + `\nновый пароль: ${this.state.password ? this.state.password : '<не задан>'}`
             + `\nимя: ${this.state.first_name ? this.state.first_name : '<не задано>'}`
@@ -219,6 +236,8 @@ export default class App {
             + `\nтелефон: ${this.state.phone ? this.state.phone : '<не задан>'}`
             + `\nимя в чате: ${this.state.display_name ? this.state.display_name : '<не задано>'}`
             + `\nаватар: ${this.state.avatar ? this.state.avatar : '<не задан>'}`);
+        console.log('Object:', this.createFieldObjectFromFormSubmit(formElement, 
+            ['login', 'oldPassword', 'newPassword', 'first_name', 'second_name', 'email', 'phone', 'display_name', 'avatar']));
         this.changePage('chats');
     }
 
@@ -262,6 +281,8 @@ export default class App {
         } else {
             console.log(`Сообщение\nтекст: ${message}`);
             this.state.active_chat.content.push({ party: PARTY_ME, message });
+            console.log('Object:', this.createFieldObjectFromFormSubmit(formElement, 
+                ['message']));    
             this.render();
         }
     }

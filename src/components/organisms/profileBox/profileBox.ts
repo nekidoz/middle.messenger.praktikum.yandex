@@ -118,7 +118,7 @@ export default class ProfileBox extends Block {
                 events: {
                     'submit': (e: SubmitEvent) => {
                         e.preventDefault();
-                        if (this.validate(['newPassword', 'repeatNewPassword'], 'Пароль неверно введен повторно')) {
+                        if (this.validate(['newPassword', 'repeatNewPassword'], 'Пароли не совпадают')) {
                             (this._props.onSubmit as (e: SubmitEvent) => void)(e);
                         }
                     },

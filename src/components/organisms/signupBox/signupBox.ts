@@ -83,7 +83,7 @@ export default class SignupBox extends Block {
                 events: {
                     'submit': (e: SubmitEvent) => {
                         e.preventDefault();
-                        if (this.validate(['password', 'repeat_password'], 'Пароль неверно введен повторно')) {
+                        if (this.validate(['password', 'repeat_password'], 'Пароли не совпадают')) {
                             (this._props.onSubmit as (e: SubmitEvent) => void)(e);
                         }
                     },

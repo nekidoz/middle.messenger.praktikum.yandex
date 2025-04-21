@@ -32,14 +32,10 @@ const InputBoxValidationMixin = {
                 } else {
                     // for valid fields, check field value match
                     if (element) {
-                        console.log('Valid field', element.id, (element as HTMLInputElement).value);
                         if (matchingFields.includes(element.id)) {
-                            console.log('One of matching fields');
                             if (!referenceValue) {
                                 referenceValue = (element as HTMLInputElement).value;
-                                console.log('Will match with its value', referenceValue);
                             } else if ((element as HTMLInputElement).value !== referenceValue) {
-                                console.log('Value mismatch: reference', referenceValue, 'this', (element as HTMLInputElement).value);
                                 block.setProps({error: mismatchMessage});
                                 if (success) {
                                     success = false;
