@@ -7,6 +7,7 @@ import ChatsPage from './components/pages/chatsPage';
 import Code404Page from './components/pages/code404Page';
 import Code5xxPage from './components/pages/code5xxPage';
 import { PARTY_ME } from './types/ChatMessage';
+import Router from './framework/router/router';
 // import HTTPTransport, { queryStringify } from './framework/fetch';
 
 type FieldList = Record<string, string>;
@@ -31,6 +32,8 @@ export default class App {
     appElement: HTMLElement | null;
 
     logger: Logger;
+
+    router: Router;
 
     constructor() {
         this.logger = new Logger(Level.debug);
@@ -78,6 +81,8 @@ export default class App {
         // .get('https://dzen.ru')
         // .then((data: any) => console.log('Response:', data))
         // .catch((reason: any) => console.log('Reject:', reason)));
+
+        this.router = new Router();
     }
 
     render() {
@@ -88,7 +93,7 @@ export default class App {
         let block;
         // for menu and other links
         const commonProps = {
-            change_page: ((e: Event) => this.changePageByLink(e)),
+            // change_page: ((e: Event) => this.changePageByLink(e)),
         };
         this.logger.log(this.state.currentPage, this);
         switch (this.state.currentPage) {
@@ -131,7 +136,7 @@ export default class App {
                     active_chat: this.state.active_chat,
                     // chat list header listeners
                     activate_chat: ((chat: Chat) => this.activateChat(chat)),
-                    edit_profile: (() => this.changePage('profile')),
+                    edit_profile: (() => this.changePage('/settings')),
                     search_chats: ((value: string) => this.chatSearch(value)),
                     // chat body listeners
                     do_chat_action: (() => this.chatAction()),
@@ -165,16 +170,73 @@ export default class App {
         block.dispatchComponentDidMount();
     }
 
-    changePage(page: string | undefined) {
-        this.state.currentPage = page;
-        this.render();
+    initRouter() {
+        // for menu and other links
+        const commonProps = {
+            // change_page: ((e: Event) => this.changePageByLink(e)),
+        };
+        this.logger.log('Initialize Router');
+        this.router
+            .use('/', LoginPage, {
+                login: this.state.login,
+                onSubmit: ((e: SubmitEvent) => this.login(e)),
+                ...commonProps,
+            })
+            .use('/sign-up', SignupPage, {
+                login: this.state.login,
+                first_name: this.state.first_name,
+                second_name: this.state.second_name,
+                email: this.state.email,
+                phone: this.state.phone,
+                onSubmit: ((e: SubmitEvent) => this.signup(e)),
+                ...commonProps,
+            })
+            .use('/settings', ProfilePage, {
+                profile_avatar: '/avatar.png',
+                login: this.state.login,
+                first_name: this.state.first_name,
+                second_name: this.state.second_name,
+                email: this.state.email,
+                phone: this.state.phone,
+                display_name: this.state.display_name,
+                avatar: this.state.avatar,
+                onSubmit: ((e: SubmitEvent) => this.saveProfile(e)),
+                ...commonProps,
+            })
+            .use('/messenger', ChatsPage, {
+                chats: this.state.chat_selection,
+                chat_search_value: this.state.chat_search_value,
+                active_chat: this.state.active_chat,
+                // chat list header listeners
+                activate_chat: ((chat: Chat) => this.activateChat(chat)),
+                edit_profile: (() => this.changePage('/settings')),
+                search_chats: ((value: string) => this.chatSearch(value)),
+                // chat body listeners
+                do_chat_action: (() => this.chatAction()),
+                attach_to_chat: (() => this.chatAttach()),
+                send_message: ((e: SubmitEvent) => this.chatSend(e)),
+                ...commonProps,
+            })
+            .use('/error', Code5xxPage, {
+                ...commonProps,
+            })
+            .useAs404(Code404Page, {
+                ...commonProps,
+            })
+            .start();
     }
 
-    changePageByLink(e: Event) {
-        e.preventDefault();
-        const linkElement = e.target as HTMLLinkElement;
-        this.changePage(linkElement?.dataset.page);
+    changePage(page: string) {
+        this.state.currentPage = page;
+        this.router.go(page);
+        // this.render();
     }
+
+    // changePageByLink(e: Event) {
+    //     e.preventDefault();
+    //     const linkElement = e.target as HTMLLinkElement;
+    //     this.changePage(linkElement?.dataset.page);
+    // }
 
     createFieldObjectFromFormSubmit(formElement: HTMLFormElement, fieldList: string[]): FieldList {
         const fieldObject: FieldList = {};
@@ -196,7 +258,7 @@ export default class App {
             + `\nлогин: ${this.state.login ? this.state.login : '<не задан>'}`
             + `\nпароль: ${this.state.password ? this.state.password : '<не задан>'}`);
         this.createFieldObjectFromFormSubmit(formElement, ['login', 'password']);
-        this.changePage('chats');
+        this.changePage('/messenger');
     }
 
     signup(event: SubmitEvent) {
@@ -217,7 +279,7 @@ export default class App {
             + `\nпочта: ${this.state.email ? this.state.email : '<не задана>'}`
             + `\nтелефон: ${this.state.phone ? this.state.phone : '<не задан>'}`);
         this.createFieldObjectFromFormSubmit(formElement, ['login', 'password', 'first_name', 'second_name', 'email', 'phone']);
-        this.changePage('login');
+        this.changePage('/');
     }
 
     saveProfile(event: SubmitEvent) {
@@ -241,7 +303,7 @@ export default class App {
             + `\nимя в чате: ${this.state.display_name ? this.state.display_name : '<не задано>'}`
             + `\nаватар: ${this.state.avatar ? this.state.avatar : '<не задан>'}`);
         this.createFieldObjectFromFormSubmit(formElement, ['login', 'oldPassword', 'newPassword', 'first_name', 'second_name', 'email', 'phone', 'display_name', 'avatar']);
-        this.changePage('chats');
+        this.changePage('/messenger');
     }
 
     chatSearch(searchValue: string) {

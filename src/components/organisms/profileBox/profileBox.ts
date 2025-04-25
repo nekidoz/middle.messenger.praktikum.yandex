@@ -108,7 +108,7 @@ export default class ProfileBox extends Block {
                             new Link({
                                 href: '#',
                                 class: 'menu-page-menu-item',
-                                datapage: 'login',
+                                datapage: '/',
                                 text: 'Выйти',
                                 change_page: props.change_page,
                             }),

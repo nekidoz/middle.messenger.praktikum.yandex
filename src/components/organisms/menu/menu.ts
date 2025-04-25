@@ -7,39 +7,38 @@ export default class Menu extends Block {
         const commonProps = {
             href: '#',
             class: 'menu-page-menu-item',
-            change_page: props.change_page,
         };
         super({
             ...props,
             links: [
                 new Link({
                     ...commonProps,
-                    datapage: 'login',
+                    datapage: '/',
                     text: 'Вход',
                 }),
                 new Link({
                     ...commonProps,
-                    datapage: 'signup',
+                    datapage: '/sign-up',
                     text: 'Регистрация',
                 }),
                 new Link({
                     ...commonProps,
-                    datapage: 'profile',
+                    datapage: '/settings',
                     text: 'Профиль',
                 }),
                 new Link({
                     ...commonProps,
-                    datapage: 'chats',
+                    datapage: '/messenger',
                     text: 'Чаты',
                 }),
                 new Link({
                     ...commonProps,
-                    datapage: 'page404',
+                    datapage: '/notfound',
                     text: '404',
                 }),
                 new Link({
                     ...commonProps,
-                    datapage: 'page5xx',
+                    datapage: '/error',
                     text: '5xx',
                 }),
             ],

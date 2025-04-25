@@ -73,7 +73,7 @@ export default class SignupBox extends Block {
                             new Link({
                                 href: '#',
                                 class: 'menu-page-menu-item',
-                                datapage: 'login',
+                                datapage: '/',
                                 text: 'Уже есть аккаунт?',
                                 change_page: props.change_page,
                             }),

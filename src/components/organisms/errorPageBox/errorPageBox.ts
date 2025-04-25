@@ -15,7 +15,7 @@ export default class ErrorPageBox extends Block {
             backLink: new Link({
                 href: '#',
                 class: 'menu-page-menu-item',
-                datapage: 'chats',
+                datapage: '/messenger',
                 text: 'Назад к чатам',
                 change_page: props.change_page,
             }),
