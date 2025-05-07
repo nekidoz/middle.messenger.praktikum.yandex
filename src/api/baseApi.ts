@@ -1,6 +1,6 @@
 import HTTPTransport from '../framework/httpTransport';
 import BaseApiRequest from './baseApiRequest';
-// import BaseApiResponse from './baseApiResponse';
+import BaseApiResponse from './baseApiResponse';
 
 export default class BaseAPI {
     protected httpApi: HTTPTransport;
@@ -10,14 +10,22 @@ export default class BaseAPI {
     }
 
     // eslint-disable-next-line class-methods-use-this
-    create(request: BaseApiRequest) { throw new Error(`Not implemented: ${JSON.stringify(request)}`); }
+    create(request: BaseApiRequest): Promise<BaseApiResponse> {
+        throw new Error(`Not implemented: ${JSON.stringify(request)}`);
+    }
 
     // eslint-disable-next-line class-methods-use-this
-    request(request: BaseApiRequest) { throw new Error(`Not implemented: ${JSON.stringify(request)}`); }
+    request(request: BaseApiRequest): Promise<BaseApiResponse> {
+        throw new Error(`Not implemented: ${JSON.stringify(request)}`);
+    }
 
     // eslint-disable-next-line class-methods-use-this
-    update(request: BaseApiRequest) { throw new Error(`Not implemented: ${JSON.stringify(request)}`); }
+    update(request: BaseApiRequest): Promise<BaseApiResponse> {
+        throw new Error(`Not implemented: ${JSON.stringify(request)}`);
+    }
 
     // eslint-disable-next-line class-methods-use-this
-    delete(request: BaseApiRequest) { throw new Error(`Not implemented: ${JSON.stringify(request)}`); }
+    delete(request: BaseApiRequest): Promise<BaseApiResponse> {
+        throw new Error(`Not implemented: ${JSON.stringify(request)}`);
+    }
 }

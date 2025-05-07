@@ -9,8 +9,8 @@ import Code5xxPage from './components/pages/code5xxPage';
 import { PARTY_ME } from './types/ChatMessage';
 import Router from './framework/router/router';
 // import HTTPTransport, { queryStringify } from './framework/httpTransport';
-import LoginApi, { LoginRequest } from './api/loginApi';
-import SignupApi, { SignupRequest } from './api/signupApi';
+import LoginApi, { LoginRequest, LoginResponse } from './api/loginApi';
+import SignupApi, { SignupRequest, SignupResponse } from './api/signupApi';
 
 type FieldList = Record<string, string>;
 
@@ -265,46 +265,12 @@ export default class App {
         new LoginApi().request(new LoginRequest()
             .setLogin(this.state.login)
             .setPassword(this.state.password))
-            .then((response: XMLHttpRequest) => {
-                this.logger.log('Login promise resolved');
-                let responseStr: string;
-                switch (response.status) {
-                    case 200:
-                        responseStr = 'Logged in OK';
-                        break;
-                    case 400:
-                        responseStr = 'Bad request';
-                        break;
-                    case 401:
-                        responseStr = 'Unauthorized';
-                        break;
-                    case 500:
-                        responseStr = 'Unexpected error';
-                        break;
-                    default:
-                        responseStr = 'Undefined response code';
-                        break;
-                }
-                this.logger.log(`${responseStr} (${response.status}): ${response.response}.`, response);
-                // return result;
-                if (response.status === 200) {
-                    this.changePage('/messenger');
-                } else {
-                    const { reason } = JSON.parse(response.response);
-                    alert(reason);
-                }
+            .then(() => {
+                this.changePage('/messenger');
             })
-            .catch((reply: XMLHttpRequest) => {
-                this.logger.log(`Error logging in (${reply.status}): ${reply.response}.`, reply);
-                // return result.setReason('Exception logging in');
+            .catch((response: LoginResponse) => {
+                alert(response.reason);
             });
-        // ).then(((response: LoginResponse) => {
-        //     if (response.success)  {
-        //         this.changePage('/messenger');
-        //     } else {
-        //         alert(response.reason);
-        //     }
-        // }).bind(this));
         // API END
     }
 
@@ -328,19 +294,6 @@ export default class App {
         this.createFieldObjectFromFormSubmit(formElement, ['login', 'password', 'first_name', 'second_name', 'email', 'phone']);
 
         // API
-        const request = new SignupRequest()
-            .setFirstName(this.state.first_name)
-            .setLogin(this.state.login)
-            .setEmail(this.state.email)
-            .setPassword(this.state.password);
-        if (this.state.phone) {
-            this.logger.log('Phone defined');
-            request.setPhone(this.state.phone);
-        }
-        if (this.state.second_name) {
-            this.logger.log('Second name defined');
-            request.setSecondName(this.state.second_name);
-        }
         new SignupApi().request(new SignupRequest()
             .setFirstName(this.state.first_name)
             .setSecondName(this.state.second_name)
@@ -348,48 +301,13 @@ export default class App {
             .setEmail(this.state.email)
             .setPassword(this.state.password)
             .setPhone(this.state.phone))
-            .then((response: XMLHttpRequest) => {
-                this.logger.log('Signup promise resolved');
-                let responseStr: string;
-                switch (response.status) {
-                    case 200:
-                        // eslint-disable-next-line no-case-declarations
-                        const { id } = JSON.parse(response.response);
-                        responseStr = `Signed up OK (id ${id})`;
-                        break;
-                    case 400:
-                        responseStr = 'Bad request';
-                        break;
-                    case 401:
-                        responseStr = 'Unauthorized';
-                        break;
-                    case 500:
-                        responseStr = 'Unexpected error';
-                        break;
-                    default:
-                        responseStr = 'Undefined response code';
-                        break;
-                }
-                this.logger.log(`${responseStr} (${response.status}): ${response.response}.`, response);
-                // return result;
-                if (response.status === 200) {
-                    this.changePage('/');
-                } else {
-                    const { reason } = JSON.parse(response.response);
-                    alert(reason);
-                }
+            .then((response) => {
+                alert(`Registered with id ${response.id}`);
+                this.changePage('/');
             })
-            .catch((reply: XMLHttpRequest) => {
-                this.logger.log(`Error logging in (${reply.status}): ${reply.response}.`, reply);
-                // return result.setReason('Exception logging in');
+            .catch((response: SignupResponse) => {
+                alert(response.reason);
             });
-        // ).then(((response: LoginResponse) => {
-        //     if (response.success)  {
-        //         this.changePage('/messenger');
-        //     } else {
-        //         alert(response.reason);
-        //     }
-        // }).bind(this));
         // API END
     }
 

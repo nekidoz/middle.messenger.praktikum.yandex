@@ -50,7 +50,22 @@ export class SignupRequest extends BaseApiRequest {
 }
 
 export class SignupResponse extends BaseApiResponse {
+    id: string;
 
+    public setSuccess(success: boolean) {
+        super.setSuccess(success);
+        return this;
+    }
+
+    public setReason(reason: string) {
+        super.setReason(reason);
+        return this;
+    }
+
+    public setId(id: string) {
+        this.id = id;
+        return this;
+    }
 }
 
 export default class SignupApi extends BaseApi {
@@ -73,42 +88,51 @@ export default class SignupApi extends BaseApi {
         this.logger.log('SignupApi: creating singleton');
     }
 
-    public request(credentials: SignupRequest) {
-        // const result = new LoginResponse().setSuccess(false); // prepare for worse
-        this.logger.log('LoginApi.request()', credentials, JSON.stringify(credentials));
-        return this.httpApi.post('/signup', { data: JSON.stringify(credentials) });
-        // .then((response: XMLHttpRequest) => {
-        //     console.log('Login promise resolved');
-        //     const { reason } = JSON.parse(response.response);
-        //     result.setReason(reason);
-        //     let responseStr: string;
-        //     switch (response.status) {
-        //         case 200:
-        //             result.setSuccess(true);
-        //             responseStr = 'Logged in OK';
-        //             break;
-        //         case 400:
-        //             responseStr = 'Bad request';
-        //             break;
-        //         case 401:
-        //             responseStr = 'Unauthorized';
-        //             break;
-        //         case 500:
-        //             responseStr = 'Unexpected error';
-        //             break;
-        //         default:
-        //             responseStr = 'Undefined response code';
-        //             break;
-        //     }
-        //     console.log(`${responseStr} (${response.status}): ${response.response}.`, response);
-        //     return result;
-        // })
-        // .catch((reply: XMLHttpRequest) => {
-        //     console.log(`Error logging in (${reply.status}): ${reply.response}.`, reply);
-        //     return result.setReason('Exception logging in');
-        // })
-        // .finally(() => {
-        //     return result.setReason('Unknown (finally)');
-        // });
+    public request(credentials: SignupRequest): Promise<SignupResponse> {
+        return new Promise((resolve, reject) => {
+            const result = new SignupResponse().setSuccess(false) as SignupResponse; // prepare for worse
+            this.logger.log('SignupApi.request()', credentials, JSON.stringify(credentials));
+            this.httpApi.post('/signup', { data: JSON.stringify(credentials) })
+                .then((response: XMLHttpRequest) => {
+                    this.logger.log('Signup promise resolved');
+                    let responseStr: string;
+                    switch (response.status) {
+                        case 200:
+                            // eslint-disable-next-line no-case-declarations
+                            const { id } = JSON.parse(response.response);
+                            result
+                                .setSuccess(true)
+                                .setId(id);
+                            responseStr = `Signed up OK with id ${id}`;
+                            break;
+                        case 400:
+                            responseStr = 'Bad request';
+                            break;
+                        case 401:
+                            responseStr = 'Unauthorized';
+                            break;
+                        case 500:
+                            responseStr = 'Unexpected error';
+                            break;
+                        default:
+                            responseStr = 'Undefined response code';
+                            break;
+                    }
+                    this.logger.log(`${responseStr} (${response.status}): ${response.response}.`, response);
+                    if (response.status === 200) {
+                        resolve(result);
+                    } else {
+                        const { reason } = JSON.parse(response.response);
+                        reject(result.setReason(reason));
+                    }
+                })
+                .catch((reply: XMLHttpRequest) => {
+                    this.logger.log(`Error signing up (${reply.status}): ${reply.response}.`, reply);
+                    reject(result.setReason('Exception signing up'));
+                })
+                .finally(() => {
+                    reject(result.setReason('Unknown (finally)'));
+                });
+        });
     }
 }
