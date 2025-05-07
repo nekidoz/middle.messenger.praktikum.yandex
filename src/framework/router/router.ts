@@ -24,6 +24,7 @@ export default class Router {
         // Singleton
         if (Router.__instance) {
             Router.__instance.logger.log('Router: returning singleton');
+            // eslint-disable-next-line no-constructor-return
             return Router.__instance;
         }
 

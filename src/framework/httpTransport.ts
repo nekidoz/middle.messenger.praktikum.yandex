@@ -16,6 +16,8 @@ type HttpRequestOptions = {
     headers: StringDict,
 }
 
+type HttpMethod = <T = unknown>(url: string, options?: Partial<HttpRequestOptions>) => Promise<T>;
+
 /**
   * Функция трансформирует объект в строку запроса HTML
   * @param  На входе: объект. Пример: {a: 1, b: 2, c: {d: 123}, k: [1, 2, 3]}
@@ -30,25 +32,32 @@ export function queryStringify(data: Object) {
 export default class HTTPTransport {
     logger: Logger;
 
-    constructor() {
+    baseUrl: string = '';
+
+    constructor(baseUrl: string) {
         this.logger = new Logger(Level.info);
+        this.baseUrl = baseUrl;
     }
 
-    get = (url: string, options: Partial<HttpRequestOptions> = {}) => this.request(url, { ...options, method: METHODS.GET }, options.timeout);
+    private createMethod(method: METHODS): HttpMethod {
+        return (url, options = {}) => this.request(url, { ...options, method });
+    }
 
-    put = (url: string, options: Partial<HttpRequestOptions> = {}) => this.request(url, { ...options, method: METHODS.PUT }, options.timeout);
+    get = this.createMethod(METHODS.GET);
 
-    post = (url: string, options: Partial<HttpRequestOptions> = {}) => this.request(url, { ...options, method: METHODS.POST }, options.timeout);
+    put = this.createMethod(METHODS.PUT);
 
-    delete = (url: string, options: Partial<HttpRequestOptions> = {}) => this.request(url, { ...options, method: METHODS.DELETE }, options.timeout);
+    post = this.createMethod(METHODS.POST);
+
+    delete = this.createMethod(METHODS.DELETE);
 
     // options:
     // headers — obj
     // data — obj
-    request = (url = 'http://localhost', options: Partial<HttpRequestOptions> = { method: METHODS.GET }, timeout = 5000) => {
-        const { method, data, headers = {} } = options;
+    private request<T = unknown>(url = 'http://localhost', options: Partial<HttpRequestOptions> = { method: METHODS.GET }): Promise<T> {
+        const { method, data, timeout = 5000, headers = {} } = options;
         this.logger.log(method, data, headers);
-        let targetUrl = url;
+        let targetUrl = `${this.baseUrl}${url}`;
 
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
@@ -76,7 +85,7 @@ export default class HTTPTransport {
             xhr.timeout = timeout;
 
             xhr.onload = () => {
-                resolve(xhr);
+                resolve(xhr as T);
             };
 
             xhr.onabort = reject;
@@ -88,8 +97,8 @@ export default class HTTPTransport {
                 xhr.send();
             } else {
                 this.logger.log('Not Get and data present');
-                xhr.send(data as Document);
+                xhr.send(data as unknown as Document);
             }
         });
-    };
+    }
 }

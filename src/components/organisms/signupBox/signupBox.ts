@@ -39,14 +39,14 @@ export default class SignupBox extends Block {
                         id: 'second_name',
                         type: 'text',
                         value: props.second_name,
-                        caption: 'Фамилия',
+                        caption: '* Фамилия',
                         placeholder: 'Фамилия',
                     }),
                     new LoginSignupInputBlock({
                         id: 'phone',
                         type: 'tel',
                         value: props.phone,
-                        caption: 'Телефон',
+                        caption: '* Телефон',
                         placeholder: 'Телефон',
                     }),
                     new LoginSignupInputBlock({

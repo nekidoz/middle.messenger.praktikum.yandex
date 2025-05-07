@@ -126,9 +126,9 @@ export default class Validate {
             case 'display_name':
                 return Validate.isName(value, true);
             case 'second_name':
-                return Validate.isName(value, false);
+                return Validate.isName(value, true);
             case 'phone':
-                return Validate.isPhone(value, false);
+                return Validate.isPhone(value, true);
             case 'avatar':
                 return [true, null];
             default:
