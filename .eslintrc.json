@@ -12,6 +12,7 @@
     "import/extensions": "off",
     "no-underscore-dangle": "off",
     "no-multi-str": "off",
+    "no-plusplus": "off",
     // Следующее нужно, чтобы eslint не ругался на enum в TS
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "error"

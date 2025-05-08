@@ -9,8 +9,10 @@ import Code5xxPage from './components/pages/code5xxPage';
 import { PARTY_ME } from './types/ChatMessage';
 import Router from './framework/router/router';
 // import HTTPTransport, { queryStringify } from './framework/httpTransport';
-import LoginApi, { LoginRequest, LoginResponse } from './api/loginApi';
-import SignupApi, { SignupRequest, SignupResponse } from './api/signupApi';
+import { LoginRequest } from './api/loginApi';
+import { SignupRequest } from './api/signupApi';
+import loginController from './controllers/loginController';
+import signupController from './controllers/signupController';
 
 type FieldList = Record<string, string>;
 
@@ -262,15 +264,9 @@ export default class App {
         this.createFieldObjectFromFormSubmit(formElement, ['login', 'password']);
 
         // API
-        new LoginApi().request(new LoginRequest()
+        loginController.login(new LoginRequest()
             .setLogin(this.state.login)
-            .setPassword(this.state.password))
-            .then(() => {
-                this.changePage('/messenger');
-            })
-            .catch((response: LoginResponse) => {
-                alert(response.reason);
-            });
+            .setPassword(this.state.password));
         // API END
     }
 
@@ -294,20 +290,13 @@ export default class App {
         this.createFieldObjectFromFormSubmit(formElement, ['login', 'password', 'first_name', 'second_name', 'email', 'phone']);
 
         // API
-        new SignupApi().request(new SignupRequest()
+        signupController.signup(new SignupRequest()
             .setFirstName(this.state.first_name)
             .setSecondName(this.state.second_name)
             .setLogin(this.state.login)
             .setEmail(this.state.email)
             .setPassword(this.state.password)
-            .setPhone(this.state.phone))
-            .then((response) => {
-                alert(`Registered with id ${response.id}`);
-                this.changePage('/');
-            })
-            .catch((response: SignupResponse) => {
-                alert(response.reason);
-            });
+            .setPhone(this.state.phone));
         // API END
     }
 

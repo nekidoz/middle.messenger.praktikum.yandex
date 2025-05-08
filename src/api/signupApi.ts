@@ -1,9 +1,7 @@
 /* eslint max-classes-per-file: 0 */
 
 import Logger, { Level } from '../utils/logger';
-import BaseApi from './baseApi';
-import BaseApiRequest from './baseApiRequest';
-import BaseApiResponse from './baseApiResponse';
+import BaseApi, { BaseApiRequest, BaseApiResponse } from './baseApi';
 
 export class SignupRequest extends BaseApiRequest {
     first_name: string;

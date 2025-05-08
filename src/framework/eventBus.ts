@@ -26,10 +26,11 @@ class EventBus {
 
     emit(event: string, ...args: unknown[]) {
         this.logger.log(`EventBus: ${event} emitted`);
-        if (!this.listeners[event]) {
-            throw new Error(`Событие не зарегистрировано: ${event}`);
+        if (this.listeners[event]) {
+            this.listeners[event].forEach((listener) => { listener(...args); });
+        } else {
+            this.logger.log(`Не зарегистрированы обработчики события: ${event}`);
         }
-        this.listeners[event].forEach((listener) => { listener(...args); });
     }
 }
 
