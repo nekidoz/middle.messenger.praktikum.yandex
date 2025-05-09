@@ -176,15 +176,11 @@ export default class App {
 
     initRouter() {
         // for menu and other links
-        const commonProps = {
-            // change_page: ((e: Event) => this.changePageByLink(e)),
-        };
         this.logger.log('Initialize Router');
         this.router
             .use('/', LoginPage, {
                 login: this.state.login,
                 onSubmit: ((e: SubmitEvent) => this.login(e)),
-                ...commonProps,
             })
             .use('/sign-up', SignupPage, {
                 login: this.state.login,
@@ -193,7 +189,6 @@ export default class App {
                 email: this.state.email,
                 phone: this.state.phone,
                 onSubmit: ((e: SubmitEvent) => this.signup(e)),
-                ...commonProps,
             })
             .use('/settings', ProfilePage, {
                 profile_avatar: '/avatar.png',
@@ -205,7 +200,6 @@ export default class App {
                 display_name: this.state.display_name,
                 avatar: this.state.avatar,
                 onSubmit: ((e: SubmitEvent) => this.saveProfile(e)),
-                ...commonProps,
             })
             .use('/messenger', ChatsPage, {
                 chats: this.state.chat_selection,
@@ -219,14 +213,9 @@ export default class App {
                 do_chat_action: (() => this.chatAction()),
                 attach_to_chat: (() => this.chatAttach()),
                 send_message: ((e: SubmitEvent) => this.chatSend(e)),
-                ...commonProps,
             })
-            .use('/error', Code5xxPage, {
-                ...commonProps,
-            })
-            .useAs404(Code404Page, {
-                ...commonProps,
-            })
+            .use('/error', Code5xxPage, {})
+            .useAs404(Code404Page, {})
             .start();
     }
 

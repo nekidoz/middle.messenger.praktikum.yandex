@@ -6,8 +6,10 @@ import Div from '../../atoms/div';
 import LoginSignupInputBlock from '../../blocks/loginSignupInputBlock';
 import template from './template';
 import InputBoxValidationMixin from '../../mixins/inputBoxValidationMixin';
+import { connect } from '../../../framework/store';
+import Indexed from '../../../types/indexed';
 
-export default class LoginBox extends Block {
+class LoginBox extends Block {
     constructor(props: PropsRecord = {}) {
         super({
             ...props,
@@ -66,4 +68,15 @@ export default class LoginBox extends Block {
     }
 }
 
+// map Store props to form props
+function mapStateToProps(state: Indexed) {
+    return {
+        login: (state.user as Indexed)?.login,
+    };
+}
+
+// add validation
 Object.assign(LoginBox.prototype, InputBoxValidationMixin);
+
+// add store update subscription
+export default connect(LoginBox, mapStateToProps);
