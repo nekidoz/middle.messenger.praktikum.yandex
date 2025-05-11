@@ -12,59 +12,80 @@ import signupController from '../../../controllers/signupController';
 import { SignupRequest } from '../../../api/signupApi';
 
 class SignupBox extends Block {
+    private email;
+
+    private login;
+
+    private firstName;
+
+    private secondName;
+
+    private phone;
+
+    // private password;
+
+    // private repeatPassword;
+
     constructor(props: PropsRecord = {}) {
+        const email = new LoginSignupInputBlock({
+            id: 'email',
+            type: 'email',
+            value: props.email,
+            caption: '* Почта',
+            placeholder: 'Почта',
+        });
+        const login = new LoginSignupInputBlock({
+            id: 'login',
+            type: 'text',
+            value: props.login,
+            caption: '* Логин',
+            placeholder: 'Логин',
+        });
+        const firstName = new LoginSignupInputBlock({
+            id: 'first_name',
+            type: 'text',
+            value: props.first_name,
+            caption: '* Имя',
+            placeholder: 'Имя',
+        });
+        const secondName = new LoginSignupInputBlock({
+            id: 'second_name',
+            type: 'text',
+            value: props.second_name,
+            caption: '* Фамилия',
+            placeholder: 'Фамилия',
+        });
+        const phone = new LoginSignupInputBlock({
+            id: 'phone',
+            type: 'tel',
+            value: props.phone,
+            caption: '* Телефон',
+            placeholder: 'Телефон',
+        });
+        const password = new LoginSignupInputBlock({
+            id: 'password',
+            type: 'password',
+            caption: '* Пароль',
+            placeholder: 'Пароль',
+        });
+        const repeatPassword = new LoginSignupInputBlock({
+            id: 'repeat_password',
+            type: 'password',
+            caption: '* Пароль (еще раз)',
+            placeholder: 'Пароль (еще раз)',
+        });
         super({
             ...props,
             form: new Form({
                 id: 'signup-form',
                 content: [
-                    new LoginSignupInputBlock({
-                        id: 'email',
-                        type: 'email',
-                        value: props.email,
-                        caption: '* Почта',
-                        placeholder: 'Почта',
-                    }),
-                    new LoginSignupInputBlock({
-                        id: 'login',
-                        type: 'text',
-                        value: props.login,
-                        caption: '* Логин',
-                        placeholder: 'Логин',
-                    }),
-                    new LoginSignupInputBlock({
-                        id: 'first_name',
-                        type: 'text',
-                        value: props.first_name,
-                        caption: '* Имя',
-                        placeholder: 'Имя',
-                    }),
-                    new LoginSignupInputBlock({
-                        id: 'second_name',
-                        type: 'text',
-                        value: props.second_name,
-                        caption: '* Фамилия',
-                        placeholder: 'Фамилия',
-                    }),
-                    new LoginSignupInputBlock({
-                        id: 'phone',
-                        type: 'tel',
-                        value: props.phone,
-                        caption: '* Телефон',
-                        placeholder: 'Телефон',
-                    }),
-                    new LoginSignupInputBlock({
-                        id: 'password',
-                        type: 'password',
-                        caption: '* Пароль',
-                        placeholder: 'Пароль',
-                    }),
-                    new LoginSignupInputBlock({
-                        id: 'repeat_password',
-                        type: 'password',
-                        caption: '* Пароль (еще раз)',
-                        placeholder: 'Пароль (еще раз)',
-                    }),
+                    email,
+                    login,
+                    firstName,
+                    secondName,
+                    phone,
+                    password,
+                    repeatPassword,
                     new Div({
                         class: 'button-stack',
                         content: [
@@ -104,6 +125,21 @@ class SignupBox extends Block {
             }),
             template,
         });
+        this.email = email;
+        this.login = login;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.phone = phone;
+        // this.password = password;
+        // this.repeatPassword = repeatPassword;
+    }
+
+    componentDidUpdate(_oldProps: PropsRecord, _newProps: PropsRecord): boolean {
+        return Block.updateChildProps(_oldProps, _newProps, this.email, 'value', 'email')
+            || Block.updateChildProps(_oldProps, _newProps, this.login, 'value', 'login')
+            || Block.updateChildProps(_oldProps, _newProps, this.firstName, 'value', 'first_name')
+            || Block.updateChildProps(_oldProps, _newProps, this.secondName, 'value', 'second_name')
+            || Block.updateChildProps(_oldProps, _newProps, this.phone, 'value', 'phone');
     }
 
     // The following is replaced with implementation from InputBoxValidationMixin

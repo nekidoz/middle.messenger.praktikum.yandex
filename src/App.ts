@@ -9,10 +9,10 @@ import Code5xxPage from './components/pages/code5xxPage';
 import { PARTY_ME } from './types/ChatMessage';
 import Router from './framework/router/router';
 // import HTTPTransport, { queryStringify } from './framework/httpTransport';
-import { LoginRequest } from './api/loginApi';
-import { SignupRequest } from './api/signupApi';
-import loginController from './controllers/loginController';
-import signupController from './controllers/signupController';
+// import { LoginRequest } from './api/loginApi';
+// import { SignupRequest } from './api/signupApi';
+// import loginController from './controllers/loginController';
+// import signupController from './controllers/signupController';
 
 type FieldList = Record<string, string>;
 

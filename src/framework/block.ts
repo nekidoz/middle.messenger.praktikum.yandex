@@ -215,6 +215,29 @@ abstract class Block {
         }
     }
 
+    /**
+     * To be used in custom componentDidUpdate() of a particular block class to update child prop if differs.
+     * @param _oldProps parent's old props object
+     * @param _newProps parent's new props object
+     * @param child child Block element
+     * @param childPropName prop name in child which needs updating
+     * @param propName prop name in parent's old and new props objects
+     * @returns true if prop value differs, false otherwise - can be used to determine if to update parent component
+     */
+    static updateChildProps<T extends Block>(
+        _oldProps: PropsRecord,
+        _newProps: PropsRecord,
+        child: T,
+        childPropName: string,
+        propName: string,
+    ) {
+        if (_oldProps[propName] !== _newProps[propName]) {
+            child.setProps({ [childPropName]: _newProps[propName] });
+            return true;
+        }
+        return false;
+    }
+
     // This is a stub, parameters are naturally unused
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     componentDidUpdate(_oldProps: PropsRecord, _newProps: PropsRecord): boolean {

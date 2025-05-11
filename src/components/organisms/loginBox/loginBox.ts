@@ -12,25 +12,31 @@ import loginController from '../../../controllers/loginController';
 import { LoginRequest } from '../../../api/loginApi';
 
 class LoginBox extends Block {
+    private login;
+
+    private password;
+
     constructor(props: PropsRecord = {}) {
+        const login = new LoginSignupInputBlock({
+            id: 'login',
+            type: 'text',
+            value: props.login,
+            caption: '* Логин',
+            placeholder: 'Логин',
+        });
+        const password = new LoginSignupInputBlock({
+            id: 'password',
+            type: 'password',
+            caption: '* Пароль',
+            placeholder: 'Пароль',
+        });
         super({
             ...props,
             form: new Form({
                 id: 'login-form',
                 content: [
-                    new LoginSignupInputBlock({
-                        id: 'login',
-                        type: 'text',
-                        value: props.login,
-                        caption: '* Логин',
-                        placeholder: 'Логин',
-                    }),
-                    new LoginSignupInputBlock({
-                        id: 'password',
-                        type: 'password',
-                        caption: '* Пароль',
-                        placeholder: 'Пароль',
-                    }),
+                    login,
+                    password,
                     new Div({
                         class: 'button-stack',
                         content: [
@@ -66,6 +72,12 @@ class LoginBox extends Block {
             }),
             template,
         });
+        this.login = login;
+        this.password = password;
+    }
+
+    componentDidUpdate(_oldProps: PropsRecord, _newProps: PropsRecord): boolean {
+        return Block.updateChildProps(_oldProps, _newProps, this.login, 'value', 'login');
     }
 
     // The following is replaced with implementation from InputBoxValidationMixin
