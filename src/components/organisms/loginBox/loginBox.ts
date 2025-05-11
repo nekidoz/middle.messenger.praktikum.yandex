@@ -14,7 +14,7 @@ import { LoginRequest } from '../../../api/loginApi';
 class LoginBox extends Block {
     private login;
 
-    private password;
+    // private password;
 
     constructor(props: PropsRecord = {}) {
         const login = new LoginSignupInputBlock({
@@ -51,7 +51,6 @@ class LoginBox extends Block {
                                 class: 'menu-page-menu-item',
                                 datapage: '/sign-up',
                                 text: 'Нет аккаунта?',
-                                change_page: props.change_page,
                             }),
                         ],
                     }),
@@ -73,7 +72,7 @@ class LoginBox extends Block {
             template,
         });
         this.login = login;
-        this.password = password;
+        // this.password = password;
     }
 
     componentDidUpdate(_oldProps: PropsRecord, _newProps: PropsRecord): boolean {

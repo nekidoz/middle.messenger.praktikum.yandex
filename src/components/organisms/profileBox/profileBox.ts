@@ -8,9 +8,101 @@ import Spacer from '../../atoms/spacer';
 import ProfileInputBlock from '../../blocks/profileInputBlock';
 import template from './template';
 import InputBoxValidationMixin from '../../mixins/inputBoxValidationMixin';
+import Indexed from '../../../types/indexed';
+import { connect } from '../../../framework/store';
+import logoutController from '../../../controllers/logoutController';
+import { LogoutRequest } from '../../../api/logoutApi';
 
-export default class ProfileBox extends Block {
+class ProfileBox extends Block {
+    private email;
+
+    private login;
+
+    private firstName;
+
+    private secondName;
+
+    private displayName;
+
+    private phone;
+
+    private avatar;
+
+    // private oldPassword;
+
+    // private newPassword;
+
+    // private repeatNewPassword;
+
     constructor(props: PropsRecord = {}) {
+        const email = new ProfileInputBlock({
+            id: 'email',
+            type: 'email',
+            value: props.email,
+            caption: '* Почта',
+            placeholder: 'Почта',
+        });
+        const login = new ProfileInputBlock({
+            id: 'login',
+            type: 'text',
+            value: props.login,
+            caption: '* Логин',
+            placeholder: 'Логин',
+        });
+        const firstName = new ProfileInputBlock({
+            id: 'first_name',
+            type: 'text',
+            value: props.first_name,
+            caption: '* Имя',
+            placeholder: 'Имя',
+        });
+        const secondName = new ProfileInputBlock({
+            id: 'second_name',
+            type: 'text',
+            value: props.second_name,
+            caption: 'Фамилия',
+            placeholder: 'Фамилия',
+        });
+        const displayName = new ProfileInputBlock({
+            id: 'display_name',
+            type: 'text',
+            value: props.display_name,
+            caption: '* Имя в чате',
+            placeholder: 'Имя в чате',
+        });
+        const phone = new ProfileInputBlock({
+            id: 'phone',
+            type: 'tel',
+            value: props.phone,
+            caption: 'Телефон',
+            placeholder: 'Телефон',
+        });
+        const avatar = new ProfileInputBlock({
+            id: 'avatar',
+            type: 'file',
+            value: props.avatar,
+            accept: 'image/png, image/jpeg',
+            caption: 'Аватар',
+            placeholder: 'Аватар',
+        });
+        const oldPassword = new ProfileInputBlock({
+            id: 'oldPassword',
+            type: 'password',
+            caption: 'Старый пароль',
+            placeholder: 'Старый пароль',
+        });
+        const newPassword = new ProfileInputBlock({
+            id: 'newPassword',
+            type: 'password',
+            caption: 'Новый пароль',
+            placeholder: 'Новый пароль',
+        });
+        const repeatNewPassword = new ProfileInputBlock({
+            id: 'repeatNewPassword',
+            type: 'password',
+            caption: 'Новый пароль (еще раз)',
+            placeholder: 'Новый пароль (еще раз)',
+        });
         super({
             ...props,
             avatar: new Image({
@@ -25,77 +117,19 @@ export default class ProfileBox extends Block {
                     new Spacer({
                         class: 'profile-spacer',
                     }),
-                    new ProfileInputBlock({
-                        id: 'email',
-                        type: 'email',
-                        value: props.email,
-                        caption: '* Почта',
-                        placeholder: 'Почта',
-                    }),
-                    new ProfileInputBlock({
-                        id: 'login',
-                        type: 'text',
-                        value: props.login,
-                        caption: '* Логин',
-                        placeholder: 'Логин',
-                    }),
-                    new ProfileInputBlock({
-                        id: 'first_name',
-                        type: 'text',
-                        value: props.first_name,
-                        caption: '* Имя',
-                        placeholder: 'Имя',
-                    }),
-                    new ProfileInputBlock({
-                        id: 'second_name',
-                        type: 'text',
-                        value: props.second_name,
-                        caption: 'Фамилия',
-                        placeholder: 'Фамилия',
-                    }),
-                    new ProfileInputBlock({
-                        id: 'display_name',
-                        type: 'text',
-                        value: props.display_name,
-                        caption: '* Имя в чате',
-                        placeholder: 'Имя в чате',
-                    }),
-                    new ProfileInputBlock({
-                        id: 'phone',
-                        type: 'tel',
-                        value: props.phone,
-                        caption: 'Телефон',
-                        placeholder: 'Телефон',
-                    }),
-                    new ProfileInputBlock({
-                        id: 'avatar',
-                        type: 'file',
-                        value: props.avatar,
-                        accept: 'image/png, image/jpeg',
-                        caption: 'Аватар',
-                        placeholder: 'Аватар',
-                    }),
+                    email,
+                    login,
+                    firstName,
+                    secondName,
+                    displayName,
+                    phone,
+                    avatar,
                     new Spacer({
                         class: 'profile-spacer',
                     }),
-                    new ProfileInputBlock({
-                        id: 'oldPassword',
-                        type: 'password',
-                        caption: 'Старый пароль',
-                        placeholder: 'Старый пароль',
-                    }),
-                    new ProfileInputBlock({
-                        id: 'newPassword',
-                        type: 'password',
-                        caption: 'Новый пароль',
-                        placeholder: 'Новый пароль',
-                    }),
-                    new ProfileInputBlock({
-                        id: 'repeatNewPassword',
-                        type: 'password',
-                        caption: 'Новый пароль (еще раз)',
-                        placeholder: 'Новый пароль (еще раз)',
-                    }),
+                    oldPassword,
+                    newPassword,
+                    repeatNewPassword,
                     new Div({
                         class: 'button-stack',
                         content: [
@@ -108,9 +142,14 @@ export default class ProfileBox extends Block {
                             new Link({
                                 href: '#',
                                 class: 'menu-page-menu-item',
-                                datapage: '/',
                                 text: 'Выйти',
-                                change_page: props.change_page,
+                                events: {
+                                    click: (e: Event) => {
+                                        e.preventDefault();
+                                        this.logger.log('Выход');
+                                        logoutController.logout(new LogoutRequest());
+                                    },
+                                },
                             }),
                         ],
                     }),
@@ -126,6 +165,26 @@ export default class ProfileBox extends Block {
             }),
             template,
         });
+        this.email = email;
+        this.login = login;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.displayName = displayName;
+        this.phone = phone;
+        this.avatar = avatar;
+        // this.oldPassword = oldPassword;
+        // this.newPassword = newPassword;
+        // this.repeatNewPassword = repeatNewPassword;
+    }
+
+    componentDidUpdate(_oldProps: PropsRecord, _newProps: PropsRecord): boolean {
+        return Block.updateChildProps(_oldProps, _newProps, this.email, 'value', 'email')
+            || Block.updateChildProps(_oldProps, _newProps, this.login, 'value', 'login')
+            || Block.updateChildProps(_oldProps, _newProps, this.firstName, 'value', 'first_name')
+            || Block.updateChildProps(_oldProps, _newProps, this.secondName, 'value', 'second_name')
+            || Block.updateChildProps(_oldProps, _newProps, this.displayName, 'value', 'display_name')
+            || Block.updateChildProps(_oldProps, _newProps, this.phone, 'value', 'phone')
+            || Block.updateChildProps(_oldProps, _newProps, this.avatar, 'value', 'avatar');
     }
 
     // The following is replaced with implementation from InputBoxValidationMixin
@@ -135,4 +194,22 @@ export default class ProfileBox extends Block {
     }
 }
 
+// map Store props to form props
+function mapStateToProps(state: Indexed) {
+    const userSection: Indexed | undefined = state.user as Indexed | undefined;
+    return userSection
+        ? {
+            email: userSection.email,
+            login: userSection.login,
+            first_name: userSection.first_name,
+            second_name: userSection.second_name,
+            display_name: userSection.display_name,
+            phone: userSection.phone,
+            avatar: userSection.avatar,
+        }
+        : {};
+}
+
 Object.assign(ProfileBox.prototype, InputBoxValidationMixin);
+
+export default connect(ProfileBox, mapStateToProps);

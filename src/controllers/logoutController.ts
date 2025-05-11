@@ -18,11 +18,13 @@ class LogoutController {
     public logout(credentials: LogoutRequest) {
         this.logoutApi.request(credentials)
             .then(() => {
-                this.store.set('user.login', undefined);
+                this.store.set('user', undefined);
                 this.router.go('/');
             })
             .catch((response: LogoutResponse) => {
                 alert(response.reason);
+                this.store.set('user', undefined);
+                this.router.go('/');
             });
     }
 }

@@ -43,6 +43,9 @@ export default class ProfileInputBlock extends Block {
         if (oldProps.error !== newProps.error) {
             this._children.errorComponent.setProps({ text: newProps.error });
         }
+        if (oldProps.value !== newProps.value) {
+            this._children.inputComponent.setProps({ value: newProps.value });
+        }
         return true;
     }
 }

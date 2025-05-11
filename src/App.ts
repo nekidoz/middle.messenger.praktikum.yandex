@@ -119,20 +119,20 @@ export default class App {
             //         ...commonProps,
             //     });
             //     break;
-            case 'profile':
-                block = new ProfilePage({
-                    profile_avatar: '/avatar.png',
-                    login: this.state.login,
-                    first_name: this.state.first_name,
-                    second_name: this.state.second_name,
-                    email: this.state.email,
-                    phone: this.state.phone,
-                    display_name: this.state.display_name,
-                    avatar: this.state.avatar,
-                    onSubmit: ((e: SubmitEvent) => this.saveProfile(e)),
-                    ...commonProps,
-                });
-                break;
+            // case 'profile':
+            //     block = new ProfilePage({
+            //         profile_avatar: '/avatar.png',
+            //         login: this.state.login,
+            //         first_name: this.state.first_name,
+            //         second_name: this.state.second_name,
+            //         email: this.state.email,
+            //         phone: this.state.phone,
+            //         display_name: this.state.display_name,
+            //         avatar: this.state.avatar,
+            //         onSubmit: ((e: SubmitEvent) => this.saveProfile(e)),
+            //         ...commonProps,
+            //     });
+            //     break;
             case 'chats':
                 block = new ChatsPage({
                     chats: this.state.chat_selection,
