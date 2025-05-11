@@ -8,6 +8,8 @@ import template from './template';
 import InputBoxValidationMixin from '../../mixins/inputBoxValidationMixin';
 import { connect } from '../../../framework/store';
 import Indexed from '../../../types/indexed';
+import signupController from '../../../controllers/signupController';
+import { SignupRequest } from '../../../api/signupApi';
 
 class SignupBox extends Block {
     constructor(props: PropsRecord = {}) {
@@ -86,7 +88,16 @@ class SignupBox extends Block {
                     submit: (e: SubmitEvent) => {
                         e.preventDefault();
                         if (this.validate(['password', 'repeat_password'], 'Пароли не совпадают')) {
-                            (this._props.onSubmit as (event: SubmitEvent) => void)(e);
+                            const formElement = e.target as HTMLFormElement;
+                            const request = new SignupRequest()
+                                .setFirstName(formElement?.first_name.value)
+                                .setSecondName(formElement?.second_name.value)
+                                .setLogin(formElement?.login.value)
+                                .setEmail(formElement?.email.value)
+                                .setPassword(formElement?.password.value)
+                                .setPhone(formElement?.phone.value);
+                            this.logger.log('Регистрация', request);
+                            signupController.signup(request);
                         }
                     },
                 },

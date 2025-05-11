@@ -19,7 +19,13 @@ class SignupController {
         this.signupApi.request(credentials)
             .then((response: SignupResponse) => {
                 alert(`Registered with id ${response.id}`);
-                this.store.set('user.login', credentials.login);
+                this.store.set('user', {
+                    first_name: credentials.first_name,
+                    second_name: credentials.second_name,
+                    login: credentials.login,
+                    email: credentials.email,
+                    phone: credentials.phone,
+                });
                 this.router.go('/');
             })
             .catch((response: SignupResponse) => {

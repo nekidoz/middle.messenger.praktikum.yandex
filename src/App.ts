@@ -101,24 +101,24 @@ export default class App {
         };
         this.logger.log(this.state.currentPage, this);
         switch (this.state.currentPage) {
-            case 'login':
-                block = new LoginPage({
-                    login: this.state.login,
-                    onSubmit: ((e: SubmitEvent) => this.login(e)),
-                    ...commonProps,
-                });
-                break;
-            case 'signup':
-                block = new SignupPage({
-                    login: this.state.login,
-                    first_name: this.state.first_name,
-                    second_name: this.state.second_name,
-                    email: this.state.email,
-                    phone: this.state.phone,
-                    onSubmit: ((e: SubmitEvent) => this.signup(e)),
-                    ...commonProps,
-                });
-                break;
+            // case 'login':
+            //     block = new LoginPage({
+            //         login: this.state.login,
+            //         onSubmit: ((e: SubmitEvent) => this.login(e)),
+            //         ...commonProps,
+            //     });
+            //     break;
+            // case 'signup':
+            //     block = new SignupPage({
+            //         login: this.state.login,
+            //         first_name: this.state.first_name,
+            //         second_name: this.state.second_name,
+            //         email: this.state.email,
+            //         phone: this.state.phone,
+            //         onSubmit: ((e: SubmitEvent) => this.signup(e)),
+            //         ...commonProps,
+            //     });
+            //     break;
             case 'profile':
                 block = new ProfilePage({
                     profile_avatar: '/avatar.png',
@@ -179,16 +179,16 @@ export default class App {
         this.logger.log('Initialize Router');
         this.router
             .use('/', LoginPage, {
-                login: this.state.login,
-                onSubmit: ((e: SubmitEvent) => this.login(e)),
+                // login: this.state.login,
+                // onSubmit: ((e: SubmitEvent) => this.login(e)),
             })
             .use('/sign-up', SignupPage, {
-                login: this.state.login,
-                first_name: this.state.first_name,
-                second_name: this.state.second_name,
-                email: this.state.email,
-                phone: this.state.phone,
-                onSubmit: ((e: SubmitEvent) => this.signup(e)),
+                // login: this.state.login,
+                // first_name: this.state.first_name,
+                // second_name: this.state.second_name,
+                // email: this.state.email,
+                // phone: this.state.phone,
+                // onSubmit: ((e: SubmitEvent) => this.signup(e)),
             })
             .use('/settings', ProfilePage, {
                 profile_avatar: '/avatar.png',
@@ -242,52 +242,52 @@ export default class App {
         return fieldObject;
     }
 
-    login(event: SubmitEvent) {
-        event.preventDefault();
-        const formElement = event.target as HTMLFormElement;
-        this.state.login = formElement?.login.value;
-        this.state.password = formElement?.password.value;
-        this.logger.log('Вход'
-            + `\nлогин: ${this.state.login ? this.state.login : '<не задан>'}`
-            + `\nпароль: ${this.state.password ? this.state.password : '<не задан>'}`);
-        this.createFieldObjectFromFormSubmit(formElement, ['login', 'password']);
+    // login(event: SubmitEvent) {
+    //     event.preventDefault();
+    //     const formElement = event.target as HTMLFormElement;
+    //     this.state.login = formElement?.login.value;
+    //     this.state.password = formElement?.password.value;
+    //     this.logger.log('Вход'
+    //         + `\nлогин: ${this.state.login ? this.state.login : '<не задан>'}`
+    //         + `\nпароль: ${this.state.password ? this.state.password : '<не задан>'}`);
+    //     this.createFieldObjectFromFormSubmit(formElement, ['login', 'password']);
 
-        // API
-        loginController.login(new LoginRequest()
-            .setLogin(this.state.login)
-            .setPassword(this.state.password));
-        // API END
-    }
+    //     // API
+    //     loginController.login(new LoginRequest()
+    //         .setLogin(this.state.login)
+    //         .setPassword(this.state.password));
+    //     // API END
+    // }
 
-    signup(event: SubmitEvent) {
-        event.preventDefault();
-        const formElement = event.target as HTMLFormElement;
-        this.state.login = formElement?.login.value;
-        this.state.password = formElement?.password.value;
-        this.state.first_name = formElement?.first_name.value;
-        this.state.second_name = formElement?.second_name.value;
-        this.state.email = formElement?.email.value;
-        this.state.phone = formElement?.phone.value;
-        this.state.display_name = formElement?.first_name.value;
-        this.logger.log('Регистрация'
-            + `\nлогин: ${this.state.login ? this.state.login : '<не задан>'}`
-            + `\nпароль: ${this.state.password ? this.state.password : '<не задан>'}`
-            + `\nимя: ${this.state.first_name ? this.state.first_name : '<не задано>'}`
-            + `\nфамилия: ${this.state.second_name ? this.state.second_name : '<не задана>'}`
-            + `\nпочта: ${this.state.email ? this.state.email : '<не задана>'}`
-            + `\nтелефон: ${this.state.phone ? this.state.phone : '<не задан>'}`);
-        this.createFieldObjectFromFormSubmit(formElement, ['login', 'password', 'first_name', 'second_name', 'email', 'phone']);
+    // signup(event: SubmitEvent) {
+    //     event.preventDefault();
+    //     const formElement = event.target as HTMLFormElement;
+    //     this.state.login = formElement?.login.value;
+    //     this.state.password = formElement?.password.value;
+    //     this.state.first_name = formElement?.first_name.value;
+    //     this.state.second_name = formElement?.second_name.value;
+    //     this.state.email = formElement?.email.value;
+    //     this.state.phone = formElement?.phone.value;
+    //     this.state.display_name = formElement?.first_name.value;
+    //     this.logger.log('Регистрация'
+    //         + `\nлогин: ${this.state.login ? this.state.login : '<не задан>'}`
+    //         + `\nпароль: ${this.state.password ? this.state.password : '<не задан>'}`
+    //         + `\nимя: ${this.state.first_name ? this.state.first_name : '<не задано>'}`
+    //         + `\nфамилия: ${this.state.second_name ? this.state.second_name : '<не задана>'}`
+    //         + `\nпочта: ${this.state.email ? this.state.email : '<не задана>'}`
+    //         + `\nтелефон: ${this.state.phone ? this.state.phone : '<не задан>'}`);
+    //     this.createFieldObjectFromFormSubmit(formElement, ['login', 'password', 'first_name', 'second_name', 'email', 'phone']);
 
-        // API
-        signupController.signup(new SignupRequest()
-            .setFirstName(this.state.first_name)
-            .setSecondName(this.state.second_name)
-            .setLogin(this.state.login)
-            .setEmail(this.state.email)
-            .setPassword(this.state.password)
-            .setPhone(this.state.phone));
-        // API END
-    }
+    //     // API
+    //     signupController.signup(new SignupRequest()
+    //         .setFirstName(this.state.first_name)
+    //         .setSecondName(this.state.second_name)
+    //         .setLogin(this.state.login)
+    //         .setEmail(this.state.email)
+    //         .setPassword(this.state.password)
+    //         .setPhone(this.state.phone));
+    //     // API END
+    // }
 
     saveProfile(event: SubmitEvent) {
         event.preventDefault();

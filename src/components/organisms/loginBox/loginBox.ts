@@ -8,6 +8,8 @@ import template from './template';
 import InputBoxValidationMixin from '../../mixins/inputBoxValidationMixin';
 import { connect } from '../../../framework/store';
 import Indexed from '../../../types/indexed';
+import loginController from '../../../controllers/loginController';
+import { LoginRequest } from '../../../api/loginApi';
 
 class LoginBox extends Block {
     constructor(props: PropsRecord = {}) {
@@ -52,7 +54,12 @@ class LoginBox extends Block {
                     submit: (e: SubmitEvent) => {
                         e.preventDefault();
                         if (this.validate()) {
-                            (this._props.onSubmit as (event: SubmitEvent) => void)(e);
+                            const formElement = e.target as HTMLFormElement;
+                            const request = new LoginRequest()
+                                .setLogin(formElement?.login.value)
+                                .setPassword(formElement?.password.value);
+                            this.logger.log('Вход', request);
+                            loginController.login(request);
                         }
                     },
                 },

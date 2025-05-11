@@ -5,6 +5,7 @@ import EventBus from './eventBus';
 import set from '../utils/indexed/set';
 import { Level } from '../utils/logger';
 import Block, { PropsRecord } from './block';
+import isEqual from '../utils/indexed/isEqual';
 
 export enum StoreEvents {
     Updated = 'updated',
@@ -46,19 +47,24 @@ export function connect(Component: typeof Block, mapStateToProps: (state: Indexe
     return class extends Component {
         constructor(args: PropsRecord) {
             const store = new Store();
-            super({ ...args, ...mapStateToProps(store.getState()) });
+
+            // save current Store state
+            let state = mapStateToProps(store.getState());
+            super({ ...args, ...state });
 
             // sign up for updates
-            // this.logger.level = Level.debug;
-            // this.logger.log(`${Component.name}: connecting store update event`);
-            // this.logger.log(mapStateToProps(store.getState()));
-            // this.logger.log({ ...args, ...mapStateToProps(store.getState()) });
-            // this.logger.level = Level.info;
+            // console.log(`${Component.name}: connecting store update event`);
+            // console.log(mapStateToProps(store.getState()));
+            // console.log({ ...args, ...mapStateToProps(store.getState()) });
             store.on(StoreEvents.Updated, () => {
-                // this.logger.level = Level.debug;
-                // this.logger.log('Store updated - setting props', store.getState());
-                this.setProps({ ...mapStateToProps(store.getState()) });
-                // this.logger.level = Level.info;
+                // console.log('Store updated - setting props', store.getState());
+                // get new Store state, of different - update
+                const newState = mapStateToProps(store.getState());
+                // console.log(Component.name, state, newState);
+                if (!isEqual(state, newState)) {
+                    this.setProps({ ...newState });
+                    state = newState;
+                }
             });
         }
     };
