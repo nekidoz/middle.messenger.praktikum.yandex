@@ -1,5 +1,6 @@
 /* eslint max-classes-per-file: 0 */
 
+import { RejectResponse } from '../framework/httpTransport';
 import Logger, { Level } from '../utils/logger';
 import BaseApi, { BaseApiRequest, BaseApiResponse } from './baseApi';
 
@@ -33,41 +34,15 @@ export default class LogoutApi extends BaseApi {
 
     public request(credentials: LogoutRequest): Promise<LogoutResponse> {
         return new Promise((resolve, reject) => {
-            const result = new LogoutResponse().setSuccess(false); // prepare for worse
-            this.logger.log('LogoutApi.request()', credentials, JSON.stringify(credentials));
-            this.httpApi.post('/logout', { data: JSON.stringify(credentials) })
-                .then((response: XMLHttpRequest) => {
+            this.logger.log('LogoutApi.request()', credentials);
+            this.httpApi.post('/logout', { data: credentials })
+                .then(() => {
                     this.logger.log('Logout promise resolved');
-                    let responseStr: string;
-                    switch (response.status) {
-                        case 200:
-                            result.setSuccess(true);
-                            responseStr = 'Logged out OK';
-                            break;
-                        case 401:
-                            responseStr = 'Unauthorized';
-                            break;
-                        case 500:
-                            responseStr = 'Unexpected error';
-                            break;
-                        default:
-                            responseStr = 'Undefined response code';
-                            break;
-                    }
-                    this.logger.log(`${responseStr} (${response.status}): ${response.response}.`, response);
-                    if (response.status === 200) {
-                        resolve(result);
-                    } else {
-                        const { reason } = JSON.parse(response.response);
-                        reject(result.setReason(reason));
-                    }
+                    resolve(new LogoutResponse().setSuccess(true));
                 })
-                .catch((reply: XMLHttpRequest) => {
-                    this.logger.log(`Error logging out (${reply.status}): ${reply.response}.`, reply);
-                    reject(result.setReason('Exception logging out'));
-                })
-                .finally(() => {
-                    reject(result.setReason('Unknown (finally)'));
+                .catch((response: RejectResponse) => {
+                    this.logger.log(`Error logging out (${response.status}): ${response.reason}.`);
+                    reject(new LogoutResponse().setSuccess(false).setReason(response.reason));
                 });
         });
     }

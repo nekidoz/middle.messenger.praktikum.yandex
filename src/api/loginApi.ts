@@ -1,5 +1,6 @@
 /* eslint max-classes-per-file: 0 */
 
+import { RejectResponse } from '../framework/httpTransport';
 import Logger, { Level } from '../utils/logger';
 import BaseApi, { BaseApiRequest, BaseApiResponse } from './baseApi';
 
@@ -45,44 +46,15 @@ export default class LoginApi extends BaseApi {
 
     public request(credentials: LoginRequest): Promise<LoginResponse> {
         return new Promise((resolve, reject) => {
-            const result = new LoginResponse().setSuccess(false); // prepare for worse
-            this.logger.log('LoginApi.request()', credentials, JSON.stringify(credentials));
-            this.httpApi.post('/signin', { data: JSON.stringify(credentials) })
-                .then((response: XMLHttpRequest) => {
+            this.logger.log('LoginApi.request()', credentials);
+            this.httpApi.post('/signin', { data: credentials })
+                .then(() => {
                     this.logger.log('Login promise resolved');
-                    let responseStr: string;
-                    switch (response.status) {
-                        case 200:
-                            result.setSuccess(true);
-                            responseStr = 'Logged in OK';
-                            break;
-                        case 400:
-                            responseStr = 'Bad request';
-                            break;
-                        case 401:
-                            responseStr = 'Unauthorized';
-                            break;
-                        case 500:
-                            responseStr = 'Unexpected error';
-                            break;
-                        default:
-                            responseStr = 'Undefined response code';
-                            break;
-                    }
-                    this.logger.log(`${responseStr} (${response.status}): ${response.response}.`, response);
-                    if (response.status === 200) {
-                        resolve(result);
-                    } else {
-                        const { reason } = JSON.parse(response.response);
-                        reject(result.setReason(reason));
-                    }
+                    resolve(new LoginResponse().setSuccess(true));
                 })
-                .catch((reply: XMLHttpRequest) => {
-                    this.logger.log(`Error logging in (${reply.status}): ${reply.response}.`, reply);
-                    reject(result.setReason('Exception logging in'));
-                })
-                .finally(() => {
-                    reject(result.setReason('Unknown (finally)'));
+                .catch((response: RejectResponse) => {
+                    this.logger.log(`Error logging in (${response.status}): ${response.reason}.`);
+                    reject(new LoginResponse().setSuccess(false).setReason(response.reason));
                 });
         });
     }

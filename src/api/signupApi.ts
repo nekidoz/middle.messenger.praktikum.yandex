@@ -1,5 +1,7 @@
 /* eslint max-classes-per-file: 0 */
 
+import { RejectResponse } from '../framework/httpTransport';
+import Indexed from '../types/indexed';
 import Logger, { Level } from '../utils/logger';
 import BaseApi, { BaseApiRequest, BaseApiResponse } from './baseApi';
 
@@ -88,48 +90,15 @@ export default class SignupApi extends BaseApi {
 
     public request(credentials: SignupRequest): Promise<SignupResponse> {
         return new Promise((resolve, reject) => {
-            const result = new SignupResponse().setSuccess(false) as SignupResponse; // prepare for worse
-            this.logger.log('SignupApi.request()', credentials, JSON.stringify(credentials));
-            this.httpApi.post('/signup', { data: JSON.stringify(credentials) })
-                .then((response: XMLHttpRequest) => {
+            this.logger.log('SignupApi.request()', credentials);
+            this.httpApi.post('/signup', { data: credentials })
+                .then((response: Indexed) => {
                     this.logger.log('Signup promise resolved');
-                    let responseStr: string;
-                    switch (response.status) {
-                        case 200:
-                            // eslint-disable-next-line no-case-declarations
-                            const { id } = JSON.parse(response.response);
-                            result
-                                .setSuccess(true)
-                                .setId(id);
-                            responseStr = `Signed up OK with id ${id}`;
-                            break;
-                        case 400:
-                            responseStr = 'Bad request';
-                            break;
-                        case 401:
-                            responseStr = 'Unauthorized';
-                            break;
-                        case 500:
-                            responseStr = 'Unexpected error';
-                            break;
-                        default:
-                            responseStr = 'Undefined response code';
-                            break;
-                    }
-                    this.logger.log(`${responseStr} (${response.status}): ${response.response}.`, response);
-                    if (response.status === 200) {
-                        resolve(result);
-                    } else {
-                        const { reason } = JSON.parse(response.response);
-                        reject(result.setReason(reason));
-                    }
+                    resolve((new SignupResponse().setSuccess(true) as SignupResponse).setId(response.id as string));
                 })
-                .catch((reply: XMLHttpRequest) => {
-                    this.logger.log(`Error signing up (${reply.status}): ${reply.response}.`, reply);
-                    reject(result.setReason('Exception signing up'));
-                })
-                .finally(() => {
-                    reject(result.setReason('Unknown (finally)'));
+                .catch((response: RejectResponse) => {
+                    this.logger.log(`Error signing up (${response.status}): ${response.reason}.`);
+                    reject(new SignupResponse().setSuccess(false).setReason(response.reason));
                 });
         });
     }
