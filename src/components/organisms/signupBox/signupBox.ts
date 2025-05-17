@@ -8,8 +8,8 @@ import template from './template';
 import InputBoxValidationMixin from '../../mixins/inputBoxValidationMixin';
 import { connect } from '../../../framework/store';
 import Indexed from '../../../types/indexed';
-import signupController from '../../../controllers/signupController';
-import { SignupRequest } from '../../../api/signupApi';
+import profileController from '../../../controllers/profileController';
+import { ProfileRequest } from '../../../api/profileApi';
 
 class SignupBox extends Block {
     private email;
@@ -109,7 +109,7 @@ class SignupBox extends Block {
                         e.preventDefault();
                         if (this.validate(['password', 'repeat_password'], 'Пароли не совпадают')) {
                             const formElement = e.target as HTMLFormElement;
-                            const request = new SignupRequest()
+                            const request = new ProfileRequest()
                                 .setFirstName(formElement?.first_name.value)
                                 .setSecondName(formElement?.second_name.value)
                                 .setLogin(formElement?.login.value)
@@ -117,7 +117,7 @@ class SignupBox extends Block {
                                 .setPassword(formElement?.password.value)
                                 .setPhone(formElement?.phone.value);
                             this.logger.log('Регистрация', request);
-                            signupController.signup(request);
+                            profileController.create(request);
                         }
                     },
                 },

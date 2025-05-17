@@ -15,8 +15,8 @@ class LogoutController {
         this.store = new Store();
     }
 
-    public logout(credentials: LogoutRequest) {
-        this.logoutApi.request(credentials)
+    public logout() {
+        this.logoutApi.request(new LogoutRequest())
             .then(() => {
                 this.store.set('user', undefined);
                 this.router.go('/');

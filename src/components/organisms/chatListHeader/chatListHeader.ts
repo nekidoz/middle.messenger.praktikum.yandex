@@ -3,6 +3,7 @@ import Button from '../../atoms/button';
 import Input from '../../atoms/input';
 import Spacer from '../../atoms/spacer';
 import template from './template';
+import profileController from '../../../controllers/profileController';
 
 export default class ChatListHeader extends Block {
     constructor(props: PropsRecord = {}) {
@@ -13,7 +14,7 @@ export default class ChatListHeader extends Block {
                 class: 'navigation-button',
                 text: 'Профиль >',
                 events: {
-                    click: props.edit_profile,
+                    click: () => profileController.edit(),
                 },
             }),
             chatSearchInput: new Input({

@@ -140,7 +140,7 @@ export default class App {
                     active_chat: this.state.active_chat,
                     // chat list header listeners
                     activate_chat: ((chat: Chat) => this.activateChat(chat)),
-                    edit_profile: (() => this.changePage('/settings')),
+                    // edit_profile: (() => this.changePage('/settings')),
                     search_chats: ((value: string) => this.chatSearch(value)),
                     // chat body listeners
                     do_chat_action: (() => this.chatAction()),
@@ -191,15 +191,15 @@ export default class App {
                 // onSubmit: ((e: SubmitEvent) => this.signup(e)),
             })
             .use('/settings', ProfilePage, {
-                profile_avatar: '/avatar.png',
-                login: this.state.login,
-                first_name: this.state.first_name,
-                second_name: this.state.second_name,
-                email: this.state.email,
-                phone: this.state.phone,
-                display_name: this.state.display_name,
-                avatar: this.state.avatar,
-                onSubmit: ((e: SubmitEvent) => this.saveProfile(e)),
+                // profile_avatar: '/avatar.png',
+                // login: this.state.login,
+                // first_name: this.state.first_name,
+                // second_name: this.state.second_name,
+                // email: this.state.email,
+                // phone: this.state.phone,
+                // display_name: this.state.display_name,
+                // avatar: this.state.avatar,
+                // onSubmit: ((e: SubmitEvent) => this.saveProfile(e)),
             })
             .use('/messenger', ChatsPage, {
                 chats: this.state.chat_selection,
@@ -207,7 +207,7 @@ export default class App {
                 active_chat: this.state.active_chat,
                 // chat list header listeners
                 activate_chat: ((chat: Chat) => this.activateChat(chat)),
-                edit_profile: (() => this.changePage('/settings')),
+                // edit_profile: (() => this.changePage('/settings')),
                 search_chats: ((value: string) => this.chatSearch(value)),
                 // chat body listeners
                 do_chat_action: (() => this.chatAction()),
@@ -219,11 +219,11 @@ export default class App {
             .start();
     }
 
-    changePage(page: string) {
-        this.state.currentPage = page;
-        this.router.go(page);
-        // this.render();
-    }
+    // changePage(page: string) {
+    //     this.state.currentPage = page;
+    //     this.router.go(page);
+    //     // this.render();
+    // }
 
     // changePageByLink(e: Event) {
     //     e.preventDefault();
@@ -289,29 +289,29 @@ export default class App {
     //     // API END
     // }
 
-    saveProfile(event: SubmitEvent) {
-        event.preventDefault();
-        const formElement = event.target as HTMLFormElement;
-        this.state.login = formElement?.login.value;
-        this.state.password = formElement?.newPassword.value;
-        this.state.first_name = formElement?.first_name.value;
-        this.state.second_name = formElement?.second_name.value;
-        this.state.email = formElement?.email.value;
-        this.state.phone = formElement?.phone.value;
-        this.state.display_name = formElement?.display_name.value;
-        this.state.avatar = formElement?.avatar.value;
-        this.logger.log('Редактирование профиля'
-            + `\nлогин: ${this.state.login ? this.state.login : '<не задан>'}`
-            + `\nновый пароль: ${this.state.password ? this.state.password : '<не задан>'}`
-            + `\nимя: ${this.state.first_name ? this.state.first_name : '<не задано>'}`
-            + `\nфамилия: ${this.state.second_name ? this.state.second_name : '<не задана>'}`
-            + `\nпочта: ${this.state.email ? this.state.email : '<не задана>'}`
-            + `\nтелефон: ${this.state.phone ? this.state.phone : '<не задан>'}`
-            + `\nимя в чате: ${this.state.display_name ? this.state.display_name : '<не задано>'}`
-            + `\nаватар: ${this.state.avatar ? this.state.avatar : '<не задан>'}`);
-        this.createFieldObjectFromFormSubmit(formElement, ['login', 'oldPassword', 'newPassword', 'first_name', 'second_name', 'email', 'phone', 'display_name', 'avatar']);
-        this.changePage('/messenger');
-    }
+    // saveProfile(event: SubmitEvent) {
+    //     event.preventDefault();
+    //     const formElement = event.target as HTMLFormElement;
+    //     this.state.login = formElement?.login.value;
+    //     this.state.password = formElement?.newPassword.value;
+    //     this.state.first_name = formElement?.first_name.value;
+    //     this.state.second_name = formElement?.second_name.value;
+    //     this.state.email = formElement?.email.value;
+    //     this.state.phone = formElement?.phone.value;
+    //     this.state.display_name = formElement?.display_name.value;
+    //     this.state.avatar = formElement?.avatar.value;
+    //     this.logger.log('Редактирование профиля'
+    //         + `\nлогин: ${this.state.login ? this.state.login : '<не задан>'}`
+    //         + `\nновый пароль: ${this.state.password ? this.state.password : '<не задан>'}`
+    //         + `\nимя: ${this.state.first_name ? this.state.first_name : '<не задано>'}`
+    //         + `\nфамилия: ${this.state.second_name ? this.state.second_name : '<не задана>'}`
+    //         + `\nпочта: ${this.state.email ? this.state.email : '<не задана>'}`
+    //         + `\nтелефон: ${this.state.phone ? this.state.phone : '<не задан>'}`
+    //         + `\nимя в чате: ${this.state.display_name ? this.state.display_name : '<не задано>'}`
+    //         + `\nаватар: ${this.state.avatar ? this.state.avatar : '<не задан>'}`);
+    //     this.createFieldObjectFromFormSubmit(formElement, ['login', 'oldPassword', 'newPassword', 'first_name', 'second_name', 'email', 'phone', 'display_name', 'avatar']);
+    //     this.changePage('/messenger');
+    // }
 
     chatSearch(searchValue: string) {
         if (searchValue !== this.state.chat_search_value) {
