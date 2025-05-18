@@ -8,8 +8,8 @@ import template from './template';
 import InputBoxValidationMixin from '../../mixins/inputBoxValidationMixin';
 import { connect } from '../../../framework/store';
 import Indexed from '../../../types/indexed';
-import loginController from '../../../controllers/loginController';
-import { LoginRequest } from '../../../api/loginApi';
+import sessionController from '../../../controllers/sessionController';
+import { SessionRequest } from '../../../api/sessionApi';
 
 class LoginBox extends Block {
     private login;
@@ -60,11 +60,11 @@ class LoginBox extends Block {
                         e.preventDefault();
                         if (this.validate()) {
                             const formElement = e.target as HTMLFormElement;
-                            const request = new LoginRequest()
+                            const request = new SessionRequest()
                                 .setLogin(formElement?.login.value)
                                 .setPassword(formElement?.password.value);
                             this.logger.log('Вход', request);
-                            loginController.login(request);
+                            sessionController.login(request);
                         }
                     },
                 },

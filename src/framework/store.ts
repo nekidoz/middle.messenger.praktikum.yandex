@@ -36,6 +36,7 @@ class Store extends EventBus {
     }
 
     public set(path: string, value: unknown) {
+        this.logger.log('Store set request:', this.state, path, value);
         set(this.state, path, value);
         this.logger.log('Store state:', this.state);
 

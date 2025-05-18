@@ -10,7 +10,7 @@ import template from './template';
 import InputBoxValidationMixin from '../../mixins/inputBoxValidationMixin';
 import Indexed from '../../../types/indexed';
 import { connect } from '../../../framework/store';
-import logoutController from '../../../controllers/logoutController';
+import sessionController from '../../../controllers/sessionController';
 import { ProfileRequest } from '../../../api/profileApi';
 import profileController from '../../../controllers/profileController';
 
@@ -61,7 +61,7 @@ class ProfileBox extends Block {
             id: 'second_name',
             type: 'text',
             value: props.second_name,
-            caption: 'Фамилия',
+            caption: '* Фамилия',
             placeholder: 'Фамилия',
         });
         const displayName = new ProfileInputBlock({
@@ -75,7 +75,7 @@ class ProfileBox extends Block {
             id: 'phone',
             type: 'tel',
             value: props.phone,
-            caption: 'Телефон',
+            caption: '* Телефон',
             placeholder: 'Телефон',
         });
         const avatar = new ProfileInputBlock({
@@ -148,7 +148,7 @@ class ProfileBox extends Block {
                                     click: (e: Event) => {
                                         e.preventDefault();
                                         this.logger.log('Выход');
-                                        logoutController.logout();
+                                        sessionController.logout();
                                     },
                                 },
                             }),

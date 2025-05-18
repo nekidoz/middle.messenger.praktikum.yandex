@@ -36,7 +36,7 @@ class ProfileController {
 
     public get() {
         return new Promise<ProfileResponse>((resolve, reject) => {
-            this.profileApi.request(new ProfileRequest())
+            this.profileApi.request()
                 .then((response: ProfileResponse) => {
                     this.store.set('user', {
                         id: response.id,

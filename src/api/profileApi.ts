@@ -170,10 +170,10 @@ export default class ProfileApi extends BaseApi {
      * @param credentials no parameters requires
      * @returns profile info
      */
-    public request(credentials: ProfileRequest): Promise<ProfileResponse> {
+    public request(): Promise<ProfileResponse> {
         return new Promise((resolve, reject) => {
-            this.logger.log('ProfileApi.request()', credentials);
-            this.httpApi.get('/auth/user', { data: credentials })
+            this.logger.log('ProfileApi.request()');
+            this.httpApi.get('/auth/user')
                 .then((response: Indexed) => {
                     this.logger.log('Request profile promise resolved');
                     resolve(new ProfileResponse()
