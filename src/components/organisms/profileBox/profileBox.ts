@@ -11,8 +11,7 @@ import InputBoxValidationMixin from '../../mixins/inputBoxValidationMixin';
 import Indexed from '../../../types/indexed';
 import { connect } from '../../../framework/store';
 import sessionController from '../../../controllers/sessionController';
-import { ProfileRequest } from '../../../api/profileApi';
-import profileController from '../../../controllers/profileController';
+import profileController, { ProfileUpdateRequest } from '../../../controllers/profileController';
 
 class ProfileBox extends Block {
     private email;
@@ -82,7 +81,7 @@ class ProfileBox extends Block {
             id: 'avatar',
             type: 'file',
             value: props.avatar,
-            accept: 'image/png, image/jpeg',
+            accept: 'image/png, image/jpeg, image/gif, image/webp',
             caption: 'Аватар',
             placeholder: 'Аватар',
         });
@@ -124,6 +123,9 @@ class ProfileBox extends Block {
                     secondName,
                     displayName,
                     phone,
+                    new Spacer({
+                        class: 'profile-spacer',
+                    }),
                     avatar,
                     new Spacer({
                         class: 'profile-spacer',
@@ -160,19 +162,16 @@ class ProfileBox extends Block {
                         e.preventDefault();
                         if (this.validate(['newPassword', 'repeatNewPassword'], 'Пароли не совпадают')) {
                             const formElement = e.target as HTMLFormElement;
-                            const request = new ProfileRequest()
+                            const request = (new ProfileUpdateRequest()
                                 .setFirstName(formElement?.first_name.value)
                                 .setSecondName(formElement?.second_name.value)
                                 .setDisplayName(formElement?.display_name.value)
                                 .setLogin(formElement?.login.value)
                                 .setEmail(formElement?.email.value)
-                                .setPhone(formElement?.phone.value);
-                            if (formElement?.newPassword.value) {
-                                alert('Need to set new password');
-                            }
-                            if (formElement?.avatar.value) {
-                                alert('Need to set avatar');
-                            }
+                                .setPhone(formElement?.phone.value) as ProfileUpdateRequest)
+                                .setOldPassword(formElement?.oldPassword.value)
+                                .setNewPassword(formElement?.newPassword.value)
+                                .setAvatar(formElement?.avatar.value);
                             this.logger.log('Обновление профиля', request);
                             profileController.update(request);
                         }

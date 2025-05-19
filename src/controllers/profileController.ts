@@ -1,9 +1,37 @@
+/* eslint max-classes-per-file: 0 */
+
 import ProfileApi, { ProfileRequest, ProfileResponse } from '../api/profileApi';
+import ProfilePasswordApi, { ProfilePasswordRequest } from '../api/profilePasswordApi';
 import Router from '../framework/router/router';
 import Store from '../framework/store';
 
+export class ProfileUpdateRequest extends ProfileRequest {
+    oldPassword: string;
+
+    newPassword: string;
+
+    avatar: string;
+
+    public setOldPassword(password: string): ProfileUpdateRequest {
+        this.oldPassword = password;
+        return this;
+    }
+
+    public setNewPassword(password: string): ProfileUpdateRequest {
+        this.newPassword = password;
+        return this;
+    }
+
+    public setAvatar(avatar: string): ProfileUpdateRequest {
+        this.avatar = avatar;
+        return this;
+    }
+}
+
 class ProfileController {
     private profileApi;
+
+    private profilePasswordApi;
 
     private router;
 
@@ -11,6 +39,7 @@ class ProfileController {
 
     constructor() {
         this.profileApi = new ProfileApi();
+        this.profilePasswordApi = new ProfilePasswordApi();
         this.router = new Router();
         this.store = new Store();
     }
@@ -66,7 +95,8 @@ class ProfileController {
             });
     }
 
-    public update(credentials: ProfileRequest) {
+    public update(credentials: ProfileUpdateRequest) {
+        // console.log('Profile update request received', credentials);
         this.profileApi.update(credentials)
             .then((response: ProfileResponse) => {
                 this.store.set('user', {
@@ -79,6 +109,25 @@ class ProfileController {
                     avatar: response.avatar,
                     email: response.email,
                 });
+                if (credentials.newPassword) {
+                    // console.log('Password update requested');
+                    this.profilePasswordApi.update(
+                        new ProfilePasswordRequest()
+                            .setOldPassword(credentials.oldPassword)
+                            .setNewPassword(credentials.newPassword),
+                    )
+                        .then(() => {
+                            // console.log('Password updated successfully');
+                        })
+                        .catch((pResponse: ProfileResponse) => {
+                            alert(`Ошибка изменения пароля: ${pResponse.reason}`);
+                            this.router.go('/settings');
+                        });
+                }
+                if (credentials.avatar) {
+                    // console.log('Avatar update requested');
+                    alert('Need to set avatar');
+                }
                 this.router.go('/messenger');
             })
             .catch((response: ProfileResponse) => {
