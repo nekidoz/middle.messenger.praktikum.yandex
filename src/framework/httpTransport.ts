@@ -1,4 +1,4 @@
-import Logger, { Level } from '../utils/logger';
+import Logger, { Level } from './logger';
 
 const enum METHODS {
     GET = 'GET',

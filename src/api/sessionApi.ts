@@ -1,7 +1,7 @@
 /* eslint max-classes-per-file: 0 */
 
 import { RejectResponse } from '../framework/httpTransport';
-import Logger, { Level } from '../utils/logger';
+import Logger, { Level } from '../framework/logger';
 import BaseApi, { BaseApiRequest, BaseApiResponse } from './baseApi';
 
 export class SessionRequest extends BaseApiRequest {

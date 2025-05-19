@@ -2,7 +2,7 @@
 
 import { RejectResponse } from '../framework/httpTransport';
 import Indexed from '../types/indexed';
-import Logger, { Level } from '../utils/logger';
+import Logger, { Level } from '../framework/logger';
 import BaseApi, { BaseApiRequest, BaseApiResponse } from './baseApi';
 
 export class ProfileRequest extends BaseApiRequest {

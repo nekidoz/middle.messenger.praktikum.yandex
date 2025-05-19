@@ -1,6 +1,6 @@
 import Route from './route';
 import Block, { PropsRecord } from '../block';
-import Logger, { Level } from '../../utils/logger';
+import Logger, { Level } from '../logger';
 
 export const PATHNAME_ROUTE_404 = '/notfound';
 

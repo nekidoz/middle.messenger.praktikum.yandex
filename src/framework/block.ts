@@ -1,7 +1,7 @@
 import { v4 as makeUUID } from 'uuid';
 import Handlebars from 'handlebars';
 import EventBus from './eventBus';
-import Logger, { Level } from '../utils/logger';
+import Logger, { Level } from './logger';
 
 const enum EVENTS {
     INIT = 'init',

@@ -3,7 +3,7 @@
 import Indexed from '../types/indexed';
 import EventBus from './eventBus';
 import set from '../utils/indexed/set';
-import { Level } from '../utils/logger';
+import { Level } from './logger';
 import Block, { PropsRecord } from './block';
 import isEqual from '../utils/indexed/isEqual';
 

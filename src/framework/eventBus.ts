@@ -1,4 +1,4 @@
-import Logger, { Level } from '../utils/logger';
+import Logger, { Level } from './logger';
 
 class EventBus {
     listeners: Record<string, Function[]>;

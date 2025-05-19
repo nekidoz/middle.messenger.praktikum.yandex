@@ -1,5 +1,5 @@
 import Block, { PropsRecord } from '../block';
-import Logger, { Level } from '../../utils/logger';
+import Logger, { Level } from '../logger';
 
 export default class Route<T extends Block> {
     protected _pathname: string;

@@ -1,4 +1,4 @@
-import Logger, { Level } from './utils/logger';
+import Logger, { Level } from './framework/logger';
 import Chat from './types/Chat';
 import LoginPage from './components/pages/loginPage';
 import SignupPage from './components/pages/signupPage';
