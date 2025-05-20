@@ -1,28 +1,8 @@
-/* eslint max-classes-per-file: 0 */
-
 import HTTPTransport from '../framework/httpTransport';
+import BaseApiRequest from './payload/baseApiRequest';
+import BaseApiResponse from './payload/baseApiResponse';
 
-export class BaseApiRequest {
-
-}
-
-export class BaseApiResponse {
-    success: boolean;
-
-    reason: string;
-
-    public setSuccess(success: boolean): BaseApiResponse {
-        this.success = success;
-        return this;
-    }
-
-    public setReason(reason: string): BaseApiResponse {
-        this.reason = reason;
-        return this;
-    }
-}
-
-export default class BaseAPI {
+export default class BaseApi {
     protected httpApi: HTTPTransport;
 
     constructor(baseUrl: string) {

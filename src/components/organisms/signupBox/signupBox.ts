@@ -9,7 +9,7 @@ import InputBoxValidationMixin from '../../mixins/inputBoxValidationMixin';
 import { connect } from '../../../framework/store';
 import Indexed from '../../../types/indexed';
 import profileController from '../../../controllers/profileController';
-import { ProfileRequest } from '../../../api/profileApi';
+import ProfileRequest from '../../../api/payload/profileRequest';
 
 class SignupBox extends Block {
     private email;

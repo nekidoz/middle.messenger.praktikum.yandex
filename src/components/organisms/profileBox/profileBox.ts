@@ -34,6 +34,12 @@ class ProfileBox extends Block {
 
     // private repeatNewPassword;
 
+    static generateAvatarSource(props: Indexed): string {
+        return props.avatar_blob
+            ? URL.createObjectURL(props.avatar_blob as Blob)
+            : './avatar.png';
+    }
+
     constructor(props: PropsRecord = {}) {
         const email = new ProfileInputBlock({
             id: 'email',
@@ -106,7 +112,7 @@ class ProfileBox extends Block {
         super({
             ...props,
             avatar: new Image({
-                source: props.profile_avatar,
+                source: ProfileBox.generateAvatarSource(props),
                 class: 'profile-avatar',
                 caption: 'Аватар',
             }),
@@ -171,7 +177,8 @@ class ProfileBox extends Block {
                                 .setPhone(formElement?.phone.value) as ProfileUpdateRequest)
                                 .setOldPassword(formElement?.oldPassword.value)
                                 .setNewPassword(formElement?.newPassword.value)
-                                .setAvatar(formElement?.avatar.value);
+                                .setAvatar(formElement?.avatar.value)
+                                .setAvatarFile(formElement?.avatar.files[0]);
                             this.logger.log('Обновление профиля', request);
                             profileController.update(request);
                         }
@@ -193,13 +200,19 @@ class ProfileBox extends Block {
     }
 
     componentDidUpdate(_oldProps: PropsRecord, _newProps: PropsRecord): boolean {
-        return Block.updateChildProps(_oldProps, _newProps, this.email, 'value', 'email')
-            || Block.updateChildProps(_oldProps, _newProps, this.login, 'value', 'login')
-            || Block.updateChildProps(_oldProps, _newProps, this.firstName, 'value', 'first_name')
-            || Block.updateChildProps(_oldProps, _newProps, this.secondName, 'value', 'second_name')
-            || Block.updateChildProps(_oldProps, _newProps, this.displayName, 'value', 'display_name')
-            || Block.updateChildProps(_oldProps, _newProps, this.phone, 'value', 'phone')
-            || Block.updateChildProps(_oldProps, _newProps, this.avatar, 'value', 'avatar');
+        let didUpdate = false;
+        if (_oldProps.avatar_blob !== _newProps.avatar_blob) {
+            didUpdate = true;
+            this._children.avatar.setProps({ source: ProfileBox.generateAvatarSource(_newProps) });
+        }
+        didUpdate ||= Block.updateChildProps(_oldProps, _newProps, this.email, 'value', 'email');
+        didUpdate ||= Block.updateChildProps(_oldProps, _newProps, this.login, 'value', 'login');
+        didUpdate ||= Block.updateChildProps(_oldProps, _newProps, this.firstName, 'value', 'first_name');
+        didUpdate ||= Block.updateChildProps(_oldProps, _newProps, this.secondName, 'value', 'second_name');
+        didUpdate ||= Block.updateChildProps(_oldProps, _newProps, this.displayName, 'value', 'display_name');
+        didUpdate ||= Block.updateChildProps(_oldProps, _newProps, this.phone, 'value', 'phone');
+        didUpdate ||= Block.updateChildProps(_oldProps, _newProps, this.avatar, 'value', 'avatar');
+        return didUpdate;
     }
 
     // The following is replaced with implementation from InputBoxValidationMixin
@@ -221,6 +234,7 @@ function mapStateToProps(state: Indexed) {
             display_name: userSection.display_name,
             phone: userSection.phone,
             avatar: userSection.avatar,
+            avatar_blob: userSection.avatar_blob,
         }
         : {};
 }

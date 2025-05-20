@@ -1,28 +1,8 @@
-/* eslint max-classes-per-file: 0 */
-
 import { RejectResponse } from '../framework/httpTransport';
 import Logger, { Level } from '../framework/logger';
-import BaseApi, { BaseApiRequest, BaseApiResponse } from './baseApi';
-
-export class SessionRequest extends BaseApiRequest {
-    login: string;
-
-    password: string;
-
-    public setLogin(login: string): SessionRequest {
-        this.login = login;
-        return this;
-    }
-
-    public setPassword(password: string): SessionRequest {
-        this.password = password;
-        return this;
-    }
-}
-
-export class SessionResponse extends BaseApiResponse {
-
-}
+import BaseApi from './baseApi';
+import SessionRequest from './payload/sessionRequest';
+import SessionResponse from './payload/sessionResponse';
 
 export default class SessionApi extends BaseApi {
     // eslint-disable-next-line no-use-before-define

@@ -1,4 +1,6 @@
-import SessionApi, { SessionRequest, SessionResponse } from '../api/sessionApi';
+import SessionRequest from '../api/payload/sessionRequest';
+import SessionResponse from '../api/payload/sessionResponse';
+import SessionApi from '../api/sessionApi';
 import Router from '../framework/router/router';
 import Store from '../framework/store';
 

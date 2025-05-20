@@ -1,28 +1,8 @@
-/* eslint max-classes-per-file: 0 */
-
 import { RejectResponse } from '../framework/httpTransport';
 import Logger, { Level } from '../framework/logger';
-import BaseApi, { BaseApiRequest, BaseApiResponse } from './baseApi';
-
-export class ProfilePasswordRequest extends BaseApiRequest {
-    oldPassword: string;
-
-    newPassword: string;
-
-    public setOldPassword(password: string): ProfilePasswordRequest {
-        this.oldPassword = password;
-        return this;
-    }
-
-    public setNewPassword(password: string): ProfilePasswordRequest {
-        this.newPassword = password;
-        return this;
-    }
-}
-
-export class ProfilePasswordResponse extends BaseApiResponse {
-
-}
+import BaseApi from './baseApi';
+import ProfilePasswordRequest from './payload/profilePasswordRequest';
+import ProfilePasswordResponse from './payload/profilePasswordResponse';
 
 export default class ProfilePasswordApi extends BaseApi {
     // eslint-disable-next-line no-use-before-define

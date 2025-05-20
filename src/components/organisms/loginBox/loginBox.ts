@@ -9,7 +9,7 @@ import InputBoxValidationMixin from '../../mixins/inputBoxValidationMixin';
 import { connect } from '../../../framework/store';
 import Indexed from '../../../types/indexed';
 import sessionController from '../../../controllers/sessionController';
-import { SessionRequest } from '../../../api/sessionApi';
+import SessionRequest from '../../../api/payload/sessionRequest';
 
 class LoginBox extends Block {
     private login;

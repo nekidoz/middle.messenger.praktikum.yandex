@@ -1,7 +1,13 @@
 /* eslint max-classes-per-file: 0 */
 
-import ProfileApi, { ProfileRequest, ProfileResponse } from '../api/profileApi';
-import ProfilePasswordApi, { ProfilePasswordRequest } from '../api/profilePasswordApi';
+import ProfileAvatarRequest from '../api/payload/profileAvatarRequest';
+import ProfileAvatarResponse from '../api/payload/profileAvatarResponse';
+import ProfilePasswordRequest from '../api/payload/profilePasswordRequest';
+import ProfileRequest from '../api/payload/profileRequest';
+import ProfileResponse from '../api/payload/profileResponse';
+import ProfileApi from '../api/profileApi';
+import ProfileAvatarApi from '../api/profileAvatarApi';
+import ProfilePasswordApi from '../api/profilePasswordApi';
 import Router from '../framework/router/router';
 import Store from '../framework/store';
 
@@ -11,6 +17,8 @@ export class ProfileUpdateRequest extends ProfileRequest {
     newPassword: string;
 
     avatar: string;
+
+    avatarFile: File;
 
     public setOldPassword(password: string): ProfileUpdateRequest {
         this.oldPassword = password;
@@ -26,12 +34,19 @@ export class ProfileUpdateRequest extends ProfileRequest {
         this.avatar = avatar;
         return this;
     }
+
+    public setAvatarFile(file: File): ProfileUpdateRequest {
+        this.avatarFile = file;
+        return this;
+    }
 }
 
 class ProfileController {
     private profileApi;
 
     private profilePasswordApi;
+
+    private profileAvatarApi;
 
     private router;
 
@@ -40,6 +55,7 @@ class ProfileController {
     constructor() {
         this.profileApi = new ProfileApi();
         this.profilePasswordApi = new ProfilePasswordApi();
+        this.profileAvatarApi = new ProfileAvatarApi();
         this.router = new Router();
         this.store = new Store();
     }
@@ -63,6 +79,16 @@ class ProfileController {
             });
     }
 
+    private loadAvatar(avatar: string) {
+        this.profileAvatarApi.request(new ProfileAvatarRequest().setAvatar(avatar))
+            .then((response: ProfileAvatarResponse) => {
+                this.store.set('user.avatar_blob', response.avatarBlob);
+            })
+            .catch((response: ProfileAvatarResponse) => {
+                alert(`Ошибка загрузки аватара: ${response.reason}`);
+            });
+    }
+
     public get() {
         return new Promise<ProfileResponse>((resolve, reject) => {
             this.profileApi.request()
@@ -77,6 +103,9 @@ class ProfileController {
                         avatar: response.avatar,
                         email: response.email,
                     });
+                    if (response.avatar) {
+                        this.loadAvatar(response.avatar);
+                    }
                     resolve(response);
                 })
                 .catch((response: ProfileResponse) => {
@@ -95,6 +124,34 @@ class ProfileController {
             });
     }
 
+    private updatePassword(oldPassword: string, newPassword: string) {
+        // console.log('Password update requested');
+        this.profilePasswordApi.update(
+            new ProfilePasswordRequest()
+                .setOldPassword(oldPassword)
+                .setNewPassword(newPassword),
+        )
+            .then(() => {
+                // console.log('Password updated successfully');
+            })
+            .catch((pResponse: ProfileResponse) => {
+                alert(`Ошибка изменения пароля: ${pResponse.reason}`);
+                this.router.go('/settings');
+            });
+    }
+
+    private updateAvatar(avatarFile: File) {
+        this.profileAvatarApi.update(new ProfileAvatarRequest().setAvatarFile(avatarFile))
+            .then((response: ProfileResponse) => {
+                this.store.set('user.avatar', response.avatar);
+                this.loadAvatar(response.avatar);
+            })
+            .catch((response: ProfileResponse) => {
+                alert(`Ошибка изменения аватара: ${response.reason}`);
+                this.router.go('/settings');
+            });
+    }
+
     public update(credentials: ProfileUpdateRequest) {
         // console.log('Profile update request received', credentials);
         this.profileApi.update(credentials)
@@ -109,24 +166,13 @@ class ProfileController {
                     avatar: response.avatar,
                     email: response.email,
                 });
+                // Update password if specified
                 if (credentials.newPassword) {
-                    // console.log('Password update requested');
-                    this.profilePasswordApi.update(
-                        new ProfilePasswordRequest()
-                            .setOldPassword(credentials.oldPassword)
-                            .setNewPassword(credentials.newPassword),
-                    )
-                        .then(() => {
-                            // console.log('Password updated successfully');
-                        })
-                        .catch((pResponse: ProfileResponse) => {
-                            alert(`Ошибка изменения пароля: ${pResponse.reason}`);
-                            this.router.go('/settings');
-                        });
+                    this.updatePassword(credentials.oldPassword, credentials.newPassword);
                 }
+                // Update avatar if specified
                 if (credentials.avatar) {
-                    // console.log('Avatar update requested');
-                    alert('Need to set avatar');
+                    this.updateAvatar(credentials.avatarFile);
                 }
                 this.router.go('/messenger');
             })
